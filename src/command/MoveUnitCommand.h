@@ -5,31 +5,27 @@
 
 class MoveUnitCommand : public ICommand {
     public:
-        MoveUnitCommand(unitPtr_t unit, int x, int y)
+        MoveUnitCommand(unitPtr_t unit, Position pos)
         :
         unit_(unit),
-        x_(x),
-        y_(y)
+        pos_(pos)
         {}
 
         virtual void execute() {
-            x_old_ = unit_->x();
-            y_old_ = unit_->y();
-            unit_->moveTo(x_, y_);
+            pos_old_ = unit_->getPos();
+            unit_->moveTo(pos_);
         }
 
         virtual void undo () {
-            unit_->moveTo(x_old_, y_old_);
+            unit_->moveTo(pos_old_);
         }
 
         virtual void redo () {
-            unit_->moveTo(x_, y_);
+            unit_->moveTo(pos_);
         }
 
     private:
         unitPtr_t unit_;
-        int x_; // new x
-        int y_; // new y
-        int x_old_;
-        int y_old_;
+        Position pos_;
+        Position pos_old_;
 };

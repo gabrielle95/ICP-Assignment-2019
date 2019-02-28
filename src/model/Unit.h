@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <memory>
+#include "../common/Position.h"
 
 #ifdef DEBUG
 #define STRINGIFY( name ) # name
@@ -10,32 +11,35 @@
 class Unit;
 typedef std::shared_ptr<Unit> unitPtr_t;
 
-enum Color {
-    White = 0,
-    Black = 1
+enum Color_t {
+    black,
+    white
 };
 
 class Unit {
     public:
-        virtual void moveTo(int x, int y) = 0;
+        virtual void moveTo(Position pos) = 0;
 
-        virtual int x() const {
-            return this->x_;
+        virtual int row() const {
+            return pos_.row();
         }
 
-        virtual int y() const {
-            return this->y_;
+        virtual int clm() const {
+            return pos_.clm();
         }
 
-        virtual Color color() const {
+        virtual Color_t color() const {
             return this->color_;
         }
 
-        #ifdef DEBUG
+        virtual Position getPos() const {
+            return this->pos_;
+        }
+
         virtual void print () = 0;
-        #endif
+
 
     protected:
-        int x_, y_;
-        Color color_;
+        Position pos_;
+        Color_t color_;
 };

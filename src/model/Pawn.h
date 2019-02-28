@@ -4,20 +4,19 @@
 
 class Pawn : public Unit {
     public:
-        Pawn(Color color, int xStart, int yStart) {
+        Pawn(Color_t color, Position starting_pos) {
             color_ = color;
-            x_ = xStart;
-            y_ = yStart;
+            pos_ = starting_pos;
         }
 
-        virtual void moveTo(int x, int y) {
-            x_ = x;
-            y_ = y;
+        virtual void moveTo(Position pos) {
+            pos_ = pos;
         }
 
-        #ifdef DEBUG
         virtual void print () {
-            std::cout << "This is a " << color_ << " Pawn with pos: " << x_ << "  " << y_ << "\n";
+            #ifdef DEBUG
+            std::cout << "This is a " << color_ << " Pawn with pos: " << pos_.clm() << "  " << pos_.row() << "\n";
+            #endif
         }
-        #endif
+
 };
