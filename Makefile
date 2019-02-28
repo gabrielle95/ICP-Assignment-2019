@@ -35,6 +35,9 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(BIN_DIR) $(OBJ_DIR)
 	$(CXX) $(INCLUDE) $(CFLAGS) $< -o $@
 
+run:
+	@make all && ./$(BIN_DIR)/$(BIN)
+
 clean:
 	rm -rf $(BIN_DIR) $(OBJ_DIR)
 
