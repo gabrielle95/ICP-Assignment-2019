@@ -22,6 +22,10 @@ class MoveUnitCommand : public ICommand {
             unit_->moveTo(x_old_, y_old_);
         }
 
+        virtual void redo () {
+            unit_->moveTo(x_, y_);
+        }
+
     private:
         unitPtr_t unit_;
         int x_; // new x
