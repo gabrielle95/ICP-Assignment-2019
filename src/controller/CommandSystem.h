@@ -2,7 +2,7 @@
 
 #include <stack>
 #include <memory>
-#include <../command/ICommand.h>
+#include "../command/ICommand.h"
 
 typedef std::shared_ptr<ICommand> commandPtr_t;
 typedef std::stack<commandPtr_t> commandStack_t;

@@ -12,7 +12,7 @@ INCLUDE = -Iinclude
 
 # Linker
 
-LFLAGS =
+LFLAGS = $(shell command -v g++-7.3 >/dev/null 2>&1 && echo -n "-static-libstdc++")
 
 # Folders
 
@@ -24,15 +24,22 @@ SRC_DIR = src
 APP_SRC = $(wildcard $(SRC_DIR)/*.cpp)
 APP_OBJ = $(addprefix $(OBJ_DIR)/, $(notdir $(patsubst %.cpp, %.o, $(APP_SRC))))
 
-
+CONTROLLER_DIR = $(wildcard $(SRC_DIR)/controller/*.cpp)
+CONTROLLER_OBJ = $(addprefix $(OBJ_DIR)/controller/, $(notdir $(patsubst %.cpp, %.o, $(CONTROLLER_DIR))))
 
 all: app
 
-app: $(APP_OBJ)
+app: $(APP_OBJ) $(CONTROLLER_OBJ)
 	 $(CXX) $^ -o $(BIN_DIR)/$(BIN) $(LFLAGS)
 
+# main.o
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(BIN_DIR) $(OBJ_DIR)
+	$(CXX) $(INCLUDE) $(CFLAGS) $< -o $@
+
+# controller/*.o
+$(OBJ_DIR)/controller/%.o: $(SRC_DIR)/controller/%.cpp
+	@mkdir -p $(BIN_DIR) $(OBJ_DIR)/controller
 	$(CXX) $(INCLUDE) $(CFLAGS) $< -o $@
 
 run:
