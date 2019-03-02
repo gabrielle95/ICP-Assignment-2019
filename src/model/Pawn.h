@@ -7,6 +7,7 @@ class Pawn : public Unit {
         Pawn(Color_t color, Position starting_pos) {
             color_ = color;
             pos_ = starting_pos;
+            unitType_ = PAWN;
         }
 
         virtual void moveTo(Position pos) {

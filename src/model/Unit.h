@@ -8,12 +8,18 @@
 #define STRINGIFY( name ) # name
 #endif
 
-class Unit;
-typedef std::shared_ptr<Unit> unitPtr_t;
-
 enum Color_t {
-    black,
-    white
+    BLACK,
+    WHITE
+};
+
+enum unitType_t {
+    KING, // KING - kral K
+    QUEEN, // QUEEN - dama D
+    ROOK, // ROOK - vez V
+    BISHOP, // BISHOP - strelec S
+    KNIGHT, // KNIGHT - jezdec J
+    PAWN, // PAWN - pesak p
 };
 
 class Unit {
@@ -42,4 +48,7 @@ class Unit {
     protected:
         Position pos_;
         Color_t color_;
+        unitType_t unitType_;
 };
+
+typedef std::shared_ptr<Unit> unitPtr_t;

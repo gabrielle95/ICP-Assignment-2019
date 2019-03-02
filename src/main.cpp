@@ -1,17 +1,18 @@
-
 #include <iostream>
 #include <memory>
+#include <string>
 #include "model/Pawn.h"
 #include "./controller/CommandSystem.h"
 #include "./command/MoveUnitCommand.h"
+#include "./common/ChessException.h"
 
 int main() {
 
-    unitPtr_t pawn = std::make_shared<Pawn>(Color_t::white, Position(Letter::A, 3));
+    unitPtr_t pawn = std::make_shared<Pawn>(WHITE, Position(A, 3));
 
     CommandSystem commandSystem;
 
-    commandPtr_t move_pawn = std::make_shared<MoveUnitCommand>(pawn, Position(Letter::A, 1));
+    commandPtr_t move_pawn = std::make_shared<MoveUnitCommand>(pawn, Position(A, 1));
 
     commandSystem.executeCommand(move_pawn);
 
@@ -27,5 +28,15 @@ int main() {
 
 
     std::cout << "Ola chess!" << "\n";
+
+    // Exception demo
+    char c = 'g';
+    try {
+        throw ChessException("Unknown Unit Type: " + std::string(&c));
+    }
+    catch (ChessException& e) {
+        std::cerr << e.what() << "\n";
+    }
+
     return 0;
 }
