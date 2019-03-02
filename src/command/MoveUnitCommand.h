@@ -11,6 +11,8 @@ class MoveUnitCommand : public ICommand {
         pos_(pos)
         {}
 
+    private:
+
         virtual void execute() {
             pos_old_ = unit_->getPos();
             unit_->moveTo(pos_);
@@ -24,7 +26,6 @@ class MoveUnitCommand : public ICommand {
             unit_->moveTo(pos_);
         }
 
-    private:
         unitPtr_t unit_;
         Position pos_;
         Position pos_old_;

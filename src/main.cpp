@@ -5,10 +5,11 @@
 #include "./controller/CommandSystem.h"
 #include "./command/MoveUnitCommand.h"
 #include "./common/ChessException.h"
-#include "./model/SaveFile.h"
+#include "./controller/SaveSystem.h"
 
 int main() {
 
+    // Undo Redo
     unitPtr_t pawn = std::make_shared<Pawn>(WHITE, Position(A, 3));
 
     CommandSystem commandSystem;
@@ -30,17 +31,18 @@ int main() {
     std::cout << "Ola chess!" << "\n";
 
     // Exception demo
-    char c = 'g';
+
     try {
-        throw ChessException("Unknown Unit Type: " + std::string(&c));
+        throw ChessException("Unknown Unit Type");
     }
     catch (ChessException& e) {
         std::cerr << e.what() << "\n";
     }
 
-    // Save file
-
-    // SaveFile save("save.txt");
+    // Save system
+    SaveSystem saveSystem;
+    saveSystem.load("./examples/save01");
+    if(saveSystem.getOpenedSave()) saveSystem.getOpenedSave()->print();
 
     return 0;
 }

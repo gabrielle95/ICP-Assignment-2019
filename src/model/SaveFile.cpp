@@ -1,9 +1,52 @@
 #include "SaveFile.h"
 #include "../common/ChessException.h"
 
-SaveFile::SaveFile(std::string sFPath) {
-    //TODO
+SaveFile::SaveFile(std::string sFPath)
+: sFPath_(sFPath), isLoaded_(false) {
+
+    size_t fnamePos = sFPath_.rfind('/');
+
+    #ifdef WIN32
+    if(fnamePos == std::string::npos) {
+        fnamePos = sFPath_.rfind('\\');
+    }
+    #endif
+
+    if(fnamePos != std::string::npos) {
+        sFName_ = sFPath.substr(fnamePos + 1);
+    }
+    else {
+        sFName_ = sFPath;
+    }
 }
+
+void SaveFile::load_() {
+
+    iFile_.open(sFPath_, std::ifstream::in);
+    if(!iFile_)
+        throw ChessException("Failed to load file: " + sFPath_);
+
+    sStream_ << iFile_.rdbuf();
+    sData_ = sStream_.str();
+
+    iFile_.close();
+    isLoaded_ = true;
+}
+
+
+void SaveFile::print() const {
+    #ifdef DEBUG
+    std::cout << "\n";
+    std::cout << "FILENAME: \n";
+    std::cout << sFName_ << "\n";
+    std::cout << "\n";
+    std::cout << "DATA: \n";
+    std::cout << sData_ << "\n";
+    std::cout << "\n";
+    #endif
+}
+
+
 
 unitType_t SaveFile::unitTypeFrom_(char c) {
     switch (c)
@@ -15,7 +58,7 @@ unitType_t SaveFile::unitTypeFrom_(char c) {
         case 'J': return unitType_t::KNIGHT;
         case 'p': return unitType_t::PAWN;
         default:
-            throw ChessException("Unknown Unit Type " + std::string(&c));
+            throw ChessException("Unknown Unit Type");
     }
 }
 
@@ -45,7 +88,7 @@ letter_t SaveFile::letterCoordFrom_(char letter) {
         case 'g': return letter_t::G;
         case 'h': return letter_t::H;
         default:
-            throw ChessException("No such coordinate as: " + std::string(&letter));
+            throw ChessException("No letter coordinate.");
     }
 }
 
