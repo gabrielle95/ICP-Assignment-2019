@@ -5,6 +5,7 @@
 #include "./controller/CommandSystem.h"
 #include "./command/MoveUnitCommand.h"
 #include "./common/ChessException.h"
+#include "./model/SaveFile.h"
 
 int main() {
 
@@ -26,7 +27,6 @@ int main() {
 
     pawn->print();
 
-
     std::cout << "Ola chess!" << "\n";
 
     // Exception demo
@@ -37,6 +37,10 @@ int main() {
     catch (ChessException& e) {
         std::cerr << e.what() << "\n";
     }
+
+    // Save file
+
+    // SaveFile save("save.txt");
 
     return 0;
 }

@@ -1,4 +1,4 @@
-enum Letter {
+enum letter_t {
     A = 1, B, C, D, E, F, G, H
 };
 

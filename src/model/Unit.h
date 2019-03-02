@@ -8,7 +8,7 @@
 #define STRINGIFY( name ) # name
 #endif
 
-enum Color_t {
+enum color_t {
     BLACK,
     WHITE
 };
@@ -24,7 +24,10 @@ enum unitType_t {
 
 class Unit {
     public:
-        virtual void moveTo(Position pos) = 0;
+
+        virtual void moveTo(Position pos) {
+            pos_ = pos;
+        }
 
         virtual int row() const {
             return pos_.row();
@@ -34,7 +37,7 @@ class Unit {
             return pos_.clm();
         }
 
-        virtual Color_t color() const {
+        virtual color_t color() const {
             return this->color_;
         }
 
@@ -47,7 +50,7 @@ class Unit {
 
     protected:
         Position pos_;
-        Color_t color_;
+        color_t color_;
         unitType_t unitType_;
 };
 

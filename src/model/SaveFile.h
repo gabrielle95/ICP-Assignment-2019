@@ -8,13 +8,19 @@ class SaveFile {
     public:
         SaveFile(std::string sFPath);
 
+        static char charFrom_(int coord);
+        static int coordFrom_(char c);
+
     private:
 
-        bool load_();
-        bool write_();
+        static bool load_();
+        static bool write_();
 
-        unitType_t unitTypeFrom_(char c);
-        char charFrom_(unitType_t unitType);
+        static unitType_t unitTypeFrom_(char c);
+        static char charFrom_(unitType_t unitType);
+
+        static letter_t letterCoordFrom_(char letter);
+        static char letterCharFrom_(letter_t letter);
 
 
         std::ifstream iFile_;

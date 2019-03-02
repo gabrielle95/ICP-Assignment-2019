@@ -24,12 +24,15 @@ SRC_DIR = src
 APP_SRC = $(wildcard $(SRC_DIR)/*.cpp)
 APP_OBJ = $(addprefix $(OBJ_DIR)/, $(notdir $(patsubst %.cpp, %.o, $(APP_SRC))))
 
-CONTROLLER_DIR = $(wildcard $(SRC_DIR)/controller/*.cpp)
-CONTROLLER_OBJ = $(addprefix $(OBJ_DIR)/controller/, $(notdir $(patsubst %.cpp, %.o, $(CONTROLLER_DIR))))
+CONTROLLER_SRC = $(wildcard $(SRC_DIR)/controller/*.cpp)
+CONTROLLER_OBJ = $(addprefix $(OBJ_DIR)/controller/, $(notdir $(patsubst %.cpp, %.o, $(CONTROLLER_SRC))))
+
+MODEL_SRC = $(wildcard $(SRC_DIR)/model/*.cpp)
+MODEL_OBJ = $(addprefix $(OBJ_DIR)/model/, $(notdir $(patsubst %.cpp, %.o, $(MODEL_SRC))))
 
 all: app
 
-app: $(APP_OBJ) $(CONTROLLER_OBJ)
+app: $(APP_OBJ) $(CONTROLLER_OBJ) $(MODEL_OBJ)
 	 $(CXX) $^ -o $(BIN_DIR)/$(BIN) $(LFLAGS)
 
 # main.o
@@ -40,6 +43,11 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 # controller/*.o
 $(OBJ_DIR)/controller/%.o: $(SRC_DIR)/controller/%.cpp
 	@mkdir -p $(BIN_DIR) $(OBJ_DIR)/controller
+	$(CXX) $(INCLUDE) $(CFLAGS) $< -o $@
+
+# model/*.o
+$(OBJ_DIR)/model/%.o: $(SRC_DIR)/model/%.cpp
+	@mkdir -p $(BIN_DIR) $(OBJ_DIR)/model
 	$(CXX) $(INCLUDE) $(CFLAGS) $< -o $@
 
 run:
