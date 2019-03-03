@@ -3,28 +3,44 @@
 CommandSystem::CommandSystem () {}
 
 void CommandSystem::executeCommand(commandPtr_t command) {
-    redoStack_ = commandStack_t();
+    redoVector_ = commandVector_t();
     command->execute();
-    undoStack_.push(command);
+    undoVector_.push_back(command);
 }
 
 void CommandSystem::undo() {
 
-    if(undoStack_.empty()) {
+    if(undoVector_.empty()) {
         return;
     }
 
-    undoStack_.top()->undo();
-    redoStack_.push(undoStack_.top());
-    undoStack_.pop();
+    undoVector_.back()->undo();
+    redoVector_.push_back(undoVector_.back());
+    undoVector_.pop_back();
 }
 
 void CommandSystem::redo() {
-    if(redoStack_.empty()) {
+    if(redoVector_.empty()) {
         return;
     }
 
-    redoStack_.top()->redo();
-    undoStack_.push(redoStack_.top());
-    redoStack_.pop();
+    redoVector_.back()->redo();
+    undoVector_.push_back(redoVector_.back());
+    redoVector_.pop_back();
+}
+
+commandVector_t CommandSystem::constructCommandsToSave() {
+    std::move(undoVector_.begin(), undoVector_.end(), commandsToSave_.begin());
+    return commandsToSave_;
+}
+
+void CommandSystem::notifyObservers() {
+    if(commandsToSave_.empty()) constructCommandsToSave();
+    for(observerPtr_t o : observers_) {
+        o->onNotify(shared_from_this());
+    }
+}
+
+void CommandSystem::onNotify(subjectPtr_t subject) {
+    std::cout << "CommandSystem has been notified.\n";
 }

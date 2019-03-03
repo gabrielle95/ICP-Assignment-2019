@@ -3,36 +3,8 @@
 
 SaveFile::SaveFile(std::string sFPath)
 : sFPath_(sFPath), isLoaded_(false) {
-
-    size_t fnamePos = sFPath_.rfind('/');
-
-    #ifdef WIN32
-    if(fnamePos == std::string::npos) {
-        fnamePos = sFPath_.rfind('\\');
-    }
-    #endif
-
-    if(fnamePos != std::string::npos) {
-        sFName_ = sFPath.substr(fnamePos + 1);
-    }
-    else {
-        sFName_ = sFPath;
-    }
+    assignFileName_();
 }
-
-void SaveFile::load_() {
-
-    iFile_.open(sFPath_, std::ifstream::in);
-    if(!iFile_)
-        throw ChessException("Failed to load file: " + sFPath_);
-
-    sStream_ << iFile_.rdbuf();
-    sData_ = sStream_.str();
-
-    iFile_.close();
-    isLoaded_ = true;
-}
-
 
 void SaveFile::print() const {
     #ifdef DEBUG
@@ -41,12 +13,50 @@ void SaveFile::print() const {
     std::cout << sFName_ << "\n";
     std::cout << "\n";
     std::cout << "DATA: \n";
-    std::cout << sData_ << "\n";
+    std::cout << sIData_ << "\n";
     std::cout << "\n";
     #endif
 }
 
+void SaveFile::load_() {
 
+    iFile_.open(sFPath_, std::ifstream::in);
+    if(!iFile_)
+        throw ChessException("Failed to load file: " + sFPath_);
+
+    sStream_.clear();
+    sStream_ << iFile_.rdbuf();
+    sIData_ = sStream_.str();
+
+    iFile_.close();
+    isLoaded_ = true;
+}
+
+void SaveFile::write_() {
+    oFile_.open(sFPath_, std::ofstream::trunc);
+
+    if(!oFile_)
+        throw ChessException("Failed to save file: " + sFPath_);
+
+    sStream_.clear();
+    oFile_ << sOData_;
+
+    oFile_.close();
+}
+
+void SaveFile::writeAs_(std::string fileName) {
+    sFPath_ = fileName;
+    assignFileName_();
+
+    // CONSTRUCT OUTPUT DATA PROPERLY
+    sOData_ = sIData_;
+
+    write_();
+}
+
+void SaveFile::serializeOutput_(commandVector_t outputCommands) {
+
+}
 
 unitType_t SaveFile::unitTypeFrom_(char c) {
     switch (c)
@@ -105,5 +115,22 @@ char SaveFile::letterCharFrom_(letter_t letter) {
         case letter_t::H: return 'h';
         default:
             throw ChessException("Letter supplied not part of enum letter_t.");
+    }
+}
+
+void SaveFile::assignFileName_() {
+    size_t fnamePos = sFPath_.rfind('/');
+
+    #ifdef WIN32
+    if(fnamePos == std::string::npos) {
+        fnamePos = sFPath_.rfind('\\');
+    }
+    #endif
+
+    if(fnamePos != std::string::npos) {
+        sFName_ = sFPath_.substr(fnamePos + 1);
+    }
+    else {
+        sFName_ = sFPath_;
     }
 }

@@ -1,13 +1,17 @@
 #pragma once
 
+#include <iostream>
 #include <stack>
 #include <memory>
+#include <vector>
+#include "../observer/ISubject.h"
 #include "../command/ICommand.h"
 
-typedef std::shared_ptr<ICommand> commandPtr_t;
-typedef std::stack<commandPtr_t> commandStack_t;
+using commandPtr_t = std::shared_ptr<ICommand>;
+using commandVector_t = std::vector<commandPtr_t>;
+using commandSystemPtr_t = std::shared_ptr<CommandSystem>;
 
-class CommandSystem {
+class CommandSystem : public ISubject, public IObserver, public std::enable_shared_from_this<CommandSystem> {
     public:
 
         CommandSystem();
@@ -18,9 +22,18 @@ class CommandSystem {
 
         void redo();
 
+        commandVector_t constructCommandsToSave();
+
+        virtual void notifyObservers();
+
+        virtual void onNotify(subjectPtr_t subject);
+
+        virtual void printNotification() {
+            std::cout << "CommandSystem called from SaveSystem\n";
+        }
 
     private:
-        commandStack_t undoStack_;
-        commandStack_t redoStack_;
-
+        commandVector_t undoVector_;
+        commandVector_t redoVector_;
+        commandVector_t commandsToSave_;
 };
