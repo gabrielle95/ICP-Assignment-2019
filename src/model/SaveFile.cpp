@@ -28,6 +28,8 @@ void SaveFile::load_() {
     sStream_ << iFile_.rdbuf();
     sIData_ = sStream_.str();
 
+    generatedCommands_ = deserializeInput_();
+
     iFile_.close();
     isLoaded_ = true;
 }
@@ -56,6 +58,43 @@ void SaveFile::writeAs_(std::string fileName) {
 
 void SaveFile::serializeOutput_(commandVector_t outputCommands) {
 
+}
+
+void SaveFile::serializeLine_(commandPtr_t command) {
+
+}
+
+commandVector_t SaveFile::deserializeInput_() {
+
+    commandVector_t commands;
+
+    std::vector<std::string> lines;
+    std::string s;
+
+    while(std::getline(sStream_, s)) {
+        lines.push_back(s);
+    }
+
+    if(lines.empty()) {
+        throw ChessException("The save file is empty.");
+    }
+
+    for(auto line : lines) {
+        deserializeLine_(line);
+    }
+
+    return commands;
+}
+
+commandPtr_t SaveFile::deserializeLine_(std::string line) {
+
+    commandPtr_t command;
+
+    for(auto i : line) {
+        //std::cout << i << "\n";
+    }
+
+    return command;
 }
 
 unitType_t SaveFile::unitTypeFrom_(char c) {

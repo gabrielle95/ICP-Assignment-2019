@@ -5,6 +5,12 @@
 #include "Unit.h"
 #include "../controller/CommandSystem.h"
 
+enum specialEvent_t {
+    CAPTURE,
+    CHECK,
+    MATE
+};
+
 class SaveSystem;
 
 class SaveFile {
@@ -28,7 +34,10 @@ class SaveFile {
         void writeAs_(std::string fileName);
 
         void serializeOutput_(commandVector_t outputCommands);
+        void serializeLine_(commandPtr_t command);
+
         commandVector_t deserializeInput_();
+        commandPtr_t deserializeLine_(std::string line);
 
         static unitType_t unitTypeFrom_(char c);
         static char charFrom_(unitType_t unitType);
@@ -45,6 +54,8 @@ class SaveFile {
         std::string sIData_;
         std::string sOData_;
         std::stringstream sStream_;
+
+        commandVector_t generatedCommands_;
 
         bool isLoaded_;
 };

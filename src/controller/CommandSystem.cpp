@@ -35,7 +35,7 @@ commandVector_t CommandSystem::constructCommandsToSave() {
 }
 
 void CommandSystem::notifyObservers() {
-    if(commandsToSave_.empty()) constructCommandsToSave();
+    //if(commandsToSave_.empty()) constructCommandsToSave();
     for(observerPtr_t o : observers_) {
         o->onNotify(shared_from_this());
     }

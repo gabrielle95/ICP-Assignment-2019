@@ -30,5 +30,5 @@ class SaveSystem : public ISubject, public IObserver, public std::enable_shared_
 
         void load_(saveFilePtr_t saveFile);
         void save_(saveFilePtr_t saveFile);
-        saveFilePtr_t currentlyOpen_;
+        saveFilePtr_t currentlyOpen_; //TODO
 };
