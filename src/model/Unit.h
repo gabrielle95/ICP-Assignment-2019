@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <memory>
+#include <vector>
 #include "../common/Position.h"
 
 #ifdef DEBUG
@@ -22,8 +23,22 @@ enum unitType_t {
     PAWN, // PAWN - pesak p
 };
 
+using pseudoUnitPtr_t = std::shared_ptr<struct PseudoUnit>;
+using unitPtr_t = std::shared_ptr<class Unit>;
+using unitVector_t = std::vector<unitPtr_t>;
+
+class PseudoUnit {
+    Position pos;
+    color_t color;
+    unitType_t type;
+};
+
 class Unit {
     public:
+
+        Unit(color_t color, unitType_t type, Position starting_pos)
+        : color_(color), type_(type), pos_(starting_pos)
+        {}
 
         virtual void moveTo(Position pos) {
             pos_ = pos;
@@ -45,13 +60,12 @@ class Unit {
             return this->pos_;
         }
 
-        virtual void print () = 0;
-
+        virtual unitType_t type() const {
+            return this->type_;
+        }
 
     protected:
         Position pos_;
         color_t color_;
-        unitType_t unitType_;
+        unitType_t type_;
 };
-
-typedef std::shared_ptr<Unit> unitPtr_t;

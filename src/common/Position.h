@@ -1,29 +1,33 @@
 enum letter_t {
-    A = 1, B, C, D, E, F, G, H
+    A, B, C, D, E, F, G, H
+};
+
+enum rowPos_t {
+    ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT
 };
 
 class Position {
     public:
 
-        Position() : clm_(0), row_(0) {}
+        Position() : clm_(A), row_(ONE) {}
 
-        Position (int clm, int row)
+        Position (letter_t clm, rowPos_t row)
         : clm_(clm), row_(row) {}
 
-        int row() const {
+        rowPos_t row() const {
             return row_;
         }
 
-        int clm() const {
+        letter_t clm() const {
             return clm_;
         }
 
-        void set(int clm, int row) {
+        void set(letter_t clm, rowPos_t row) {
             clm_ = clm;
             row_ = row;
         }
 
     private:
-        int clm_;
-        int row_;
+        letter_t clm_;
+        rowPos_t row_;
 };

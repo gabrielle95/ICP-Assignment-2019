@@ -6,9 +6,10 @@
 #include "../controller/CommandSystem.h"
 
 enum specialEvent_t {
-    CAPTURE,
-    CHECK,
-    MATE
+    CAPTURE, // brani
+    PROMOTION, // premena
+    CHECK, // sach
+    MATE // mat
 };
 
 class SaveSystem;

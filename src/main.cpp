@@ -1,7 +1,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
-#include "model/Pawn.h"
+#include "model/Unit.h"
 #include "./controller/CommandSystem.h"
 #include "./command/MoveUnitCommand.h"
 #include "./common/ChessException.h"
@@ -18,7 +18,7 @@ int main() {
     commandSystem->notifyObservers();
     saveSystem->notifyObservers();
     // Undo Redo
-    /*unitPtr_t pawn = std::make_shared<Pawn>(WHITE, Position(A, 3));
+    /*unitPtr_t pawn = std::make_shared<Unit>(WHITE, Position(A, 3));
 
     commandPtr_t move_pawn = std::make_shared<MoveUnitCommand>(pawn, Position(A, 1));
 
