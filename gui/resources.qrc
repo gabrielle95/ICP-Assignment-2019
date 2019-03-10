@@ -1,0 +1,23 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+  <file>../res/app_icons/new.png</file>
+  <file>../res/app_icons/cut.png</file>
+  <file>../res/app_icons/copy.png</file>
+  <file>../res/app_icons/save.png</file>
+  <file>../res/app_icons/open.png</file>
+  <file>../res/app_icons/paste.png</file>
+  <file>../res/chess_icons/bishop_black.svg</file>
+  <file>../res/chess_icons/bishop_white.svg</file>
+  <file>../res/chess_icons/king_black.svg</file>
+  <file>../res/chess_icons/king_white.svg</file>
+  <file>../res/chess_icons/knight_black.svg</file>
+  <file>../res/chess_icons/knight_white.svg</file>
+  <file>../res/chess_icons/pawn_black.svg</file>
+  <file>../res/chess_icons/pawn_white.svg</file>
+  <file>../res/chess_icons/queen_black.svg</file>
+  <file>../res/chess_icons/queen_white.svg</file>
+  <file>../res/chess_icons/rook_black.svg</file>
+  <file>../res/chess_icons/rook_white.svg</file>
+    <file>../res/chess_icons/profile.png</file>
+</qresource>
+</RCC>

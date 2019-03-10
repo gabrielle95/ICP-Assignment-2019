@@ -1,12 +1,20 @@
-#include "mainwindow.h"
 #include <QApplication>
+#include <QCommandLineParser>
+#include <QCommandLineOption>
+
+#include "mainwindow.h"
 
 
 int main(int argc, char *argv[]) {
 
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+    QApplication app(argc, argv);
+    QCoreApplication::setOrganizationName("ICP Project");
+    QCoreApplication::setApplicationName("Chess");
+    QCoreApplication::setApplicationVersion(QT_VERSION_STR);
 
-    return a.exec();
+    MainWindow mainWin;
+    mainWin.setWindowIcon(QIcon(":/res/chess_icons/knight_black.svg"));
+    mainWin.show();
+
+    return app.exec();
 }

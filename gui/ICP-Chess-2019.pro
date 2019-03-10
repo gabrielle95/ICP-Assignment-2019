@@ -26,13 +26,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         ../src/view/gui/main.cpp \
-        ../src/view/gui/mainwindow.cpp
+        ../src/view/gui/mainwindow.cpp \
+    ../src/view/gui/chessboardview.cpp
 
 HEADERS += \
-        ../src/view/gui/mainwindow.h
+        ../src/view/gui/mainwindow.h \
+    ../src/view/gui/chessboardview.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+        chessboardview.ui
 
+RESOURCES += resources.qrc
 DESTDIR = ../bin
 OBJECTS_DIR = ../obj/view/gui
