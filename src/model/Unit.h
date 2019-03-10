@@ -64,6 +64,31 @@ class Unit {
             return this->type_;
         }
 
+        virtual void print() const {
+
+            switch (type_)
+            {
+                case KING:
+                    std::cout << "KING ";
+                    break;
+                case QUEEN:
+                    std::cout << "QUEEN ";
+                    break;
+                case ROOK:
+                    std::cout << "ROOK ";
+                    break;
+                case BISHOP:
+                    std::cout << "BISHOP ";
+                    break;
+                case KNIGHT:
+                    std::cout << "KNIGHT ";
+                    break;
+                default:
+                    std::cout << "PAWN ";
+                    break;
+            }
+        }
+
     protected:
         Position pos_;
         color_t color_;

@@ -48,15 +48,3 @@ void SaveSystem::saveAs(std::string filePath) {
 saveFilePtr_t SaveSystem::instantiateSaveFile(std::string filePath) {
     return std::make_shared<SaveFile>(filePath);
 }
-
-void SaveSystem::notifyObservers() {
-
-    for(observerPtr_t o : observers_) {
-        o->onNotify(shared_from_this());
-    }
-}
-
-void SaveSystem::onNotify(subjectPtr_t subject) {
-    std::cout << "SaveSystem has been notified.\n";
-    subject->printNotification();
-}

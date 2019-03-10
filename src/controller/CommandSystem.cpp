@@ -33,14 +33,3 @@ commandVector_t CommandSystem::constructCommandsToSave() {
     std::move(undoVector_.begin(), undoVector_.end(), commandsToSave_.begin());
     return commandsToSave_;
 }
-
-void CommandSystem::notifyObservers() {
-    //if(commandsToSave_.empty()) constructCommandsToSave();
-    for(observerPtr_t o : observers_) {
-        o->onNotify(shared_from_this());
-    }
-}
-
-void CommandSystem::onNotify(subjectPtr_t subject) {
-    std::cout << "CommandSystem has been notified.\n";
-}

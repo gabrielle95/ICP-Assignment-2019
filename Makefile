@@ -6,6 +6,8 @@ BIN = $(PROJECT)
 # Compiler
 CXX = g++
 CFLAGS = -Wall -Wextra -c --std=c++17 -g -DDEBUG
+QFLAGS =
+QFLAGS_DEBUG = CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug
 
 # Includes
 INCLUDE = -Iinclude
@@ -19,10 +21,12 @@ LFLAGS = $(shell command -v g++-7.3 >/dev/null 2>&1 && echo -n "-static-libstdc+
 BIN_DIR = bin
 OBJ_DIR = obj
 SRC_DIR = src
+GUI_DIR = gui
+GUI_QMAKE = gui_qmake
 
 # Sources
-APP_SRC = $(wildcard $(SRC_DIR)/*.cpp)
-APP_OBJ = $(addprefix $(OBJ_DIR)/, $(notdir $(patsubst %.cpp, %.o, $(APP_SRC))))
+APP_SRC = $(wildcard $(SRC_DIR)/view/cli/*.cpp)
+APP_OBJ = $(addprefix $(OBJ_DIR)/view/cli/, $(notdir $(patsubst %.cpp, %.o, $(APP_SRC))))
 
 CONTROLLER_SRC = $(wildcard $(SRC_DIR)/controller/*.cpp)
 CONTROLLER_OBJ = $(addprefix $(OBJ_DIR)/controller/, $(notdir $(patsubst %.cpp, %.o, $(CONTROLLER_SRC))))
@@ -30,14 +34,18 @@ CONTROLLER_OBJ = $(addprefix $(OBJ_DIR)/controller/, $(notdir $(patsubst %.cpp, 
 MODEL_SRC = $(wildcard $(SRC_DIR)/model/*.cpp)
 MODEL_OBJ = $(addprefix $(OBJ_DIR)/model/, $(notdir $(patsubst %.cpp, %.o, $(MODEL_SRC))))
 
-all: app
+all: app gui
 
 app: $(APP_OBJ) $(CONTROLLER_OBJ) $(MODEL_OBJ)
 	 $(CXX) $^ -o $(BIN_DIR)/$(BIN) $(LFLAGS)
 
+gui:
+	@cd $(GUI_DIR) && qmake -o ../$(GUI_QMAKE)/Makefile $(QFLAGS)
+	$(MAKE) CXX=$(CXX) -C $(GUI_QMAKE)
+
 # main.o
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	@mkdir -p $(BIN_DIR) $(OBJ_DIR)
+$(OBJ_DIR)/view/cli/%.o: $(SRC_DIR)/view/cli/%.cpp
+	@mkdir -p $(BIN_DIR) $(OBJ_DIR)/view/cli
 	$(CXX) $(INCLUDE) $(CFLAGS) $< -o $@
 
 # controller/*.o
@@ -54,6 +62,6 @@ run:
 	@make all && ./$(BIN_DIR)/$(BIN)
 
 clean:
-	rm -rf $(BIN_DIR) $(OBJ_DIR)
+	rm -rf $(BIN_DIR) $(OBJ_DIR) $(GUI_QMAKE)
 
-.PHONY: app
+.PHONY: app gui
