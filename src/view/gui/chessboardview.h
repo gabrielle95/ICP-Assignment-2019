@@ -1,7 +1,11 @@
 #ifndef CHESSBOARDVIEW_H
 #define CHESSBOARDVIEW_H
 
+#include <array>
 #include <QWidget>
+#include "qchesscell.h"
+
+const int MAX_CELLS = 8;
 
 namespace Ui {
 class chessBoardView;
@@ -15,11 +19,16 @@ public:
     explicit chessBoardView(QWidget *parent = 0);
     ~chessBoardView();
 
+signals:
+    void cellSelectionChanged(QChessCell * selected);
+
+
 private slots:
-    void on_label_64_linkActivated(const QString &link);
+    void cellClicked();
 
 private:
     Ui::chessBoardView *ui;
+    std::array<std::array<QChessCell *, MAX_CELLS>, MAX_CELLS> qCellBoard_;
 };
 
 #endif // CHESSBOARDVIEW_H

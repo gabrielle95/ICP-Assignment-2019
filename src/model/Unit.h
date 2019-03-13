@@ -4,15 +4,16 @@
 #include <memory>
 #include <vector>
 #include "../common/Position.h"
+#include "../common/Color.h"
 
 #ifdef DEBUG
 #define STRINGIFY( name ) # name
 #endif
 
-enum color_t {
+/*enum color_t {
     BLACK,
     WHITE
-};
+};*/
 
 enum unitType_t {
     KING, // KING - kral K

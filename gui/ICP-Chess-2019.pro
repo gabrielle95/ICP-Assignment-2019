@@ -27,11 +27,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         ../src/view/gui/main.cpp \
         ../src/view/gui/mainwindow.cpp \
-    ../src/view/gui/chessboardview.cpp
+    ../src/view/gui/chessboardview.cpp \
+    ../src/view/gui/qchesscell.cpp
 
 HEADERS += \
         ../src/view/gui/mainwindow.h \
-    ../src/view/gui/chessboardview.h
+    ../src/view/gui/chessboardview.h \
+    ../src/view/gui/qchesscell.h \
+    ../src/view/gui/styles.h
 
 FORMS += \
         mainwindow.ui \

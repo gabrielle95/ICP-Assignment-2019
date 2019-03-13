@@ -1,3 +1,4 @@
+#include "../common/Color.h"
 #include "Board.h"
 
 Board::Board() {
