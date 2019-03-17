@@ -91,7 +91,7 @@ class Unit {
         }
 
     protected:
-        Position pos_;
         color_t color_;
         unitType_t type_;
+        Position pos_;
 };

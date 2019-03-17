@@ -26,15 +26,30 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         ../src/view/gui/main.cpp \
-        ../src/view/gui/mainwindow.cpp \
+    ../src/view/gui/mainwindow.cpp \
     ../src/view/gui/chessboardview.cpp \
-    ../src/view/gui/qchesscell.cpp
+    ../src/view/gui/qchesscell.cpp \
+    ../src/controller/Application.cpp \
+    ../src/controller/SaveSystem.cpp \
+    ../src/controller/CommandSystem.cpp \
+    ../src/model/SaveFile.cpp \
+    ../src/model/Board.cpp
 
 HEADERS += \
         ../src/view/gui/mainwindow.h \
     ../src/view/gui/chessboardview.h \
     ../src/view/gui/qchesscell.h \
-    ../src/view/gui/styles.h
+    ../src/controller/Application.h \
+    ../src/controller/SaveSystem.h \
+    ../src/controller/CommandSystem.h \
+    ../src/model/SaveFile.h \
+    ../src/model/Board.h \
+    ../src/model/Unit.h \
+    ../src/command/ICommand.h \
+    ../src/command/MoveUnitCommand.h \
+    ../src/common/ChessException.h \
+    ../src/common/Position.h \
+    ../src/common/Color.h
 
 FORMS += \
         mainwindow.ui \
@@ -42,4 +57,8 @@ FORMS += \
 
 RESOURCES += resources.qrc
 DESTDIR = ../bin
-OBJECTS_DIR = ../obj/view/gui
+
+OBJECTS_DIR += \
+    ../obj/view/gui \
+    ../obj/controller \
+    ../obj/model

@@ -1,3 +1,5 @@
+#pragma once
+
 enum letter_t {
     A, B, C, D, E, F, G, H
 };

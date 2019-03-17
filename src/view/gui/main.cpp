@@ -1,9 +1,7 @@
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QCommandLineOption>
-
 #include "mainwindow.h"
-
 
 int main(int argc, char *argv[]) {
 

@@ -18,6 +18,6 @@
   <file>../res/chess_icons/queen_white.svg</file>
   <file>../res/chess_icons/rook_black.svg</file>
   <file>../res/chess_icons/rook_white.svg</file>
-    <file>../res/chess_icons/profile.png</file>
+  <file>../res/chess_icons/profile.png</file>
 </qresource>
 </RCC>

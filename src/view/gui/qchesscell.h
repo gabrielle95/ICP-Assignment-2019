@@ -15,8 +15,19 @@ public:
         return backgroundStyle_;
     }
 
-    void setSelectedForAction (bool value) {
-        selected_ = value;
+    bool isSelected() const {
+        return selected_;
+    }
+
+    void drawUnit(QString unitStyle) {
+        if(!this->unitStyle_.isEmpty()) undrawUnit();
+        this->setStyleSheet(this->styleSheet() + unitStyle);
+        this->unitStyle_ = unitStyle;
+    }
+
+    void undrawUnit() {
+        this->setStyleSheet(this->backgroundStyle_);
+        this->unitStyle_ = "";
     }
 
 
@@ -27,6 +38,7 @@ private:
     color_t color_;
     QWidget *parent_;
     QString backgroundStyle_;
+    QString unitStyle_;
     bool selected_;
 };
 

@@ -3,6 +3,8 @@
 
 #include <array>
 #include <QWidget>
+#include "../../common/Position.h"
+#include "styles.h"
 #include "qchesscell.h"
 
 const int MAX_CELLS = 8;
@@ -27,6 +29,7 @@ private slots:
     void cellClicked();
 
 private:
+    void initStyles_();
     Ui::chessBoardView *ui;
     std::array<std::array<QChessCell *, MAX_CELLS>, MAX_CELLS> qCellBoard_;
 };

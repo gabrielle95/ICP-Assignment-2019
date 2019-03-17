@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "../../controller/Application.h"
 
 namespace Ui {
 class MainWindow;
@@ -21,7 +22,11 @@ private slots:
     void on_addtab_btn_clicked();
 
 private:
+    int gameNumber;
     Ui::MainWindow *ui;
+
+    appPtr_t application;
+    std::vector<int> gameIds;
 };
 
 #endif
