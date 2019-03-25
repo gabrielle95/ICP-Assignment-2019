@@ -15,24 +15,34 @@ public:
         return backgroundStyle_;
     }
 
-    bool isSelected() const {
-        return selected_;
-    }
-
-    void drawUnit(QString unitStyle) {
-        if(!this->unitStyle_.isEmpty()) undrawUnit();
-        this->setStyleSheet(this->styleSheet() + unitStyle);
+    void setUnitStyle(QString unitStyle) {
         this->unitStyle_ = unitStyle;
     }
 
-    void undrawUnit() {
-        this->setStyleSheet(this->backgroundStyle_);
-        this->unitStyle_ = "";
+    void unsetUnitStyle() {
+        this->unitStyle_.clear();
     }
 
+    QString getUnitStyle() const {
+        return this->unitStyle_;
+    }
+
+    void setBackgroundStyle(QString bgStyle) {
+        this->backgroundStyle_ = bgStyle;
+    }
+
+    void draw() {
+        QString selStyle;
+
+        if(this->isChecked()) selStyle = Styles::cellSelectedBg;
+        this->setStyleSheet(this->backgroundStyle_ + this->unitStyle_ + selStyle);
+    }
+
+signals:
+    void sig_emitCellSelectionChanged(QChessCell *from, QChessCell *to);
 
 private slots:
-    void onSelectionChange(QChessCell * cell);
+    void sl_onReceiveClick(QChessCell * clickedCell);
 
 private:
     color_t color_;

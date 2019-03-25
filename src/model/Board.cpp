@@ -77,3 +77,11 @@ void Board::print() {
     }
 }
 
+bool Board::checkMoveValidity(unitType_t unitType, Position fromPos, Position toPos) {
+    return Rules::checkMoveValidity(unitType, fromPos, toPos);
+}
+
+void Board::moveUnit(unitPtr_t unit, Position from, Position to) {
+//TODO
+}
+

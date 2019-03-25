@@ -12,7 +12,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->tabWidget->removeTab(1);
     ui->tabWidget->removeTab(0);
-    //ui->tabWidget->addTab(new chessBoardView(), QString("Game %0").arg(ui->tabWidget->count() + 1));
 }
 
 MainWindow::~MainWindow()
@@ -29,9 +28,18 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 
 void MainWindow::on_addtab_btn_clicked()
 {
-    //int idx = ui->tabWidget->count() + 1;
-    ui->tabWidget->addTab(new chessBoardView(), QString("Game %0").arg(gameNumber));
+    chessBoardView *c = new chessBoardView(gameNumber);
+    ui->tabWidget->addTab(c, QString("Game %0").arg(gameNumber));
+    connect(c, SIGNAL(sig_emitMoveRequest(Position,Position)), this, SLOT(sl_onMoveRequest(Position,Position)));
+
     application->newGame(gameNumber);
     gameIds.push_back(gameNumber);
     gameNumber += 1;
+}
+
+void MainWindow::sl_onMoveRequest(Position from, Position to) {
+    chessBoardView *senderView = (chessBoardView *)sender();
+    if(application->onRequestMove(senderView->Id(), from, to)) {
+        senderView->executePendingMove();
+    }
 }

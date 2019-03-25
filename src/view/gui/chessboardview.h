@@ -18,20 +18,36 @@ class chessBoardView : public QWidget
     Q_OBJECT
 
 public:
-    explicit chessBoardView(QWidget *parent = 0);
+    explicit chessBoardView(int id, QWidget *parent = 0);
     ~chessBoardView();
 
-signals:
-    void cellSelectionChanged(QChessCell * selected);
+    void draw();
 
+    int Id() const {
+        return this->id_;
+    }
+
+    void executePendingMove();
+
+signals:
+    void sig_emitClickedCell(QChessCell *cell);
+    void sig_emitMoveRequest(Position from, Position to);
 
 private slots:
-    void cellClicked();
+    void sl_cellWasClicked();
+    void sl_cellSelectionWasChanged(QChessCell *from, QChessCell* to);
 
 private:
     void initStyles_();
+    void moveUnitStyle_();
+    Position getCellPosition_(QChessCell *cell);
+
     Ui::chessBoardView *ui;
     std::array<std::array<QChessCell *, MAX_CELLS>, MAX_CELLS> qCellBoard_;
+    int id_;
+
+    QChessCell *pendingFrom;
+    QChessCell *pendingTo;
 };
 
 #endif // CHESSBOARDVIEW_H

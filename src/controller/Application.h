@@ -4,7 +4,9 @@
 #include <vector>
 #include <algorithm>
 #include "CommandSystem.h"
+#include "../command/MoveUnitCommand.h"
 #include "SaveSystem.h"
+#include "../model/Board.h"
 
 using appPtr_t = std::unique_ptr<class Application>;
 using gameInstancePtr_t = std::shared_ptr<class GameInstance>;
@@ -14,10 +16,11 @@ class Application {
         Application();
         void newGame(int gameId);
         void quitGame(int gameId);
+        bool onRequestMove(int gameId, Position from, Position to);
 
     private:
 
-        int findGame_(int gameId);
+        int findGameIdx_(int gameId);
         std::vector<gameInstancePtr_t> games_;
         int gameInstanceNextId_;
 };
@@ -31,8 +34,13 @@ class GameInstance {
             return gameId_;
         }
 
+        bool onRequestMove(Position fromPos, Position toPos);
+
     private:
+        bool moveIsValid_(unitType_t unitType, Position fromPos, Position toPos);
+
         int gameId_;
-        commandSystemPtr_t commandSystem;
-        saveSystemPtr_t saveSystem;
+        commandSystemPtr_t commandSystem_;
+        saveSystemPtr_t saveSystem_;
+        boardPtr_t board_;
 };

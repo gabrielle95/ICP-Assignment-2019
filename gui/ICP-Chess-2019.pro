@@ -33,7 +33,8 @@ SOURCES += \
     ../src/controller/SaveSystem.cpp \
     ../src/controller/CommandSystem.cpp \
     ../src/model/SaveFile.cpp \
-    ../src/model/Board.cpp
+    ../src/model/Board.cpp \
+    ../src/model/Rules.cpp
 
 HEADERS += \
         ../src/view/gui/mainwindow.h \
@@ -49,7 +50,8 @@ HEADERS += \
     ../src/command/MoveUnitCommand.h \
     ../src/common/ChessException.h \
     ../src/common/Position.h \
-    ../src/common/Color.h
+    ../src/common/Color.h \
+    ../src/model/Rules.h
 
 FORMS += \
         mainwindow.ui \

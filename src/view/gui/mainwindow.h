@@ -21,6 +21,8 @@ private slots:
 
     void on_addtab_btn_clicked();
 
+    void sl_onMoveRequest(Position from, Position to);
+
 private:
     int gameNumber;
     Ui::MainWindow *ui;
