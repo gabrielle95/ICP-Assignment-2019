@@ -26,6 +26,7 @@ chessBoardView::chessBoardView(int id, QWidget *parent) :
             connect(cell, SIGNAL(clicked(bool)), this, SLOT(sl_cellWasClicked()));
             connect(this, SIGNAL(sig_emitClickedCell(QChessCell*)), cell, SLOT(sl_onReceiveClick(QChessCell*)));
             connect(cell, SIGNAL(sig_emitCellSelectionChanged(QChessCell*,QChessCell*)), this, SLOT(sl_cellSelectionWasChanged(QChessCell*,QChessCell*)));
+            connect(cell, SIGNAL(sig_emitRequestAvailableCells()), this, SLOT(sl_onRequestAvailableCells()));
 
             black = !black;
         }
@@ -54,6 +55,19 @@ void chessBoardView::executePendingMove() {
     pendingFrom->setCheckable(false);
 }
 
+void chessBoardView::markAvailableCellsForMove(std::vector<Position> cellPositions) {
+
+    for(auto &a : qCellBoard_) {
+        for(auto &cell : a) {
+            cell->setAvailableForMove(false);
+        }
+    }
+
+    for (auto& p : cellPositions) {
+            qCellBoard_.at(p.clm()).at(p.row())->setAvailableForMove(true);
+    };
+}
+
 void chessBoardView::draw() {
     for(int col = A; col <= H; col++) {
         for(int row = ONE; row <= EIGHT; row++) {
@@ -69,10 +83,16 @@ void chessBoardView::sl_cellWasClicked() {
 }
 
 void chessBoardView::sl_cellSelectionWasChanged(QChessCell *from, QChessCell* to) {
-    // TODO: CREATE MOVE REQUEST
     pendingFrom = from;
     pendingTo = to;
     emit sig_emitMoveRequest(getCellPosition_(from), getCellPosition_(to));
+}
+
+void chessBoardView::sl_onRequestAvailableCells() {
+    QChessCell *requestingCell = (QChessCell *)sender();
+    emit sig_emitAvailableCellsRequest(getCellPosition_(requestingCell));
+    // TODO SIGNAL TO REQUEST AVAILABLE POSITIONS
+    // CACHE IT ON BACKEND
 }
 
 void chessBoardView::initStyles_() {

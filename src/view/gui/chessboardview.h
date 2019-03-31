@@ -28,14 +28,17 @@ public:
     }
 
     void executePendingMove();
+    void markAvailableCellsForMove(std::vector<Position> cellPositions);
 
 signals:
     void sig_emitClickedCell(QChessCell *cell);
     void sig_emitMoveRequest(Position from, Position to);
+    void sig_emitAvailableCellsRequest(Position from);
 
 private slots:
     void sl_cellWasClicked();
     void sl_cellSelectionWasChanged(QChessCell *from, QChessCell* to);
+    void sl_onRequestAvailableCells();
 
 private:
     void initStyles_();

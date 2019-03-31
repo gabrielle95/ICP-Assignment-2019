@@ -23,6 +23,8 @@ private slots:
 
     void sl_onMoveRequest(Position from, Position to);
 
+    void sl_onRequestAvailableCells(Position from);
+
 private:
     int gameNumber;
     Ui::MainWindow *ui;

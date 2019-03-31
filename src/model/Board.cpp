@@ -77,7 +77,27 @@ void Board::print() {
 }
 
 bool Board::checkMoveValidity(unitPtr_t unit, Position fromPos, Position toPos) {
-    return Rules::checkMoveValidity(unit, fromPos, toPos);
+
+    bool posAvailable = true;
+
+    /* REFACTOR THIS PART */
+    if(unit->type() == ROOK) {
+        posAvailable = positionIsAvailable_(getAvailableRowPositions_(fromPos),toPos)
+                        || positionIsAvailable_(getAvailableColPositions_(fromPos),toPos);
+    }
+    else if(unit->type() == BISHOP) {
+        posAvailable = positionIsAvailable_(getAvailableDiagonalPositions_(fromPos),toPos);
+    }
+    else if(unit->type() == KING || unit->type() == QUEEN) {
+        posAvailable = positionIsAvailable_(getAvailableRowPositions_(fromPos),toPos)
+                        || positionIsAvailable_(getAvailableColPositions_(fromPos),toPos)
+                        || positionIsAvailable_(getAvailableDiagonalPositions_(fromPos),toPos);
+    }
+    else if(unit->type() == PAWN) {
+        posAvailable = positionIsAvailable_(getAvailableRowPositions_(fromPos),toPos);
+    }
+
+    return Rules::checkMoveValidity(unit, fromPos, toPos) && posAvailable;
 }
 
 void Board::moveUnit(unitPtr_t unit, Position to) {
@@ -110,6 +130,127 @@ Position Board::findUnitPosition(unitPtr_t unit) {
     return Position((letter_t)-1, (rowPos_t)-1);
 }
 
+std::vector<Position> Board::getAvailableCellsForUnit(Position from) {
+    unitPtr_t unit = At(from);
+    if(unit != nullptr) {
+        std::vector<Position> rows;
+        std::vector<Position> cols;
+        std::vector<Position> diagonals;
+
+        if(unit->type() == ROOK) {
+            rows = getAvailableRowPositions_(from);
+            cols = getAvailableColPositions_(from);
+            std::move(rows.begin(), rows.end(), lastAvailableMovesCache_.end());
+            std::move(cols.begin(), cols.end(), lastAvailableMovesCache_.end());
+        }
+        else if(unit->type() == BISHOP) {
+            diagonals = getAvailableDiagonalPositions_(from);
+            std::move(diagonals.begin(), diagonals.end(), lastAvailableMovesCache_.end());
+        }
+        else if(unit->type() == QUEEN) {
+            rows = getAvailableRowPositions_(from);
+            cols = getAvailableColPositions_(from);
+            diagonals = getAvailableDiagonalPositions_(from);
+            std::move(rows.begin(), rows.end(), lastAvailableMovesCache_.end());
+            std::move(cols.begin(), cols.end(), lastAvailableMovesCache_.end());
+            std::move(diagonals.begin(), diagonals.end(), lastAvailableMovesCache_.end());
+        }
+        //TODO
+    }
+    return lastAvailableMovesCache_;
+}
+
+
 void Board::setUnitTo_(unitPtr_t unit, Position pos) {
     board_.at(pos.clm()).at(pos.row()) = unit;
+}
+
+std::vector<Position> Board::getAvailableDiagonalPositions_(Position from) {
+
+    std::vector<Position> available;
+
+    int col, row;
+
+    for(col = from.clm()-1, row = from.row()+1; col >= COL_MIN, row <= ROW_MAX; col--, row++) {
+        if(col < COL_MIN) break;
+        if(board_.at(col).at(row) == nullptr) {
+            available.push_back(Position((letter_t)col, (rowPos_t)row));
+            continue;
+        }
+        break;
+    }
+    for(col = from.clm()+1, row = from.row()+1; col <= COL_MAX, row <= ROW_MAX; col++, row++) {
+        if(col > COL_MAX) break;
+        if(board_.at(col).at(row) == nullptr) {
+            available.push_back(Position((letter_t)col, (rowPos_t)row));
+            continue;
+        }
+        break;
+    }
+    for(col = from.clm()-1, row = from.row()-1; col >= COL_MIN, row >= ROW_MIN; col--, row--) {
+        if(col < COL_MIN) break;
+        if(board_.at(col).at(row) == nullptr) {
+            available.push_back(Position((letter_t)col, (rowPos_t)row));
+            continue;
+        }
+        break;
+    }
+    for(col = from.clm()+1, row = from.row()-1; col <= COL_MAX, row >= ROW_MIN; col++, row--) {
+        if(col > COL_MAX) break;
+        if(board_.at(col).at(row) == nullptr) {
+            available.push_back(Position((letter_t)col, (rowPos_t)row));
+            continue;
+        }
+        break;
+    }
+    return available;
+}
+
+std::vector<Position> Board::getAvailableRowPositions_(Position from) {
+    int row;
+    std::vector<Position> available;
+
+    for(row = from.row()-1; row >= ROW_MIN; row--) {
+        if(board_.at(from.clm()).at(row) == nullptr) {
+            available.push_back(Position(from.clm(), (rowPos_t)row));
+            continue;
+        }
+        break;
+    }
+    for(row = from.row()+1; row <= ROW_MAX; row++) {
+        if(board_.at(from.clm()).at(row) == nullptr) {
+            available.push_back(Position(from.clm(), (rowPos_t)row));
+            continue;
+        }
+        break;
+    }
+    return available;
+}
+
+std::vector<Position> Board::getAvailableColPositions_(Position from) {
+    int col;
+    std::vector<Position> available;
+
+    for(col = from.clm()-1; col >= COL_MIN; col--) {
+        if(board_.at(col).at(from.row()) == nullptr) {
+            available.push_back(Position((letter_t)col, from.row()));
+            continue;
+        }
+        break;
+    }
+    for(col = from.clm()+1; col <= ROW_MAX; col++) {
+        if(board_.at(col).at(from.row()) == nullptr) {
+            available.push_back(Position((letter_t)col, from.row()));
+            continue;
+        }
+        break;
+    }
+    return available;
+}
+
+bool Board::positionIsAvailable_(std::vector<Position> positions, Position pos) {
+    for (auto& p : positions) {
+        if(p == pos) return true;
+    };
+    return false;
 }

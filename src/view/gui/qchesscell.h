@@ -35,11 +35,21 @@ public:
         QString selStyle;
 
         if(this->isChecked()) selStyle = Styles::cellSelectedBg;
+        if(this->availableForMove()) selStyle = Styles::cellAllowedMoveBg;
         this->setStyleSheet(this->backgroundStyle_ + this->unitStyle_ + selStyle);
+    }
+
+    bool availableForMove() const {
+        return this->availableForMove_;
+    }
+
+    void setAvailableForMove(bool value) {
+        this->availableForMove_ = value;
     }
 
 signals:
     void sig_emitCellSelectionChanged(QChessCell *from, QChessCell *to);
+    void sig_emitRequestAvailableCells();
 
 private slots:
     void sl_onReceiveClick(QChessCell * clickedCell);
@@ -49,7 +59,7 @@ private:
     QWidget *parent_;
     QString backgroundStyle_;
     QString unitStyle_;
-    bool selected_;
+    bool availableForMove_;
 };
 
 #endif // QCHESSCELL_H

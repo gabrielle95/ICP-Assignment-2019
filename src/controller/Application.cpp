@@ -31,6 +31,14 @@ bool Application::onRequestMove(int gameId, Position from, Position to) {
     return false;
 }
 
+std::vector<Position> Application::onRequestAvailableCells(int gameId, Position from) {
+    auto gameIdx = findGameIdx_(gameId);
+    if(games_.at(gameIdx) != nullptr) {
+        return games_.at(gameIdx)->onRequestAvailableCells(from);
+    }
+    return std::vector<Position>();
+}
+
 GameInstance::GameInstance(int id) : gameId_(id) {
     commandSystem_ = std::make_shared<CommandSystem>();
     saveSystem_ = std::make_shared<SaveSystem>();
@@ -52,4 +60,8 @@ bool GameInstance::onRequestMove(Position fromPos, Position toPos) {
 
 bool GameInstance::moveIsValid_(unitPtr_t unit, Position fromPos, Position toPos) {
     return board_->checkMoveValidity(unit, fromPos, toPos);
+}
+
+std::vector<Position> GameInstance::onRequestAvailableCells(Position from) {
+    return board_->getAvailableCellsForUnit(from);
 }

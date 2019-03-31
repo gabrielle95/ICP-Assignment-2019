@@ -69,7 +69,7 @@ bool Rules::checkKing_(Position fromPos, Position toPos) {
     int columnDst = getColDistance(fromPos, toPos);
     int rowDst = getRowDistance(fromPos, toPos);
 
-    return (rowDst == columnDst == 1)
+    return (rowDst == 1 && columnDst == 1)
             || (rowDst == 1 && columnDst == 0)
             || (rowDst == 0 && columnDst == 1);
 }

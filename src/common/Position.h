@@ -43,6 +43,11 @@ class Position {
             return lb + std::to_string(clm_) + separator + std::to_string(row_) + rb;
         }
 
+        bool operator==(const Position& p) const
+        {
+            return clm_ == p.clm() && row_ == p.row();
+        }
+
     private:
         letter_t clm_;
         rowPos_t row_;

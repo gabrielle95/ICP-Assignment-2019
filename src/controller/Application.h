@@ -17,6 +17,7 @@ class Application {
         void newGame(int gameId);
         void quitGame(int gameId);
         bool onRequestMove(int gameId, Position from, Position to);
+        std::vector<Position> onRequestAvailableCells(int gameId, Position from);
 
     private:
 
@@ -35,6 +36,7 @@ class GameInstance {
         }
 
         bool onRequestMove(Position fromPos, Position toPos);
+        std::vector<Position> onRequestAvailableCells(Position from);
 
     private:
         bool moveIsValid_(unitPtr_t unit, Position fromPos, Position toPos);
