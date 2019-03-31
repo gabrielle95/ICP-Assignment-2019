@@ -1,3 +1,4 @@
+#include "../common/ChessException.h"
 #include "Application.h"
 
 
@@ -38,14 +39,17 @@ GameInstance::GameInstance(int id) : gameId_(id) {
 
 bool GameInstance::onRequestMove(Position fromPos, Position toPos) {
     unitPtr_t unit = board_->At(fromPos);
-    if(moveIsValid_(unit->type(), fromPos, toPos)) {
-        commandPtr_t moveCommand = std::make_shared<MoveUnitCommand>(board_->At(fromPos), toPos);
+
+    // rewrite this line pls
+    if(unit == nullptr) throw ChessException("GameInstance::onRequestMove unit is nullptr at " + fromPos.to_str());
+    if(moveIsValid_(unit, fromPos, toPos)) {
+        commandPtr_t moveCommand = std::make_shared<MoveUnitCommand>(board_, board_->At(fromPos), toPos);
         commandSystem_->executeCommand(moveCommand);
         return true;
     }
     return false;
 }
 
-bool GameInstance::moveIsValid_(unitType_t unitType, Position fromPos, Position toPos) {
-    return board_->checkMoveValidity(unitType, fromPos, toPos);
+bool GameInstance::moveIsValid_(unitPtr_t unit, Position fromPos, Position toPos) {
+    return board_->checkMoveValidity(unit, fromPos, toPos);
 }

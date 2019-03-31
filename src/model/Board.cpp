@@ -73,15 +73,43 @@ void Board::print() {
         for(int r = ONE; r < board_.at(c).size(); r++) {
             if(board_.at(c).at(r)) board_.at(c).at(r)->print();
         }
-
     }
 }
 
-bool Board::checkMoveValidity(unitType_t unitType, Position fromPos, Position toPos) {
-    return Rules::checkMoveValidity(unitType, fromPos, toPos);
+bool Board::checkMoveValidity(unitPtr_t unit, Position fromPos, Position toPos) {
+    return Rules::checkMoveValidity(unit, fromPos, toPos);
 }
 
-void Board::moveUnit(unitPtr_t unit, Position from, Position to) {
-//TODO
+void Board::moveUnit(unitPtr_t unit, Position to) {
+    Position unitPos = findUnitPosition(unit);
+
+    // unit is not captured
+    if(unitPos.isValid()) {
+        if(At(to) != nullptr) {
+            captureUnit(At(to));
+        }
+        setUnitTo_(unit, to);
+        setUnitTo_(nullptr, unitPos);
+        if(!unit->movedFromStartingPos()) unit->setMovedFromStartingPos();
+    }
 }
 
+void Board::captureUnit(unitPtr_t unit) {
+    capturedUnits_.emplace_back(unit);
+}
+
+Position Board::findUnitPosition(unitPtr_t unit) {
+    for(int c = A; c < board_.size(); c++) {
+
+        for(int r = ONE; r < board_.at(c).size(); r++) {
+            if(board_.at(c).at(r) == unit) {
+                return Position((letter_t)c, (rowPos_t)r);
+            }
+        }
+    }
+    return Position((letter_t)-1, (rowPos_t)-1);
+}
+
+void Board::setUnitTo_(unitPtr_t unit, Position pos) {
+    board_.at(pos.clm()).at(pos.row()) = unit;
+}

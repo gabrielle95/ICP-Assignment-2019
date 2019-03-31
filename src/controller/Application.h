@@ -37,7 +37,7 @@ class GameInstance {
         bool onRequestMove(Position fromPos, Position toPos);
 
     private:
-        bool moveIsValid_(unitType_t unitType, Position fromPos, Position toPos);
+        bool moveIsValid_(unitPtr_t unit, Position fromPos, Position toPos);
 
         int gameId_;
         commandSystemPtr_t commandSystem_;

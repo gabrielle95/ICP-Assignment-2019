@@ -29,6 +29,20 @@ class Position {
             row_ = row;
         }
 
+        bool isValid() const {
+            return clm_ >= 0
+                && row_ >= 0
+                && clm_ <= 7
+                && row_ <= 7;
+        }
+
+        std::string to_str() {
+            std::string lb = "(";
+            std::string rb = ")";
+            std::string separator = (",");
+            return lb + std::to_string(clm_) + separator + std::to_string(row_) + rb;
+        }
+
     private:
         letter_t clm_;
         rowPos_t row_;

@@ -24,41 +24,18 @@ enum unitType_t {
     PAWN, // PAWN - pesak p
 };
 
-using pseudoUnitPtr_t = std::shared_ptr<struct PseudoUnit>;
 using unitPtr_t = std::shared_ptr<class Unit>;
 using unitVector_t = std::vector<unitPtr_t>;
-
-class PseudoUnit {
-    Position pos;
-    color_t color;
-    unitType_t type;
-};
 
 class Unit {
     public:
 
-        Unit(color_t color, unitType_t type, Position starting_pos)
-        : color_(color), type_(type), pos_(starting_pos)
+        Unit(color_t color, unitType_t type, /* REMOVE  UPON REFACTORING*/Position starting_pos)
+        : color_(color), type_(type), hasMovedFromStartingPos_(false)
         {}
-
-        virtual void moveTo(Position pos) {
-            pos_ = pos;
-        }
-
-        virtual int row() const {
-            return pos_.row();
-        }
-
-        virtual int clm() const {
-            return pos_.clm();
-        }
 
         virtual color_t color() const {
             return this->color_;
-        }
-
-        virtual Position getPos() const {
-            return this->pos_;
         }
 
         virtual unitType_t type() const {
@@ -90,8 +67,16 @@ class Unit {
             }
         }
 
+        virtual bool movedFromStartingPos() const {
+            return hasMovedFromStartingPos_;
+        }
+
+        virtual void setMovedFromStartingPos() {
+            hasMovedFromStartingPos_ = true;
+        }
+
     protected:
         color_t color_;
         unitType_t type_;
-        Position pos_;
+        bool hasMovedFromStartingPos_;
 };
