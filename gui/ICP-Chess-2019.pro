@@ -30,6 +30,7 @@ SOURCES += \
     ../src/view/gui/chessboardview.cpp \
     ../src/view/gui/qchesscell.cpp \
     ../src/controller/Application.cpp \
+    ../src/controller/GameInstance.cpp \
     ../src/controller/SaveSystem.cpp \
     ../src/controller/CommandSystem.cpp \
     ../src/model/SaveFile.cpp \
@@ -41,6 +42,7 @@ HEADERS += \
     ../src/view/gui/chessboardview.h \
     ../src/view/gui/qchesscell.h \
     ../src/controller/Application.h \
+    ../src/controller/GameInstance.h \
     ../src/controller/SaveSystem.h \
     ../src/controller/CommandSystem.h \
     ../src/model/SaveFile.h \
