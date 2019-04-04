@@ -7,7 +7,8 @@
 #include "../../controller/SaveSystem.h"
 #include "../../model/Board.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
 
     commandSystemPtr_t commandSystem = std::make_shared<CommandSystem>();
     saveSystemPtr_t saveSystem = std::make_shared<SaveSystem>();

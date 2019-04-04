@@ -1,6 +1,7 @@
 #pragma once
 
-enum color_t {
+enum color_t
+{
     BLACK,
     WHITE
 };

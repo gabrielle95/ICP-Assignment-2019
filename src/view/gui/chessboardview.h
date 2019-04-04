@@ -9,7 +9,8 @@
 
 const int MAX_CELLS = 8;
 
-namespace Ui {
+namespace Ui
+{
 class chessBoardView;
 }
 
@@ -17,33 +18,35 @@ class chessBoardView : public QWidget
 {
     Q_OBJECT
 
-public:
+  public:
     explicit chessBoardView(int id, QWidget *parent = 0);
     ~chessBoardView();
 
     void draw();
 
-    int Id() const {
+    int Id() const
+    {
         return this->id_;
     }
 
     void executePendingMove();
     void markAvailableCellsForMove(std::vector<Position> cellPositions);
 
-signals:
+  signals:
     void sig_emitClickedCell(QChessCell *cell);
     void sig_emitMoveRequest(Position from, Position to);
     void sig_emitAvailableCellsRequest(Position from);
 
-private slots:
+  private slots:
     void sl_cellWasClicked();
-    void sl_cellSelectionWasChanged(QChessCell *from, QChessCell* to);
+    void sl_cellSelectionWasChanged(QChessCell *from, QChessCell *to);
     void sl_onRequestAvailableCells();
 
-private:
+  private:
     void initStyles_();
     void moveUnitStyle_();
     Position getCellPosition_(QChessCell *cell);
+    void clearAvailableForMove_();
 
     Ui::chessBoardView *ui;
     std::array<std::array<QChessCell *, MAX_CELLS>, MAX_CELLS> qCellBoard_;

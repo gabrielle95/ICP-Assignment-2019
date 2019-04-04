@@ -1,54 +1,75 @@
 #pragma once
 
-enum letter_t {
-    A, B, C, D, E, F, G, H
+enum letter_t
+{
+    A,
+    B,
+    C,
+    D,
+    E,
+    F,
+    G,
+    H
 };
 
-enum rowPos_t {
-    ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT
+enum rowPos_t
+{
+    ONE,
+    TWO,
+    THREE,
+    FOUR,
+    FIVE,
+    SIX,
+    SEVEN,
+    EIGHT
 };
 
-class Position {
-    public:
+class Position
+{
+  public:
+    Position() : clm_(A), row_(ONE) {}
 
-        Position() : clm_(A), row_(ONE) {}
-
-        Position (letter_t clm, rowPos_t row)
+    Position(letter_t clm, rowPos_t row)
         : clm_(clm), row_(row) {}
 
-        rowPos_t row() const {
-            return row_;
-        }
+    Position(int clm, int row)
+        : clm_((letter_t)clm), row_((rowPos_t)row) {}
 
-        letter_t clm() const {
-            return clm_;
-        }
+    rowPos_t row() const
+    {
+        return row_;
+    }
 
-        void set(letter_t clm, rowPos_t row) {
-            clm_ = clm;
-            row_ = row;
-        }
+    letter_t clm() const
+    {
+        return clm_;
+    }
 
-        bool isValid() const {
-            return clm_ >= 0
-                && row_ >= 0
-                && clm_ <= 7
-                && row_ <= 7;
-        }
+    void set(letter_t clm, rowPos_t row)
+    {
+        clm_ = clm;
+        row_ = row;
+    }
 
-        std::string to_str() {
-            std::string lb = "(";
-            std::string rb = ")";
-            std::string separator = (",");
-            return lb + std::to_string(clm_) + separator + std::to_string(row_) + rb;
-        }
+    bool isValid() const
+    {
+        return clm_ >= 0 && row_ >= 0 && clm_ <= 7 && row_ <= 7;
+    }
 
-        bool operator==(const Position& p) const
-        {
-            return clm_ == p.clm() && row_ == p.row();
-        }
+    std::string to_str()
+    {
+        std::string lb = "(";
+        std::string rb = ")";
+        std::string separator = (",");
+        return lb + std::to_string(clm_) + separator + std::to_string(row_) + rb;
+    }
 
-    private:
-        letter_t clm_;
-        rowPos_t row_;
+    bool operator==(const Position &p) const
+    {
+        return clm_ == p.clm() && row_ == p.row();
+    }
+
+  private:
+    letter_t clm_;
+    rowPos_t row_;
 };

@@ -1,15 +1,16 @@
 #include "qchesscell.h"
 
-QChessCell::QChessCell(color_t color, QWidget *parent) :
-    QPushButton(parent),
-    color_(color),
-    parent_(parent),
-    availableForMove_(false)
+QChessCell::QChessCell(color_t color, QWidget *parent) : QPushButton(parent),
+                                                         color_(color),
+                                                         parent_(parent),
+                                                         availableForMove_(false)
 {
-    if(color == BLACK) {
+    if (color == BLACK)
+    {
         this->backgroundStyle_ = "background-color: rgb(50, 50, 50);";
     }
-    else if(color == WHITE) {
+    else if (color == WHITE)
+    {
         this->backgroundStyle_ = "background-color: rgb(255, 255, 255);";
     }
 
@@ -17,14 +18,24 @@ QChessCell::QChessCell(color_t color, QWidget *parent) :
     this->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 }
 
-void QChessCell::sl_onReceiveClick(QChessCell *clickedCell) {
-    if(clickedCell != this && this->isChecked()) {
+void QChessCell::sl_onReceiveClick(QChessCell *clickedCell)
+{
+    if (clickedCell != this && this->isChecked())
+    {
         this->setChecked(false);
         emit sig_emitCellSelectionChanged(this, clickedCell);
         return;
     }
 
-    if(clickedCell == this && this->isChecked()) {
+    if (clickedCell == this && this->isChecked())
+    {
         emit sig_emitRequestAvailableCells();
+        return;
+    }
+
+    if (clickedCell == this && !this->isChecked())
+    {
+        emit sig_emitCellSelectionChanged(this, nullptr);
+        return;
     }
 }

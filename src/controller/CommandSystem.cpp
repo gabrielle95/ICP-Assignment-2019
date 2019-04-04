@@ -1,16 +1,19 @@
 #include "CommandSystem.h"
 
-CommandSystem::CommandSystem () {}
+CommandSystem::CommandSystem() {}
 
-void CommandSystem::executeCommand(commandPtr_t command) {
+void CommandSystem::executeCommand(commandPtr_t command)
+{
     redoVector_ = commandVector_t();
     command->execute();
     undoVector_.push_back(command);
 }
 
-void CommandSystem::undo() {
+void CommandSystem::undo()
+{
 
-    if(undoVector_.empty()) {
+    if (undoVector_.empty())
+    {
         return;
     }
 
@@ -19,8 +22,10 @@ void CommandSystem::undo() {
     undoVector_.pop_back();
 }
 
-void CommandSystem::redo() {
-    if(redoVector_.empty()) {
+void CommandSystem::redo()
+{
+    if (redoVector_.empty())
+    {
         return;
     }
 
@@ -29,7 +34,8 @@ void CommandSystem::redo() {
     redoVector_.pop_back();
 }
 
-commandVector_t CommandSystem::constructCommandsToSave() {
+commandVector_t CommandSystem::constructCommandsToSave()
+{
     std::move(undoVector_.begin(), undoVector_.end(), commandsToSave_.begin());
     return commandsToSave_;
 }

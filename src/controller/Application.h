@@ -11,38 +11,39 @@
 using appPtr_t = std::unique_ptr<class Application>;
 using gameInstancePtr_t = std::shared_ptr<class GameInstance>;
 
-class Application {
-    public:
-        Application();
-        void newGame(int gameId);
-        void quitGame(int gameId);
-        bool onRequestMove(int gameId, Position from, Position to);
-        std::vector<Position> onRequestAvailableCells(int gameId, Position from);
+class Application
+{
+  public:
+    Application();
+    void newGame(int gameId);
+    void quitGame(int gameId);
+    bool onRequestMove(int gameId, Position from, Position to);
+    std::vector<Position> onRequestAvailableCells(int gameId, Position from);
 
-    private:
-
-        int findGameIdx_(int gameId);
-        std::vector<gameInstancePtr_t> games_;
-        int gameInstanceNextId_;
+  private:
+    int findGameIdx_(int gameId);
+    std::vector<gameInstancePtr_t> games_;
+    int gameInstanceNextId_;
 };
 
-class GameInstance {
-    public:
+class GameInstance
+{
+  public:
+    GameInstance(int id);
 
-        GameInstance(int id);
+    int Id() const
+    {
+        return gameId_;
+    }
 
-        int Id() const {
-            return gameId_;
-        }
+    bool onRequestMove(Position fromPos, Position toPos);
+    std::vector<Position> onRequestAvailableCells(Position from);
 
-        bool onRequestMove(Position fromPos, Position toPos);
-        std::vector<Position> onRequestAvailableCells(Position from);
+  private:
+    bool moveIsValid_(unitPtr_t unit, Position fromPos, Position toPos);
 
-    private:
-        bool moveIsValid_(unitPtr_t unit, Position fromPos, Position toPos);
-
-        int gameId_;
-        commandSystemPtr_t commandSystem_;
-        saveSystemPtr_t saveSystem_;
-        boardPtr_t board_;
+    int gameId_;
+    commandSystemPtr_t commandSystem_;
+    saveSystemPtr_t saveSystem_;
+    boardPtr_t board_;
 };

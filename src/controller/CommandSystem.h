@@ -10,21 +10,21 @@ using commandPtr_t = std::shared_ptr<ICommand>;
 using commandVector_t = std::vector<commandPtr_t>;
 using commandSystemPtr_t = std::shared_ptr<CommandSystem>;
 
-class CommandSystem {
-    public:
+class CommandSystem
+{
+  public:
+    CommandSystem();
 
-        CommandSystem();
+    void executeCommand(commandPtr_t command);
 
-        void executeCommand(commandPtr_t command);
+    void undo();
 
-        void undo();
+    void redo();
 
-        void redo();
+    commandVector_t constructCommandsToSave();
 
-        commandVector_t constructCommandsToSave();
-
-    private:
-        commandVector_t undoVector_;
-        commandVector_t redoVector_;
-        commandVector_t commandsToSave_;
+  private:
+    commandVector_t undoVector_;
+    commandVector_t redoVector_;
+    commandVector_t commandsToSave_;
 };

@@ -8,53 +8,63 @@
 class QChessCell : public QPushButton
 {
     Q_OBJECT
-public:
+  public:
     QChessCell(color_t color, QWidget *parent = 0);
 
-    QString backgroundStyle() const{
+    QString backgroundStyle() const
+    {
         return backgroundStyle_;
     }
 
-    void setUnitStyle(QString unitStyle) {
+    void setUnitStyle(QString unitStyle)
+    {
         this->unitStyle_ = unitStyle;
     }
 
-    void unsetUnitStyle() {
+    void unsetUnitStyle()
+    {
         this->unitStyle_.clear();
     }
 
-    QString getUnitStyle() const {
+    QString getUnitStyle() const
+    {
         return this->unitStyle_;
     }
 
-    void setBackgroundStyle(QString bgStyle) {
+    void setBackgroundStyle(QString bgStyle)
+    {
         this->backgroundStyle_ = bgStyle;
     }
 
-    void draw() {
+    void draw()
+    {
         QString selStyle;
 
-        if(this->isChecked()) selStyle = Styles::cellSelectedBg;
-        if(this->availableForMove()) selStyle = Styles::cellAllowedMoveBg;
+        if (this->isChecked())
+            selStyle = Styles::cellSelectedBg;
+        if (this->availableForMove())
+            selStyle = Styles::cellAllowedMoveBg;
         this->setStyleSheet(this->backgroundStyle_ + this->unitStyle_ + selStyle);
     }
 
-    bool availableForMove() const {
+    bool availableForMove() const
+    {
         return this->availableForMove_;
     }
 
-    void setAvailableForMove(bool value) {
+    void setAvailableForMove(bool value)
+    {
         this->availableForMove_ = value;
     }
 
-signals:
+  signals:
     void sig_emitCellSelectionChanged(QChessCell *from, QChessCell *to);
     void sig_emitRequestAvailableCells();
 
-private slots:
-    void sl_onReceiveClick(QChessCell * clickedCell);
+  private slots:
+    void sl_onReceiveClick(QChessCell *clickedCell);
 
-private:
+  private:
     color_t color_;
     QWidget *parent_;
     QString backgroundStyle_;

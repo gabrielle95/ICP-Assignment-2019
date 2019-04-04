@@ -1,7 +1,8 @@
 #include "../common/Color.h"
 #include "Board.h"
 
-Board::Board() {
+Board::Board()
+{
 
     /******** WHITE ********/
 
@@ -26,7 +27,7 @@ Board::Board() {
     board_.at(D).at(ONE) = std::make_shared<Unit>(WHITE, QUEEN, Position(D, ONE));
     board_.at(E).at(ONE) = std::make_shared<Unit>(WHITE, KING, Position(E, ONE));
 
-        /******** BLACK ********/
+    /******** BLACK ********/
 
     board_.at(A).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN, Position(A, SEVEN));
     board_.at(B).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN, Position(B, SEVEN));
@@ -48,209 +49,331 @@ Board::Board() {
 
     board_.at(D).at(EIGHT) = std::make_shared<Unit>(BLACK, QUEEN, Position(D, EIGHT));
     board_.at(E).at(EIGHT) = std::make_shared<Unit>(BLACK, KING, Position(E, EIGHT));
-
 }
 
-unitPtr_t Board::At(letter_t clm, rowPos_t row) {
+unitPtr_t Board::At(letter_t clm, rowPos_t row)
+{
 
-    try {
+    try
+    {
         return board_.at(clm).at(row);
     }
-    catch(std::out_of_range &e) {
+    catch (std::out_of_range &e)
+    {
         std::cerr << e.what() << "\n";
         std::cerr << "Error: Accessed out of range coords.\n";
     }
-
 }
 
-unitPtr_t Board::At(Position pos) {
+unitPtr_t Board::At(Position pos)
+{
     return At(pos.clm(), pos.row());
 }
 
-void Board::print() {
-    for(int c = A; c < board_.size(); c++) {
+void Board::print()
+{
+    for (int c = A; c < board_.size(); c++)
+    {
 
-        for(int r = ONE; r < board_.at(c).size(); r++) {
-            if(board_.at(c).at(r)) board_.at(c).at(r)->print();
+        for (int r = ONE; r < board_.at(c).size(); r++)
+        {
+            if (board_.at(c).at(r))
+                board_.at(c).at(r)->print();
         }
     }
 }
 
-bool Board::checkMoveValidity(unitPtr_t unit, Position fromPos, Position toPos) {
+bool Board::checkMoveValidity(unitPtr_t unit, Position fromPos, Position toPos)
+{
 
     bool posAvailable = true;
 
     /* REFACTOR THIS PART */
-    if(unit->type() == ROOK) {
-        posAvailable = positionIsAvailable_(getAvailableRowPositions_(fromPos),toPos)
-                        || positionIsAvailable_(getAvailableColPositions_(fromPos),toPos);
+    if (unit->type() == ROOK)
+    {
+        posAvailable = positionIsAvailable_(getAvailableRowPositions_(fromPos), toPos) || positionIsAvailable_(getAvailableColPositions_(fromPos), toPos);
     }
-    else if(unit->type() == BISHOP) {
-        posAvailable = positionIsAvailable_(getAvailableDiagonalPositions_(fromPos),toPos);
+    else if (unit->type() == BISHOP)
+    {
+        posAvailable = positionIsAvailable_(getAvailableDiagonalPositions_(fromPos), toPos);
     }
-    else if(unit->type() == KING || unit->type() == QUEEN) {
-        posAvailable = positionIsAvailable_(getAvailableRowPositions_(fromPos),toPos)
-                        || positionIsAvailable_(getAvailableColPositions_(fromPos),toPos)
-                        || positionIsAvailable_(getAvailableDiagonalPositions_(fromPos),toPos);
+    else if (unit->type() == KING || unit->type() == QUEEN)
+    {
+        posAvailable = positionIsAvailable_(getAvailableRowPositions_(fromPos), toPos) || positionIsAvailable_(getAvailableColPositions_(fromPos), toPos) || positionIsAvailable_(getAvailableDiagonalPositions_(fromPos), toPos);
     }
-    else if(unit->type() == PAWN) {
-        posAvailable = positionIsAvailable_(getAvailableRowPositions_(fromPos),toPos);
+    else if (unit->type() == PAWN)
+    {
+        posAvailable = positionIsAvailable_(getAvailableRowPositions_(fromPos), toPos);
     }
 
     return Rules::checkMoveValidity(unit, fromPos, toPos) && posAvailable;
 }
 
-void Board::moveUnit(unitPtr_t unit, Position to) {
+void Board::moveUnit(unitPtr_t unit, Position to)
+{
     Position unitPos = findUnitPosition(unit);
 
     // unit is not captured
-    if(unitPos.isValid()) {
-        if(At(to) != nullptr) {
+    if (unitPos.isValid())
+    {
+        if (At(to) != nullptr)
+        {
             captureUnit(At(to));
         }
         setUnitTo_(unit, to);
         setUnitTo_(nullptr, unitPos);
-        if(!unit->movedFromStartingPos()) unit->setMovedFromStartingPos();
+        if (!unit->movedFromStartingPos())
+            unit->setMovedFromStartingPos();
     }
 }
 
-void Board::captureUnit(unitPtr_t unit) {
+void Board::captureUnit(unitPtr_t unit)
+{
     capturedUnits_.emplace_back(unit);
+
+    //TODO
 }
 
-Position Board::findUnitPosition(unitPtr_t unit) {
-    for(int c = A; c < board_.size(); c++) {
+Position Board::findUnitPosition(unitPtr_t unit)
+{
+    for (int c = A; c < board_.size(); c++)
+    {
 
-        for(int r = ONE; r < board_.at(c).size(); r++) {
-            if(board_.at(c).at(r) == unit) {
-                return Position((letter_t)c, (rowPos_t)r);
+        for (int r = ONE; r < board_.at(c).size(); r++)
+        {
+            if (board_.at(c).at(r) == unit)
+            {
+                return Position(c, r);
             }
         }
     }
-    return Position((letter_t)-1, (rowPos_t)-1);
+    return Position(-1, -1);
 }
 
-std::vector<Position> Board::getAvailableCellsForUnit(Position from) {
-    unitPtr_t unit = At(from);
-    if(unit != nullptr) {
+std::vector<Position> Board::getAvailableCellsForUnit(Position from)
+{
+
+    lastAvailableMovesCache_.clear();
+    cachedUnit_ = nullptr;
+
+    cachedUnit_ = At(from);
+
+    if (cachedUnit_ != nullptr)
+    {
+        unitType_t unitType = cachedUnit_->type();
         std::vector<Position> rows;
         std::vector<Position> cols;
         std::vector<Position> diagonals;
 
-        if(unit->type() == ROOK) {
+        if (unitType == ROOK)
+        {
             rows = getAvailableRowPositions_(from);
             cols = getAvailableColPositions_(from);
-            std::move(rows.begin(), rows.end(), lastAvailableMovesCache_.end());
-            std::move(cols.begin(), cols.end(), lastAvailableMovesCache_.end());
+            std::copy(rows.begin(), rows.end(), std::back_inserter(lastAvailableMovesCache_));
+            std::copy(cols.begin(), cols.end(), std::back_inserter(lastAvailableMovesCache_));
         }
-        else if(unit->type() == BISHOP) {
+        else if (unitType == BISHOP)
+        {
             diagonals = getAvailableDiagonalPositions_(from);
-            std::move(diagonals.begin(), diagonals.end(), lastAvailableMovesCache_.end());
+            std::copy(diagonals.begin(), diagonals.end(), std::back_inserter(lastAvailableMovesCache_));
         }
-        else if(unit->type() == QUEEN) {
+        else if (unitType == QUEEN)
+        {
             rows = getAvailableRowPositions_(from);
             cols = getAvailableColPositions_(from);
             diagonals = getAvailableDiagonalPositions_(from);
-            std::move(rows.begin(), rows.end(), lastAvailableMovesCache_.end());
-            std::move(cols.begin(), cols.end(), lastAvailableMovesCache_.end());
-            std::move(diagonals.begin(), diagonals.end(), lastAvailableMovesCache_.end());
+
+            std::copy(rows.begin(), rows.end(), std::back_inserter(lastAvailableMovesCache_));
+            std::copy(cols.begin(), cols.end(), std::back_inserter(lastAvailableMovesCache_));
+            std::copy(diagonals.begin(), diagonals.end(), std::back_inserter(lastAvailableMovesCache_));
         }
-        //TODO
+        else if (unitType == KING)
+        {
+            diagonals = getFirstAvailableFromAllDirs_(from);
+            std::copy(diagonals.begin(), diagonals.end(), std::back_inserter(lastAvailableMovesCache_));
+        }
+        else if (unitType == KNIGHT)
+        {
+            //TODO
+        }
+        else if (unitType == PAWN)
+        {
+            //TODO
+        }
     }
     return lastAvailableMovesCache_;
 }
 
-
-void Board::setUnitTo_(unitPtr_t unit, Position pos) {
+void Board::setUnitTo_(unitPtr_t unit, Position pos)
+{
     board_.at(pos.clm()).at(pos.row()) = unit;
 }
 
-std::vector<Position> Board::getAvailableDiagonalPositions_(Position from) {
+std::vector<Position> Board::getAvailableDiagonalPositions_(Position from)
+{
 
     std::vector<Position> available;
 
     int col, row;
 
-    for(col = from.clm()-1, row = from.row()+1; col >= COL_MIN, row <= ROW_MAX; col--, row++) {
-        if(col < COL_MIN) break;
-        if(board_.at(col).at(row) == nullptr) {
+    for (col = from.clm() - 1, row = from.row() + 1; col >= COL_MIN, row <= ROW_MAX; col--, row++)
+    {
+        if (col < COL_MIN)
+            break;
+        if (board_.at(col).at(row) == nullptr)
+        {
             available.push_back(Position((letter_t)col, (rowPos_t)row));
             continue;
         }
+        if (cachedUnit_->color() != board_.at(col).at(row)->color())
+            available.push_back(Position((letter_t)col, (rowPos_t)row));
         break;
     }
-    for(col = from.clm()+1, row = from.row()+1; col <= COL_MAX, row <= ROW_MAX; col++, row++) {
-        if(col > COL_MAX) break;
-        if(board_.at(col).at(row) == nullptr) {
+    for (col = from.clm() + 1, row = from.row() + 1; col <= COL_MAX, row <= ROW_MAX; col++, row++)
+    {
+        if (col > COL_MAX)
+            break;
+        if (board_.at(col).at(row) == nullptr)
+        {
             available.push_back(Position((letter_t)col, (rowPos_t)row));
             continue;
         }
+        if (cachedUnit_->color() != board_.at(col).at(row)->color())
+            available.push_back(Position((letter_t)col, (rowPos_t)row));
         break;
     }
-    for(col = from.clm()-1, row = from.row()-1; col >= COL_MIN, row >= ROW_MIN; col--, row--) {
-        if(col < COL_MIN) break;
-        if(board_.at(col).at(row) == nullptr) {
+    for (col = from.clm() - 1, row = from.row() - 1; col >= COL_MIN, row >= ROW_MIN; col--, row--)
+    {
+        if (col < COL_MIN)
+            break;
+        if (board_.at(col).at(row) == nullptr)
+        {
             available.push_back(Position((letter_t)col, (rowPos_t)row));
             continue;
         }
+        if (cachedUnit_->color() != board_.at(col).at(row)->color())
+            available.push_back(Position((letter_t)col, (rowPos_t)row));
         break;
     }
-    for(col = from.clm()+1, row = from.row()-1; col <= COL_MAX, row >= ROW_MIN; col++, row--) {
-        if(col > COL_MAX) break;
-        if(board_.at(col).at(row) == nullptr) {
+    for (col = from.clm() + 1, row = from.row() - 1; col <= COL_MAX, row >= ROW_MIN; col++, row--)
+    {
+        if (col > COL_MAX)
+            break;
+        if (board_.at(col).at(row) == nullptr)
+        {
             available.push_back(Position((letter_t)col, (rowPos_t)row));
             continue;
         }
+        if (cachedUnit_->color() != board_.at(col).at(row)->color())
+            available.push_back(Position((letter_t)col, (rowPos_t)row));
         break;
     }
     return available;
 }
 
-std::vector<Position> Board::getAvailableRowPositions_(Position from) {
+std::vector<Position> Board::getAvailableRowPositions_(Position from)
+{
     int row;
     std::vector<Position> available;
 
-    for(row = from.row()-1; row >= ROW_MIN; row--) {
-        if(board_.at(from.clm()).at(row) == nullptr) {
+    for (row = from.row() - 1; row >= ROW_MIN; row--)
+    {
+        if (board_.at(from.clm()).at(row) == nullptr)
+        {
             available.push_back(Position(from.clm(), (rowPos_t)row));
             continue;
         }
+        if (cachedUnit_->color() != board_.at(from.clm()).at(row)->color())
+            available.push_back(Position(from.clm(), (rowPos_t)row));
         break;
     }
-    for(row = from.row()+1; row <= ROW_MAX; row++) {
-        if(board_.at(from.clm()).at(row) == nullptr) {
+    for (row = from.row() + 1; row <= ROW_MAX; row++)
+    {
+        if (board_.at(from.clm()).at(row) == nullptr)
+        {
             available.push_back(Position(from.clm(), (rowPos_t)row));
             continue;
         }
+        if (cachedUnit_->color() != board_.at(from.clm()).at(row)->color())
+            available.push_back(Position(from.clm(), (rowPos_t)row));
         break;
     }
     return available;
 }
 
-std::vector<Position> Board::getAvailableColPositions_(Position from) {
+std::vector<Position> Board::getAvailableColPositions_(Position from)
+{
     int col;
     std::vector<Position> available;
 
-    for(col = from.clm()-1; col >= COL_MIN; col--) {
-        if(board_.at(col).at(from.row()) == nullptr) {
+    for (col = from.clm() - 1; col >= COL_MIN; col--)
+    {
+        if (board_.at(col).at(from.row()) == nullptr)
+        {
             available.push_back(Position((letter_t)col, from.row()));
             continue;
         }
+        if (cachedUnit_->color() != board_.at(col).at(from.row())->color())
+            available.push_back(Position((letter_t)col, from.row()));
         break;
     }
-    for(col = from.clm()+1; col <= ROW_MAX; col++) {
-        if(board_.at(col).at(from.row()) == nullptr) {
+    for (col = from.clm() + 1; col <= ROW_MAX; col++)
+    {
+        if (board_.at(col).at(from.row()) == nullptr)
+        {
             available.push_back(Position((letter_t)col, from.row()));
             continue;
         }
+        if (cachedUnit_->color() != board_.at(col).at(from.row())->color())
+            available.push_back(Position((letter_t)col, from.row()));
         break;
     }
     return available;
 }
 
-bool Board::positionIsAvailable_(std::vector<Position> positions, Position pos) {
-    for (auto& p : positions) {
-        if(p == pos) return true;
+std::vector<Position> Board::getFirstAvailableFromAllDirs_(Position from)
+{
+    std::vector<Position> maybe;
+    std::vector<Position> available;
+
+    maybe.emplace_back(from.clm(), from.row() + 1);
+    maybe.emplace_back(from.clm(), from.row() - 1);
+
+    maybe.emplace_back(from.clm() + 1, from.row());
+    maybe.emplace_back(from.clm() - 1, from.row());
+
+    maybe.emplace_back(from.clm() + 1, from.row() + 1);
+    maybe.emplace_back(from.clm() + 1, from.row() - 1);
+    maybe.emplace_back(from.clm() - 1, from.row() + 1);
+    maybe.emplace_back(from.clm() - 1, from.row() - 1);
+
+    /* I do not have words for this, but it works */
+    for (auto &p : maybe)
+    {
+        if (p.isValid())
+        {
+            if (At(p) != nullptr)
+            {
+                if (cachedUnit_->color() != At(p)->color())
+                {
+                    available.push_back(p);
+                }
+            }
+            else
+            {
+                available.push_back(p);
+            }
+        }
+    }
+    return available;
+}
+
+bool Board::positionIsAvailable_(std::vector<Position> positions, Position pos)
+{
+    for (auto &p : positions)
+    {
+        if (p == pos)
+            return true;
     };
     return false;
 }

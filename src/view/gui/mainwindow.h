@@ -4,33 +4,34 @@
 #include <QMainWindow>
 #include "../../controller/Application.h"
 
-namespace Ui {
+namespace Ui
+{
 class MainWindow;
 }
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+  explicit MainWindow(QWidget *parent = 0);
+  ~MainWindow();
 
 private slots:
-    void on_tabWidget_tabCloseRequested(int index);
+  void on_tabWidget_tabCloseRequested(int index);
 
-    void on_addtab_btn_clicked();
+  void on_addtab_btn_clicked();
 
-    void sl_onMoveRequest(Position from, Position to);
+  void sl_onMoveRequest(Position from, Position to);
 
-    void sl_onRequestAvailableCells(Position from);
+  void sl_onRequestAvailableCells(Position from);
 
 private:
-    int gameNumber;
-    Ui::MainWindow *ui;
+  int gameNumber;
+  Ui::MainWindow *ui;
 
-    appPtr_t application;
-    std::vector<int> gameIds;
+  appPtr_t application;
+  std::vector<int> gameIds;
 };
 
 #endif

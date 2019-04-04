@@ -5,58 +5,60 @@
 #include "Unit.h"
 #include "../controller/CommandSystem.h"
 
-enum specialEvent_t {
-    CAPTURE, // brani
+enum specialEvent_t
+{
+    CAPTURE,   // brani
     PROMOTION, // premena
-    CHECK, // sach
-    MATE // mat
+    CHECK,     // sach
+    MATE       // mat
 };
 
 class SaveSystem;
 
-class SaveFile {
-    public:
-        SaveFile(std::string sFPath);
+class SaveFile
+{
+  public:
+    SaveFile(std::string sFPath);
 
-        void print() const;
+    void print() const;
 
-        bool isLoaded() const {
-            return isLoaded_;
-        }
+    bool isLoaded() const
+    {
+        return isLoaded_;
+    }
 
-    private:
+  private:
+    friend SaveSystem;
 
-        friend SaveSystem;
+    void load_();
 
-        void load_();
+    void write_();
 
-        void write_();
+    void writeAs_(std::string fileName);
 
-        void writeAs_(std::string fileName);
+    void serializeOutput_(commandVector_t outputCommands);
+    void serializeLine_(commandPtr_t command);
 
-        void serializeOutput_(commandVector_t outputCommands);
-        void serializeLine_(commandPtr_t command);
+    commandVector_t deserializeInput_();
+    commandPtr_t deserializeLine_(std::string line);
 
-        commandVector_t deserializeInput_();
-        commandPtr_t deserializeLine_(std::string line);
+    static unitType_t unitTypeFrom_(char c);
+    static char charFrom_(unitType_t unitType);
 
-        static unitType_t unitTypeFrom_(char c);
-        static char charFrom_(unitType_t unitType);
+    static letter_t letterCoordFrom_(char letter);
+    static char letterCharFrom_(letter_t letter);
 
-        static letter_t letterCoordFrom_(char letter);
-        static char letterCharFrom_(letter_t letter);
+    void assignFileName_();
 
-        void assignFileName_();
+    std::ifstream iFile_;
+    std::ofstream oFile_;
+    std::string sFName_;
+    std::string sFPath_;
+    std::string sIData_;
+    std::string sOData_;
+    std::stringstream sStream_;
 
-        std::ifstream iFile_;
-        std::ofstream oFile_;
-        std::string sFName_;
-        std::string sFPath_;
-        std::string sIData_;
-        std::string sOData_;
-        std::stringstream sStream_;
+    commandVector_t generatedCommands_;
 
-        commandVector_t generatedCommands_;
-
-        bool isLoaded_;
+    bool isLoaded_;
 };
