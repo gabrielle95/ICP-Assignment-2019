@@ -56,7 +56,7 @@
     <item>
      <widget class="QPushButton" name="addtab_btn">
       <property name="text">
-       <string>Add Tab</string>
+       <string>Add Game</string>
       </property>
      </widget>
     </item>

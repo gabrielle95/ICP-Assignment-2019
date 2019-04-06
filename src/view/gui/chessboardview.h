@@ -41,6 +41,7 @@ class chessBoardView : public QWidget
     void sl_cellWasClicked();
     void sl_cellSelectionWasChanged(QChessCell *from, QChessCell *to);
     void sl_onRequestAvailableCells();
+    void sl_undoClicked();
 
   private:
     void initStyles_();

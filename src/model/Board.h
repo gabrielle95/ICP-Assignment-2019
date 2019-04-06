@@ -28,6 +28,7 @@ class Board
     bool checkMoveValidity(unitPtr_t unit, Position fromPos, Position toPos);
     void moveUnit(unitPtr_t unit, Position to); //TODO
     void captureUnit(unitPtr_t unit);
+    void uncaptureUnit(unitPtr_t unit, Position pos_old);
     Position findUnitPosition(unitPtr_t unit);
     std::vector<Position> getAvailableCellsForUnit(Position from);
 

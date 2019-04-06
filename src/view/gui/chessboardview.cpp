@@ -40,6 +40,30 @@ chessBoardView::chessBoardView(int id, QWidget *parent) : id_(id),
     QChessCell *cell = new QChessCell(WHITE, this); //dummy
     ui->formLayout->addWidget(cell);
 
+
+    // app buttons
+    QPushButton *openButton = new QPushButton();
+    openButton->setStyleSheet(Styles::openIcon);
+    openButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    ui->appButtonsLayout->addWidget(openButton);
+
+    QPushButton *saveButton = new QPushButton();
+    saveButton->setStyleSheet(Styles::saveIcon);
+    saveButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    ui->appButtonsLayout->addWidget(saveButton);
+
+    QPushButton *undoButton = new QPushButton();
+    undoButton->setStyleSheet(Styles::undoIcon);
+    undoButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    ui->appButtonsLayout->addWidget(undoButton);
+
+    connect(undoButton, SIGNAL(clicked(bool)), this, SLOT(sl_undoClicked()));
+
+    QPushButton *redoButton = new QPushButton();
+    redoButton->setStyleSheet(Styles::redoIcon);
+    redoButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    ui->appButtonsLayout->addWidget(redoButton);
+
     draw();
 }
 
@@ -110,6 +134,10 @@ void chessBoardView::sl_onRequestAvailableCells()
     emit sig_emitAvailableCellsRequest(getCellPosition_(requestingCell));
     // TODO SIGNAL TO REQUEST AVAILABLE POSITIONS
     // CACHE IT ON BACKEND
+}
+
+void chessBoardView::sl_undoClicked() {
+
 }
 
 void chessBoardView::initStyles_()

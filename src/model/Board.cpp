@@ -86,10 +86,10 @@ void Board::print()
 bool Board::checkMoveValidity(unitPtr_t unit, Position fromPos, Position toPos)
 {
 
-    bool posAvailable = true;
+    bool posAvailable = true;//positionIsAvailable_(lastAvailableMovesCache_, toPos);
 
     /* REFACTOR THIS PART */
-    if (unit->type() == ROOK)
+    /*if (unit->type() == ROOK)
     {
         posAvailable = positionIsAvailable_(getAvailableRowPositions_(fromPos), toPos) || positionIsAvailable_(getAvailableColPositions_(fromPos), toPos);
     }
@@ -104,7 +104,7 @@ bool Board::checkMoveValidity(unitPtr_t unit, Position fromPos, Position toPos)
     else if (unit->type() == PAWN)
     {
         posAvailable = positionIsAvailable_(getAvailableRowPositions_(fromPos), toPos);
-    }
+    }*/
 
     return Rules::checkMoveValidity(unit, fromPos, toPos) && posAvailable;
 }
@@ -116,10 +116,10 @@ void Board::moveUnit(unitPtr_t unit, Position to)
     // unit is not captured
     if (unitPos.isValid())
     {
-        if (At(to) != nullptr)
+        /*if (At(to) != nullptr) //redo this
         {
             captureUnit(At(to));
-        }
+        }*/
         setUnitTo_(unit, to);
         setUnitTo_(nullptr, unitPos);
         if (!unit->movedFromStartingPos())
@@ -129,9 +129,14 @@ void Board::moveUnit(unitPtr_t unit, Position to)
 
 void Board::captureUnit(unitPtr_t unit)
 {
-    capturedUnits_.emplace_back(unit);
+    capturedUnits_.push_back(unit);
+}
 
-    //TODO
+void Board::uncaptureUnit(unitPtr_t unit, Position pos_old)
+{
+    setUnitTo_(unit, pos_old);
+    auto it = std::find(capturedUnits_.begin(), capturedUnits_.end(), unit);
+    capturedUnits_.erase(capturedUnits_.begin() + std::distance(capturedUnits_.begin(), it));
 }
 
 Position Board::findUnitPosition(unitPtr_t unit)

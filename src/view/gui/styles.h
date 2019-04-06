@@ -24,6 +24,11 @@ class Styles
 
     inline static QString cellPawnWhiteFg = "border-image: url(:/res/chess_icons/pawn_white.svg);";
     inline static QString cellPawnBlackFg = "border-image: url(:/res/chess_icons/pawn_black.svg);";
+
+    inline static QString openIcon = "border-image: url(:/res/app_icons/open.png);";
+    inline static QString saveIcon = "border-image: url(:/res/app_icons/save.png);";
+    inline static QString undoIcon = "border-image: url(:/res/app_icons/undo.png);";
+    inline static QString redoIcon = "border-image: url(:/res/app_icons/redo.png);";
 };
 
 #endif // STYLES_H
