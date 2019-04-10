@@ -39,8 +39,11 @@ class Board
     std::vector<Position> getAvailableRowPositions_(Position from);
     std::vector<Position> getAvailableColPositions_(Position from);
     std::vector<Position> getFirstAvailableFromAllDirs_(Position from);
+    std::vector<Position> getAvailableKnightPositions_(Position from);
+    std::vector<Position> getAvailablePawnPositions_(Position from);
 
     bool positionIsAvailable_(std::vector<Position> positions, Position pos);
+    std::vector<Position>  validatePossiblyAvailablePositions_(std::vector<Position> possible, unitPtr_t forUnit);
 
     unitVector_t capturedUnits_; // ?
 

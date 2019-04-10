@@ -50,5 +50,4 @@ void MainWindow::sl_onRequestAvailableCells(Position from)
 {
     chessBoardView *senderView = (chessBoardView *)sender();
     senderView->markAvailableCellsForMove(application->onRequestAvailableCells(senderView->Id(), from));
-    //APPLICATION ON REQUEST CELLS
 }
