@@ -17,25 +17,3 @@ QChessCell::QChessCell(color_t color, QWidget *parent) : QPushButton(parent),
     setBackgroundStyle(backgroundStyle_);
     this->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 }
-
-void QChessCell::sl_onReceiveClick(QChessCell *clickedCell)
-{
-    if (clickedCell != this && this->isChecked())
-    {
-        this->setChecked(false);
-        emit sig_emitCellSelectionChanged(this, clickedCell);
-        return;
-    }
-
-    if (clickedCell == this && this->isChecked())
-    {
-        emit sig_emitRequestAvailableCells();
-        return;
-    }
-
-    if (clickedCell == this && !this->isChecked())
-    {
-        emit sig_emitCellSelectionChanged(this, nullptr);
-        return;
-    }
-}

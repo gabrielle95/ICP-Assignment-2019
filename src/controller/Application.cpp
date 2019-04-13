@@ -44,3 +44,21 @@ std::vector<Position> Application::onRequestAvailableCells(int gameId, Position 
     }
     return std::vector<Position>();
 }
+
+std::vector<Position> Application::onRequestPositionsOfPlayersTurn(int gameId, bool isWhitesTurn) {
+    auto gameIdx = findGameIdx_(gameId);
+    if (games_.at(gameIdx) != nullptr)
+    {
+        return games_.at(gameIdx)->onRequestPositionsOfPlayersTurn(isWhitesTurn);
+    }
+    return std::vector<Position>();
+}
+
+CommandStructure Application::onRequestUndo(int gameId) {
+    auto gameIdx = findGameIdx_(gameId);
+    if (games_.at(gameIdx) != nullptr)
+    {
+        return games_.at(gameIdx)->onRequestUndo();
+    }
+    //return std::vector<Position>();
+}

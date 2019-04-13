@@ -9,29 +9,31 @@ void CommandSystem::executeCommand(commandPtr_t command)
     undoVector_.push_back(command);
 }
 
-void CommandSystem::undo()
+commandPtr_t CommandSystem::undo()
 {
 
     if (undoVector_.empty())
     {
-        return;
+        return nullptr;
     }
 
     undoVector_.back()->undo();
     redoVector_.push_back(undoVector_.back());
     undoVector_.pop_back();
+    return redoVector_.back();
 }
 
-void CommandSystem::redo()
+commandPtr_t CommandSystem::redo()
 {
     if (redoVector_.empty())
     {
-        return;
+        return nullptr;
     }
 
     redoVector_.back()->redo();
     undoVector_.push_back(redoVector_.back());
     redoVector_.pop_back();
+    return undoVector_.back();
 }
 
 commandVector_t CommandSystem::constructCommandsToSave()

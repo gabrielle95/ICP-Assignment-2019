@@ -31,7 +31,7 @@ using unitVector_t = std::vector<unitPtr_t>;
 class Unit
 {
   public:
-    Unit(color_t color, unitType_t type, /* REMOVE  UPON REFACTORING*/ Position starting_pos)
+    Unit(color_t color, unitType_t type)
         : color_(color), type_(type), hasMovedFromStartingPos_(false)
     {
     }

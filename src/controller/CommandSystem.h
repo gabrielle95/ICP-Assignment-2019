@@ -17,9 +17,9 @@ class CommandSystem
 
     void executeCommand(commandPtr_t command);
 
-    void undo();
+    commandPtr_t undo();
 
-    void redo();
+    commandPtr_t redo();
 
     commandVector_t constructCommandsToSave();
 

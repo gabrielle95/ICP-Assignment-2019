@@ -1,6 +1,8 @@
 #ifndef STYLES_H
 #define STYLES_H
 
+#include "../../common/Color.h"
+
 class Styles
 {
   public:

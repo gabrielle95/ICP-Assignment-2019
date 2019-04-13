@@ -61,9 +61,6 @@ class QChessCell : public QPushButton
     void sig_emitCellSelectionChanged(QChessCell *from, QChessCell *to);
     void sig_emitRequestAvailableCells();
 
-  private slots:
-    void sl_onReceiveClick(QChessCell *clickedCell);
-
   private:
     color_t color_;
     QWidget *parent_;

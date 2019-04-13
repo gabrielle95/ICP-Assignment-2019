@@ -15,6 +15,21 @@ public:
   {
   }
 
+  virtual Position old_pos() const
+  {
+    return pos_old_;
+  }
+
+  virtual Position new_pos() const
+  {
+    return pos_;
+  }
+
+  virtual unitPtr_t capturedUnit() const
+  {
+    return capturedUnit_;
+  }
+
 private:
   virtual void execute()
   {

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+//#include "../../common/CommandStructure.h"
 #include "../../controller/Application.h"
 
 namespace Ui
@@ -26,10 +27,13 @@ private slots:
 
   void sl_onRequestAvailableCells(Position from);
 
-private:
-  int gameNumber;
-  Ui::MainWindow *ui;
+  void sl_onRequestUnitsOnTurn(bool isWhitesTurn);
 
+  void sl_onRequestUndo();
+
+private:
+  Ui::MainWindow *ui;
+  int gameNumber;
   appPtr_t application;
   std::vector<int> gameIds;
 };

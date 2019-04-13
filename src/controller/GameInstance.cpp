@@ -33,3 +33,28 @@ std::vector<Position> GameInstance::onRequestAvailableCells(Position from)
 {
     return board_->getAvailableCellsForUnit(from);
 }
+
+std::vector<Position> GameInstance::onRequestPositionsOfPlayersTurn(bool isWhitesTurn)
+{
+    return board_->getPositionsOfPlayersTurn(isWhitesTurn);
+}
+
+CommandStructure GameInstance::onRequestUndo() {
+    commandPtr_t undoCommand = commandSystem_->undo();
+
+    CommandStructure data;
+
+    if(undoCommand != nullptr) {
+        data.undoFrom = undoCommand->new_pos();
+        data.undoTo = undoCommand->old_pos();
+
+        unitPtr_t captured = undoCommand->capturedUnit();
+        if(captured  != nullptr) {
+            data.hasCapturedUnit = true;
+            data.capturedUnitColor = captured->color();
+            data.capturedUnitType = captured->type();
+        }
+    }
+
+    return data;
+}

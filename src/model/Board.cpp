@@ -6,49 +6,49 @@ Board::Board()
 
     /******** WHITE ********/
 
-    board_.at(A).at(TWO) = std::make_shared<Unit>(WHITE, PAWN, Position(A, TWO));
-    board_.at(B).at(TWO) = std::make_shared<Unit>(WHITE, PAWN, Position(B, TWO));
-    board_.at(C).at(TWO) = std::make_shared<Unit>(WHITE, PAWN, Position(C, TWO));
-    board_.at(D).at(TWO) = std::make_shared<Unit>(WHITE, PAWN, Position(D, TWO));
-    board_.at(E).at(TWO) = std::make_shared<Unit>(WHITE, PAWN, Position(E, TWO));
-    board_.at(F).at(TWO) = std::make_shared<Unit>(WHITE, PAWN, Position(F, TWO));
-    board_.at(G).at(TWO) = std::make_shared<Unit>(WHITE, PAWN, Position(G, TWO));
-    board_.at(H).at(TWO) = std::make_shared<Unit>(WHITE, PAWN, Position(H, TWO));
+    board_.at(A).at(TWO) = std::make_shared<Unit>(WHITE, PAWN);
+    board_.at(B).at(TWO) = std::make_shared<Unit>(WHITE, PAWN);
+    board_.at(C).at(TWO) = std::make_shared<Unit>(WHITE, PAWN);
+    board_.at(D).at(TWO) = std::make_shared<Unit>(WHITE, PAWN);
+    board_.at(E).at(TWO) = std::make_shared<Unit>(WHITE, PAWN);
+    board_.at(F).at(TWO) = std::make_shared<Unit>(WHITE, PAWN);
+    board_.at(G).at(TWO) = std::make_shared<Unit>(WHITE, PAWN);
+    board_.at(H).at(TWO) = std::make_shared<Unit>(WHITE, PAWN);
 
-    board_.at(A).at(ONE) = std::make_shared<Unit>(WHITE, ROOK, Position(A, ONE));
-    board_.at(H).at(ONE) = std::make_shared<Unit>(WHITE, ROOK, Position(H, ONE));
+    board_.at(A).at(ONE) = std::make_shared<Unit>(WHITE, ROOK);
+    board_.at(H).at(ONE) = std::make_shared<Unit>(WHITE, ROOK);
 
-    board_.at(B).at(ONE) = std::make_shared<Unit>(WHITE, KNIGHT, Position(B, ONE));
-    board_.at(G).at(ONE) = std::make_shared<Unit>(WHITE, KNIGHT, Position(G, ONE));
+    board_.at(B).at(ONE) = std::make_shared<Unit>(WHITE, KNIGHT);
+    board_.at(G).at(ONE) = std::make_shared<Unit>(WHITE, KNIGHT);
 
-    board_.at(C).at(ONE) = std::make_shared<Unit>(WHITE, BISHOP, Position(C, ONE));
-    board_.at(F).at(ONE) = std::make_shared<Unit>(WHITE, BISHOP, Position(F, ONE));
+    board_.at(C).at(ONE) = std::make_shared<Unit>(WHITE, BISHOP);
+    board_.at(F).at(ONE) = std::make_shared<Unit>(WHITE, BISHOP);
 
-    board_.at(D).at(ONE) = std::make_shared<Unit>(WHITE, QUEEN, Position(D, ONE));
-    board_.at(E).at(ONE) = std::make_shared<Unit>(WHITE, KING, Position(E, ONE));
+    board_.at(D).at(ONE) = std::make_shared<Unit>(WHITE, QUEEN);
+    board_.at(E).at(ONE) = std::make_shared<Unit>(WHITE, KING);
 
     /******** BLACK ********/
 
-    board_.at(A).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN, Position(A, SEVEN));
-    board_.at(B).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN, Position(B, SEVEN));
-    board_.at(C).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN, Position(C, SEVEN));
-    board_.at(D).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN, Position(D, SEVEN));
-    board_.at(E).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN, Position(E, SEVEN));
-    board_.at(F).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN, Position(F, SEVEN));
-    board_.at(G).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN, Position(G, SEVEN));
-    board_.at(H).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN, Position(H, SEVEN));
+    board_.at(A).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN);
+    board_.at(B).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN);
+    board_.at(C).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN);
+    board_.at(D).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN);
+    board_.at(E).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN);
+    board_.at(F).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN);
+    board_.at(G).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN);
+    board_.at(H).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN);
 
-    board_.at(A).at(EIGHT) = std::make_shared<Unit>(BLACK, ROOK, Position(A, EIGHT));
-    board_.at(H).at(EIGHT) = std::make_shared<Unit>(BLACK, ROOK, Position(H, EIGHT));
+    board_.at(A).at(EIGHT) = std::make_shared<Unit>(BLACK, ROOK);
+    board_.at(H).at(EIGHT) = std::make_shared<Unit>(BLACK, ROOK);
 
-    board_.at(B).at(EIGHT) = std::make_shared<Unit>(BLACK, KNIGHT, Position(B, EIGHT));
-    board_.at(G).at(EIGHT) = std::make_shared<Unit>(BLACK, KNIGHT, Position(G, EIGHT));
+    board_.at(B).at(EIGHT) = std::make_shared<Unit>(BLACK, KNIGHT);
+    board_.at(G).at(EIGHT) = std::make_shared<Unit>(BLACK, KNIGHT);
 
-    board_.at(C).at(EIGHT) = std::make_shared<Unit>(BLACK, BISHOP, Position(C, EIGHT));
-    board_.at(F).at(EIGHT) = std::make_shared<Unit>(BLACK, BISHOP, Position(F, EIGHT));
+    board_.at(C).at(EIGHT) = std::make_shared<Unit>(BLACK, BISHOP);
+    board_.at(F).at(EIGHT) = std::make_shared<Unit>(BLACK, BISHOP);
 
-    board_.at(D).at(EIGHT) = std::make_shared<Unit>(BLACK, QUEEN, Position(D, EIGHT));
-    board_.at(E).at(EIGHT) = std::make_shared<Unit>(BLACK, KING, Position(E, EIGHT));
+    board_.at(D).at(EIGHT) = std::make_shared<Unit>(BLACK, QUEEN);
+    board_.at(E).at(EIGHT) = std::make_shared<Unit>(BLACK, KING);
 }
 
 unitPtr_t Board::At(letter_t clm, rowPos_t row)
@@ -189,6 +189,30 @@ std::vector<Position> Board::getAvailableCellsForUnit(Position from)
         }
     }
     return lastAvailableMovesCache_;
+}
+
+std::vector<Position> Board::getPositionsOfPlayersTurn(bool isWhitesTurn)
+{
+    std::vector<Position> positions;
+    color_t color;
+
+    isWhitesTurn ? color = WHITE : color = BLACK;
+
+   for (int c = A; c < board_.size(); c++)
+    {
+        for (int r = ONE; r < board_.at(c).size(); r++)
+        {
+            unitPtr_t u = board_.at(c).at(r);
+            if (u != nullptr)
+            {
+                if(u->color() == color) {
+                    positions.emplace_back(c, r);
+                }
+            }
+        }
+    }
+
+    return positions;
 }
 
 void Board::setUnitTo_(unitPtr_t unit, Position pos)

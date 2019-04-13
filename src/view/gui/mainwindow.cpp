@@ -29,8 +29,12 @@ void MainWindow::on_addtab_btn_clicked()
 {
     chessBoardView *c = new chessBoardView(gameNumber);
     ui->tabWidget->addTab(c, QString("Game %0").arg(gameNumber));
+
+    /* CONNECT VIEW SLOTS HERE*/
     connect(c, SIGNAL(sig_emitMoveRequest(Position, Position)), this, SLOT(sl_onMoveRequest(Position, Position)));
     connect(c, SIGNAL(sig_emitAvailableCellsRequest(Position)), this, SLOT(sl_onRequestAvailableCells(Position)));
+    connect(c, SIGNAL(sig_emitRequestUnitsOnTurn(bool)), this, SLOT(sl_onRequestUnitsOnTurn(bool)));
+    connect(c, SIGNAL(sig_emitRequestUndo()), this, SLOT(sl_onRequestUndo()));
 
     application->newGame(gameNumber);
     gameIds.push_back(gameNumber);
@@ -50,4 +54,14 @@ void MainWindow::sl_onRequestAvailableCells(Position from)
 {
     chessBoardView *senderView = (chessBoardView *)sender();
     senderView->markAvailableCellsForMove(application->onRequestAvailableCells(senderView->Id(), from));
+}
+
+void MainWindow::sl_onRequestUnitsOnTurn(bool isWhitesTurn) {
+    chessBoardView *senderView = (chessBoardView *)sender();
+    senderView->setTheseCellsCheckable(application->onRequestPositionsOfPlayersTurn(senderView->Id(), isWhitesTurn));
+}
+
+void MainWindow::sl_onRequestUndo() {
+    chessBoardView *senderView = (chessBoardView *)sender();
+    senderView->executeUndoMove(application->onRequestUndo(senderView->Id()));
 }
