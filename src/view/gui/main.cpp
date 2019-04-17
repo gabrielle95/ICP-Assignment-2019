@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
 
     MainWindow mainWin;
     mainWin.setWindowIcon(QIcon(":/res/chess_icons/knight_black.svg"));
+    mainWin.setWindowTitle("ICP Chess 2019");
     mainWin.show();
 
     return app.exec();

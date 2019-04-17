@@ -18,14 +18,14 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>800</width>
-    <height>600</height>
+    <width>1200</width>
+    <height>800</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
+  <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0">
    <item>
     <layout class="QFormLayout" name="appButtonsLayout">
      <property name="fieldGrowthPolicy">
@@ -53,8 +53,8 @@
      <property name="spacing">
       <number>0</number>
      </property>
-     <item row="9" column="3">
-      <widget class="QLabel" name="label_67">
+     <item row="0" column="4">
+      <widget class="QLabel" name="label_92">
        <property name="font">
         <font>
          <weight>75</weight>
@@ -71,63 +71,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>C</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="wordWrap">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="9">
-      <widget class="QLabel" name="label_80">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(136, 138, 133);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="lineWidth">
-        <number>0</number>
-       </property>
-       <property name="text">
-        <string>8</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="wordWrap">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="9">
-      <widget class="QLabel" name="label_75">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(136, 138, 133);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="lineWidth">
-        <number>0</number>
-       </property>
-       <property name="text">
-        <string>3</string>
+        <string>D</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -165,8 +109,8 @@
        </property>
       </widget>
      </item>
-     <item row="9" column="6">
-      <widget class="QLabel" name="label_70">
+     <item row="5" column="9">
+      <widget class="QLabel" name="label_76">
        <property name="font">
         <font>
          <weight>75</weight>
@@ -183,7 +127,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>F</string>
+        <string>4</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -193,36 +137,8 @@
        </property>
       </widget>
      </item>
-     <item row="9" column="5">
-      <widget class="QLabel" name="label_69">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(136, 138, 133);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="lineWidth">
-        <number>0</number>
-       </property>
-       <property name="text">
-        <string>E</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="wordWrap">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="1">
-      <widget class="QLabel" name="label_65">
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_89">
        <property name="font">
         <font>
          <weight>75</weight>
@@ -249,8 +165,8 @@
        </property>
       </widget>
      </item>
-     <item row="9" column="8">
-      <widget class="QLabel" name="label_72">
+     <item row="2" column="9">
+      <widget class="QLabel" name="label_79">
        <property name="font">
         <font>
          <weight>75</weight>
@@ -267,7 +183,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>H</string>
+        <string>7</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -277,64 +193,8 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="5">
-      <widget class="QLabel" name="label_93">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(136, 138, 133);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="lineWidth">
-        <number>0</number>
-       </property>
-       <property name="text">
-        <string>E</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="wordWrap">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="7">
-      <widget class="QLabel" name="label_71">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(136, 138, 133);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="lineWidth">
-        <number>0</number>
-       </property>
-       <property name="text">
-        <string>G</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="wordWrap">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0">
-      <widget class="QLabel" name="label_82">
+     <item row="7" column="9">
+      <widget class="QLabel" name="label_74">
        <property name="font">
         <font>
          <weight>75</weight>
@@ -361,8 +221,8 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_85">
+     <item row="0" column="8">
+      <widget class="QLabel" name="label_96">
        <property name="font">
         <font>
          <weight>75</weight>
@@ -379,7 +239,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>5</string>
+        <string>H</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -389,8 +249,8 @@
        </property>
       </widget>
      </item>
-     <item row="9" column="4">
-      <widget class="QLabel" name="label_68">
+     <item row="0" column="3">
+      <widget class="QLabel" name="label_91">
        <property name="font">
         <font>
          <weight>75</weight>
@@ -407,63 +267,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>D</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="wordWrap">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="label_81">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(136, 138, 133);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="lineWidth">
-        <number>0</number>
-       </property>
-       <property name="text">
-        <string>1</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="wordWrap">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="4">
-      <widget class="QLabel" name="label_92">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(136, 138, 133);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="lineWidth">
-        <number>0</number>
-       </property>
-       <property name="text">
-        <string>D</string>
+        <string>C</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -529,6 +333,34 @@
        </property>
       </widget>
      </item>
+     <item row="9" column="5">
+      <widget class="QLabel" name="label_69">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(136, 138, 133);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="lineWidth">
+        <number>0</number>
+       </property>
+       <property name="text">
+        <string>E</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="7">
       <widget class="QLabel" name="label_95">
        <property name="font">
@@ -557,8 +389,8 @@
        </property>
       </widget>
      </item>
-     <item row="9" column="2">
-      <widget class="QLabel" name="label_66">
+     <item row="9" column="1">
+      <widget class="QLabel" name="label_65">
        <property name="font">
         <font>
          <weight>75</weight>
@@ -575,7 +407,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>B</string>
+        <string>A</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -585,8 +417,8 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_88">
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_85">
        <property name="font">
         <font>
          <weight>75</weight>
@@ -603,7 +435,91 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>8</string>
+        <string>5</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="8">
+      <widget class="QLabel" name="label_72">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(136, 138, 133);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="lineWidth">
+        <number>0</number>
+       </property>
+       <property name="text">
+        <string>H</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="5">
+      <widget class="QLabel" name="label_93">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(136, 138, 133);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="lineWidth">
+        <number>0</number>
+       </property>
+       <property name="text">
+        <string>E</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="3">
+      <widget class="QLabel" name="label_67">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(136, 138, 133);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="lineWidth">
+        <number>0</number>
+       </property>
+       <property name="text">
+        <string>C</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -641,34 +557,6 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="9">
-      <widget class="QLabel" name="label_77">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(136, 138, 133);</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
-       </property>
-       <property name="lineWidth">
-        <number>0</number>
-       </property>
-       <property name="text">
-        <string>5</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-       <property name="wordWrap">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="2">
       <widget class="QLabel" name="label_90">
        <property name="font">
@@ -697,8 +585,8 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="9">
-      <widget class="QLabel" name="label_76">
+     <item row="6" column="9">
+      <widget class="QLabel" name="label_75">
        <property name="font">
         <font>
          <weight>75</weight>
@@ -715,7 +603,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>4</string>
+        <string>3</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -725,8 +613,64 @@
        </property>
       </widget>
      </item>
-     <item row="7" column="9">
-      <widget class="QLabel" name="label_74">
+     <item row="9" column="6">
+      <widget class="QLabel" name="label_70">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(136, 138, 133);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="lineWidth">
+        <number>0</number>
+       </property>
+       <property name="text">
+        <string>F</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="9">
+      <widget class="QLabel" name="label_77">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(136, 138, 133);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="lineWidth">
+        <number>0</number>
+       </property>
+       <property name="text">
+        <string>5</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_82">
        <property name="font">
         <font>
          <weight>75</weight>
@@ -753,8 +697,8 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="9">
-      <widget class="QLabel" name="label_79">
+     <item row="9" column="2">
+      <widget class="QLabel" name="label_66">
        <property name="font">
         <font>
          <weight>75</weight>
@@ -771,7 +715,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>7</string>
+        <string>B</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -781,8 +725,8 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="8">
-      <widget class="QLabel" name="label_96">
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_81">
        <property name="font">
         <font>
          <weight>75</weight>
@@ -799,7 +743,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>H</string>
+        <string>1</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -809,8 +753,8 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="label_89">
+     <item row="8" column="9">
+      <widget class="QLabel" name="label_73">
        <property name="font">
         <font>
          <weight>75</weight>
@@ -827,7 +771,63 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>A</string>
+        <string>1</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="7">
+      <widget class="QLabel" name="label_71">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(136, 138, 133);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="lineWidth">
+        <number>0</number>
+       </property>
+       <property name="text">
+        <string>G</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="4">
+      <widget class="QLabel" name="label_68">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(136, 138, 133);</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="lineWidth">
+        <number>0</number>
+       </property>
+       <property name="text">
+        <string>D</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -893,8 +893,8 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="3">
-      <widget class="QLabel" name="label_91">
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_88">
        <property name="font">
         <font>
          <weight>75</weight>
@@ -911,7 +911,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>C</string>
+        <string>8</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -921,8 +921,8 @@
        </property>
       </widget>
      </item>
-     <item row="8" column="9">
-      <widget class="QLabel" name="label_73">
+     <item row="1" column="9">
+      <widget class="QLabel" name="label_80">
        <property name="font">
         <font>
          <weight>75</weight>
@@ -939,7 +939,7 @@
         <number>0</number>
        </property>
        <property name="text">
-        <string>1</string>
+        <string>8</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -952,7 +952,20 @@
     </layout>
    </item>
    <item>
-    <layout class="QFormLayout" name="formLayout"/>
+    <layout class="QGridLayout" name="capturedUnitsLayout"/>
+   </item>
+   <item>
+    <widget class="QTextBrowser" name="textBrowser">
+     <property name="maximumSize">
+      <size>
+       <width>150</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="placeholderText">
+      <string>1. asdf</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

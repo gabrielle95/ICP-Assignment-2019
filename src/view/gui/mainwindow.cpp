@@ -28,6 +28,7 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 void MainWindow::on_addtab_btn_clicked()
 {
     chessBoardView *c = new chessBoardView(gameNumber);
+
     ui->tabWidget->addTab(c, QString("Game %0").arg(gameNumber));
 
     /* CONNECT VIEW SLOTS HERE*/

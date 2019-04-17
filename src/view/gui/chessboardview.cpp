@@ -35,35 +35,46 @@ chessBoardView::chessBoardView(int id, QWidget *parent) : QWidget(parent),
         black = !black;
     }
 
+    int col = 1;
+
+    for(int i = 0; i < 16; i++) {
+        QChessCell *cell = new QChessCell(WHITE, this); //dummy
+        cell->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        ui->capturedUnitsLayout->addWidget(cell, i+1, col);
+    }
+
+    col = 2;
+    for(int i = 0; i < 16; i++) {
+        QChessCell *cell = new QChessCell(WHITE, this); //dummy
+        cell->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        ui->capturedUnitsLayout->addWidget(cell, i+1, col);
+    }
+
     initStyles_();
-
-    //the captured container is there
-    QChessCell *cell = new QChessCell(WHITE, this); //dummy
-    ui->formLayout->addWidget(cell);
-
 
     // app buttons
     QPushButton *openButton = new QPushButton();
-    openButton->setStyleSheet(Styles::openIcon);
+    openButton->setStyleSheet(Styles::greyBackground + Styles::openIcon);
     openButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     ui->appButtonsLayout->addWidget(openButton);
 
     QPushButton *saveButton = new QPushButton();
-    saveButton->setStyleSheet(Styles::saveIcon);
+    saveButton->setStyleSheet(Styles::greyBackground + Styles::saveIcon);
     saveButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     ui->appButtonsLayout->addWidget(saveButton);
 
     QPushButton *undoButton = new QPushButton();
-    undoButton->setStyleSheet(Styles::undoIcon);
+    undoButton->setStyleSheet(Styles::greyBackground + Styles::undoIcon);
     undoButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     ui->appButtonsLayout->addWidget(undoButton);
 
     connect(undoButton, SIGNAL(clicked(bool)), this, SLOT(sl_undoClicked()));
 
     QPushButton *redoButton = new QPushButton();
-    redoButton->setStyleSheet(Styles::redoIcon);
+    redoButton->setStyleSheet(Styles::greyBackground + Styles::redoIcon);
     redoButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     ui->appButtonsLayout->addWidget(redoButton);
+
 
     draw();
 }

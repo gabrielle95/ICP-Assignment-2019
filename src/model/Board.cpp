@@ -95,14 +95,14 @@ void Board::moveUnit(unitPtr_t unit, Position to)
     // unit is not captured
     if (unitPos.isValid())
     {
-        /*if (At(to) != nullptr) //redo this
-        {
-            captureUnit(At(to));
-        }*/
         setUnitTo_(unit, to);
         setUnitTo_(nullptr, unitPos);
         if (!unit->movedFromStartingPos())
             unit->setMovedFromStartingPos();
+    }
+    else if(unitPos == Position(-1,-1)) {
+        //unit is captured
+        uncaptureUnit(unit, to);
     }
 }
 
@@ -113,6 +113,7 @@ void Board::captureUnit(unitPtr_t unit)
 
 void Board::uncaptureUnit(unitPtr_t unit, Position pos_old)
 {
+    // mostly for undo
     setUnitTo_(unit, pos_old);
     auto it = std::find(capturedUnits_.begin(), capturedUnits_.end(), unit);
     capturedUnits_.erase(capturedUnits_.begin() + std::distance(capturedUnits_.begin(), it));

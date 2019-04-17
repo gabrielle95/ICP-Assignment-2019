@@ -31,6 +31,8 @@ class Styles
     inline static QString saveIcon = "border-image: url(:/res/app_icons/save.png);";
     inline static QString undoIcon = "border-image: url(:/res/app_icons/undo.png);";
     inline static QString redoIcon = "border-image: url(:/res/app_icons/redo.png);";
+
+    inline static QString greyBackground = "background-color: rgb(136, 138, 133);";
 };
 
 #endif // STYLES_H

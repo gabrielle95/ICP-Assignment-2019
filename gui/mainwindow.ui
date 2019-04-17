@@ -55,8 +55,11 @@
     </item>
     <item>
      <widget class="QPushButton" name="addtab_btn">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(136, 138, 133);</string>
+      </property>
       <property name="text">
-       <string>Add Game</string>
+       <string>Add A New Game</string>
       </property>
      </widget>
     </item>
