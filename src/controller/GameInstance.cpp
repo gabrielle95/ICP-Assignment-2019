@@ -58,3 +58,17 @@ CommandStructure GameInstance::onRequestUndo() {
 
     return data;
 }
+
+CommandStructure GameInstance::onRequestRedo() {
+
+    commandPtr_t redoCommand = commandSystem_->redo();
+
+    CommandStructure data;
+
+    if(redoCommand != nullptr) {
+        data.redoFrom = redoCommand->old_pos();
+        data.redoTo = redoCommand->new_pos();
+    }
+
+    return data;
+}

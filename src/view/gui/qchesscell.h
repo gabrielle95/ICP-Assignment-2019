@@ -26,6 +26,10 @@ class QChessCell : public QPushButton
         this->unitStyle_.clear();
     }
 
+    bool hasUnitStyle () const {
+        return !this->unitStyle_.isEmpty();
+    }
+
     QString getUnitStyle() const
     {
         return this->unitStyle_;
@@ -57,6 +61,14 @@ class QChessCell : public QPushButton
         this->availableForMove_ = value;
     }
 
+    void setCaptured(bool value) {
+        this->captured_ = value;
+    }
+
+    bool isCaptured() const {
+        return this->captured_;
+    }
+
   signals:
     void sig_emitCellSelectionChanged(QChessCell *from, QChessCell *to);
     void sig_emitRequestAvailableCells();
@@ -67,6 +79,7 @@ class QChessCell : public QPushButton
     QString backgroundStyle_;
     QString unitStyle_;
     bool availableForMove_;
+    bool captured_;
 };
 
 #endif // QCHESSCELL_H

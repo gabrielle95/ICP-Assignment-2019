@@ -3,7 +3,8 @@
 QChessCell::QChessCell(color_t color, QWidget *parent) : QPushButton(parent),
                                                          color_(color),
                                                          parent_(parent),
-                                                         availableForMove_(false)
+                                                         availableForMove_(false),
+                                                         captured_(false)
 {
     if (color == BLACK)
     {

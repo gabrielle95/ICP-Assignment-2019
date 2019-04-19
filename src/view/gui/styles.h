@@ -2,6 +2,7 @@
 #define STYLES_H
 
 #include "../../common/Color.h"
+#include "../../model/Unit.h"
 
 class Styles
 {
@@ -31,8 +32,31 @@ class Styles
     inline static QString saveIcon = "border-image: url(:/res/app_icons/save.png);";
     inline static QString undoIcon = "border-image: url(:/res/app_icons/undo.png);";
     inline static QString redoIcon = "border-image: url(:/res/app_icons/redo.png);";
+    inline static QString forwardIcon = "border-image: url(:/res/app_icons/forward.png);";
+    inline static QString backwardIcon = "border-image: url(:/res/app_icons/backward.png);";
 
     inline static QString greyBackground = "background-color: rgb(136, 138, 133);";
+
+    inline static QString margin10px = "margin: 10px;";
+
+    inline static QString getStyleFrom(unitType_t type, color_t color) {
+        if(color == BLACK) {
+            if(type == PAWN) return cellPawnBlackFg;
+            if(type == ROOK) return cellRookBlackFg;
+            if(type == BISHOP) return cellBishopBlackFg;
+            if(type == KNIGHT) return cellKnightBlackFg;
+            if(type == KING) return cellKingBlackFg;
+            if (type == QUEEN) return cellQueenBlackFg;
+        }
+        else if(color == WHITE) {
+            if(type == PAWN) return cellPawnWhiteFg;
+            if(type == ROOK) return cellRookWhiteFg;
+            if(type == BISHOP) return cellBishopWhiteFg;
+            if(type == KNIGHT) return cellKnightWhiteFg;
+            if(type == KING) return cellKingWhiteFg;
+            if (type == QUEEN) return cellQueenWhiteFg;
+        }
+    }
 };
 
 #endif // STYLES_H

@@ -1,5 +1,7 @@
 #include "chessboardview.h"
 #include "ui_chessboardview.h"
+#include <QFileDialog>
+#include <QMessageBox>
 
 chessBoardView::chessBoardView(int id, QWidget *parent) : QWidget(parent),
                                                           ui(new Ui::chessBoardView),
@@ -40,42 +42,63 @@ chessBoardView::chessBoardView(int id, QWidget *parent) : QWidget(parent),
     for(int i = 0; i < 16; i++) {
         QChessCell *cell = new QChessCell(WHITE, this); //dummy
         cell->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        cell->setCaptured(true);
         ui->capturedUnitsLayout->addWidget(cell, i+1, col);
+        qCapturedBoard_.push_back(cell);
     }
 
     col = 2;
     for(int i = 0; i < 16; i++) {
         QChessCell *cell = new QChessCell(WHITE, this); //dummy
         cell->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        cell->setCaptured(true);
         ui->capturedUnitsLayout->addWidget(cell, i+1, col);
+        qCapturedBoard_.push_back(cell);
     }
 
     initStyles_();
 
     // app buttons
-    QPushButton *openButton = new QPushButton();
-    openButton->setStyleSheet(Styles::greyBackground + Styles::openIcon);
-    openButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    ui->appButtonsLayout->addWidget(openButton);
+    //open
+    QPushButton *btn = generateAppButton_(Styles::openIcon, "Open a game.");
 
-    QPushButton *saveButton = new QPushButton();
-    saveButton->setStyleSheet(Styles::greyBackground + Styles::saveIcon);
-    saveButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    ui->appButtonsLayout->addWidget(saveButton);
+    ui->appButtonsLayout->addWidget(btn);
 
-    QPushButton *undoButton = new QPushButton();
-    undoButton->setStyleSheet(Styles::greyBackground + Styles::undoIcon);
-    undoButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    ui->appButtonsLayout->addWidget(undoButton);
+    connect(btn, SIGNAL(clicked(bool)), this, SLOT(sl_openGameFromFile()));
 
-    connect(undoButton, SIGNAL(clicked(bool)), this, SLOT(sl_undoClicked()));
+    //save
+    btn = generateAppButton_(Styles::saveIcon, "Save a game.");
 
-    QPushButton *redoButton = new QPushButton();
-    redoButton->setStyleSheet(Styles::greyBackground + Styles::redoIcon);
-    redoButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    ui->appButtonsLayout->addWidget(redoButton);
+    ui->appButtonsLayout->addWidget(btn);
 
+    connect(btn, SIGNAL(clicked(bool)), this, SLOT(sl_saveGameToFile()));
 
+    //undo
+    btn = generateAppButton_(Styles::undoIcon, "Undo a user-performed step.");
+
+    ui->appButtonsLayout->addWidget(btn);
+
+    //undo signal
+    connect(btn, SIGNAL(clicked(bool)), this, SLOT(sl_undoClicked()));
+
+    //redo
+    btn = generateAppButton_(Styles::redoIcon, "Redo a user-performed step.");
+
+    ui->appButtonsLayout->addWidget(btn);
+
+    connect(btn, SIGNAL(clicked(bool)), this, SLOT(sl_redoClicked()));
+
+    //forward
+    btn = generateAppButton_(Styles::forwardIcon, "Move one recorded step forward.");
+
+    ui->appButtonsLayout->addWidget(btn);
+
+    //backward
+    btn = generateAppButton_(Styles::backwardIcon, "Move one recorded step backward.");
+
+    ui->appButtonsLayout->addWidget(btn);
+
+    //draw cell styles
     draw();
 }
 
@@ -90,6 +113,14 @@ void chessBoardView::executePendingMove()
         return;
     }
 
+    if(pendingTo->hasUnitStyle()) {
+        for(auto &c: qCapturedBoard_) {
+            if(!c->hasUnitStyle()) {
+                c->setUnitStyle(pendingTo->getUnitStyle());
+                break;
+            }
+        }
+    }
     pendingTo->setUnitStyle(pendingFrom->getUnitStyle());
     pendingFrom->unsetUnitStyle();
     pendingTo->setChecked(false);
@@ -114,11 +145,28 @@ void chessBoardView::executeUndoMove(CommandStructure data) {
         to->setCheckable(true);
 
         if(data.hasCapturedUnit) {
-            //to = from;
-            //TODO restore captured unit
+            to = from;
+            QString retrievedStyle = Styles::getStyleFrom(data.capturedUnitType, data.capturedUnitColor);
+            to->setUnitStyle(retrievedStyle);
+
+            for(auto &c: qCapturedBoard_) {
+                if(c->getUnitStyle() == retrievedStyle) {
+                    c->unsetUnitStyle();
+                    break;
+                }
+            }
         }
         itsWhitesTurn_ = !itsWhitesTurn_;
         emit sig_emitRequestUnitsOnTurn(itsWhitesTurn_);
+    }
+    draw();
+}
+
+void chessBoardView::executeRedoMove(CommandStructure data) {
+    if(data.redoFrom.isValid() && data.redoTo.isValid()) {
+        pendingFrom = qCellBoard_.at(data.redoFrom.clm()).at(data.redoFrom.row());
+        pendingTo = qCellBoard_.at(data.redoTo.clm()).at(data.redoTo.row());
+        executePendingMove();
     }
     draw();
 }
@@ -157,6 +205,10 @@ void chessBoardView::draw()
         {
             qCellBoard_.at(col).at(row)->draw();
         }
+    }
+
+    for(auto &c: qCapturedBoard_) {
+        c->draw();
     }
 }
 
@@ -211,6 +263,10 @@ void chessBoardView::sl_cellWasClicked()
 
 void chessBoardView::sl_undoClicked() {
     emit sig_emitRequestUndo();
+}
+
+void chessBoardView::sl_redoClicked() {
+    emit sig_emitRequestRedo();
 }
 
 void chessBoardView::onCellSelectionChanged(QChessCell *from, QChessCell *to) {
@@ -307,4 +363,67 @@ void chessBoardView::clearAvailableForMove_()
             cell->setAvailableForMove(false);
         }
     }
+}
+
+QPushButton *chessBoardView::generateAppButton_(QString style, QString tooltip) {
+    QPushButton *button = new QPushButton();
+    button->setToolTip(tooltip);
+    button->setStyleSheet(""
+                              "QPushButton {" + style + Styles::margin10px + "}"
+                              "QToolTip { color: #ffffff; background-color: #000000; border: 0px; }");
+    button->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+
+    return button;
+}
+
+void chessBoardView::sl_saveGameToFile() {
+    QString fileName = QFileDialog::getSaveFileName(this,
+                                                    tr("Save ICP Game"), "",
+                                                    tr("ICP Chess Game (*);;All Files (*)"));
+
+    if(fileName.isEmpty()) {
+        return;
+    }
+    else {
+        // TODO request serialize commands and write out
+        QFile file(fileName);
+
+        if(!file.open(QIODevice::WriteOnly)) {
+            QMessageBox::information(this, tr("Unable to open file for writing"),
+                            file.errorString());
+            return;
+        }
+
+        //dummy
+        QDataStream out(&file);
+        out.setVersion(QDataStream::Qt_4_5);
+        //out << savegamefile;
+    }
+}
+
+void chessBoardView::sl_openGameFromFile() {
+    QString fileName = QFileDialog::getOpenFileName(this,
+                                                    tr("Open ICP Game"), "",
+                                                    tr("ICP Chess Game (*);;All Files (*)"));
+
+    if(fileName.isEmpty()) {
+        return;
+    }
+    else {
+        // TODO request deserialize commands and read in
+        QFile file(fileName);
+
+        if(!file.open(QIODevice::ReadOnly)) {
+            QMessageBox::information(this, tr("Unable to open file for reading"),
+                            file.errorString());
+            return;
+        }
+
+        //dummy
+        QDataStream in(&file);
+        in.setVersion(QDataStream::Qt_4_5);
+        //savegamewhatever.clear()
+        //in >> savegamewhatever;
+    }
+
 }

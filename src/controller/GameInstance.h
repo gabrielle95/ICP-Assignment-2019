@@ -24,6 +24,7 @@ public:
   std::vector<Position> onRequestAvailableCells(Position from);
   std::vector<Position> onRequestPositionsOfPlayersTurn(bool isWhitesTurn);
   CommandStructure onRequestUndo();
+  CommandStructure onRequestRedo();
 
 private:
   bool moveIsValid_(unitPtr_t unit, Position fromPos, Position toPos);

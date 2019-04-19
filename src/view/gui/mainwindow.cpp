@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     ui->setupUi(this);
     ui->tabWidget->removeTab(1);
     ui->tabWidget->removeTab(0);
+    ui->tabWidget->setVisible(false);
 }
 
 MainWindow::~MainWindow()
@@ -23,10 +24,18 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     int gameToDelete = gameIds.at(index);
     application->quitGame(gameToDelete);
     gameIds.erase(gameIds.begin() + index);
+
+    if(ui->tabWidget->count() == 0) {
+        ui->tabWidget->setVisible(false);
+        ui->welcomeLabel->setVisible(true);
+    }
 }
 
 void MainWindow::on_addtab_btn_clicked()
 {
+    if(!ui->tabWidget->isVisible()) ui->tabWidget->setVisible(true);
+    if(ui->welcomeLabel->isVisible()) ui->welcomeLabel->setVisible(false);
+
     chessBoardView *c = new chessBoardView(gameNumber);
 
     ui->tabWidget->addTab(c, QString("Game %0").arg(gameNumber));
@@ -36,6 +45,7 @@ void MainWindow::on_addtab_btn_clicked()
     connect(c, SIGNAL(sig_emitAvailableCellsRequest(Position)), this, SLOT(sl_onRequestAvailableCells(Position)));
     connect(c, SIGNAL(sig_emitRequestUnitsOnTurn(bool)), this, SLOT(sl_onRequestUnitsOnTurn(bool)));
     connect(c, SIGNAL(sig_emitRequestUndo()), this, SLOT(sl_onRequestUndo()));
+    connect(c, SIGNAL(sig_emitRequestRedo()), this, SLOT(sl_onRequestRedo()));
 
     application->newGame(gameNumber);
     gameIds.push_back(gameNumber);
@@ -65,4 +75,9 @@ void MainWindow::sl_onRequestUnitsOnTurn(bool isWhitesTurn) {
 void MainWindow::sl_onRequestUndo() {
     chessBoardView *senderView = (chessBoardView *)sender();
     senderView->executeUndoMove(application->onRequestUndo(senderView->Id()));
+}
+
+void MainWindow::sl_onRequestRedo() {
+    chessBoardView *senderView = (chessBoardView *)sender();
+    senderView->executeRedoMove(application->onRequestRedo(senderView->Id()));
 }

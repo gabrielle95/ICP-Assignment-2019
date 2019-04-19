@@ -60,5 +60,14 @@ CommandStructure Application::onRequestUndo(int gameId) {
     {
         return games_.at(gameIdx)->onRequestUndo();
     }
-    //return std::vector<Position>();
+    return CommandStructure();
+}
+
+CommandStructure Application::onRequestRedo(int gameId) {
+    auto gameIdx = findGameIdx_(gameId);
+    if (games_.at(gameIdx) != nullptr)
+    {
+        return games_.at(gameIdx)->onRequestRedo();
+    }
+    return CommandStructure();
 }

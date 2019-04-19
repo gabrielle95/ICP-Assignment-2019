@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-//#include "../../common/CommandStructure.h"
 #include "../../controller/Application.h"
 
 namespace Ui
@@ -30,6 +29,8 @@ private slots:
   void sl_onRequestUnitsOnTurn(bool isWhitesTurn);
 
   void sl_onRequestUndo();
+
+  void sl_onRequestRedo();
 
 private:
   Ui::MainWindow *ui;

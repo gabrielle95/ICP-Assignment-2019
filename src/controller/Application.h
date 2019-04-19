@@ -15,6 +15,7 @@ public:
   std::vector<Position> onRequestAvailableCells(int gameId, Position from);
   std::vector<Position> onRequestPositionsOfPlayersTurn(int gameId, bool isWhitesTurn);
   CommandStructure onRequestUndo(int gameId);
+  CommandStructure onRequestRedo(int gameId);
 
 private:
   int findGameIdx_(int gameId);

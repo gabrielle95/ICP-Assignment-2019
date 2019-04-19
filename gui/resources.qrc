@@ -8,6 +8,8 @@
   <file>../res/app_icons/paste.png</file>
   <file>../res/app_icons/undo.png</file>
   <file>../res/app_icons/redo.png</file>
+  <file>../res/app_icons/forward.png</file>
+  <file>../res/app_icons/backward.png</file>
   <file>../res/chess_icons/bishop_black.svg</file>
   <file>../res/chess_icons/bishop_white.svg</file>
   <file>../res/chess_icons/king_black.svg</file>
