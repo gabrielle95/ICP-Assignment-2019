@@ -93,3 +93,23 @@ void Application::onRequestDeserializedData(int gameId, std::string input)
         games_.at(gameIdx)->onRequestDeserializedData(input);
     }
 }
+
+CommandStructure Application::onRequestForward(int gameId)
+{
+    auto gameIdx = findGameIdx_(gameId);
+    if (games_.at(gameIdx) != nullptr)
+    {
+        return games_.at(gameIdx)->onRequestForward();
+    }
+    return CommandStructure();
+}
+
+CommandStructure Application::onRequestBackward(int gameId)
+{
+    auto gameIdx = findGameIdx_(gameId);
+    if (games_.at(gameIdx) != nullptr)
+    {
+        return games_.at(gameIdx)->onRequestBackward();
+    }
+    return CommandStructure();
+}

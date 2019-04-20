@@ -11,6 +11,8 @@ struct CommandStructure
                          undoTo(Position(-1, -1)),
                          redoFrom(Position(-1, -1)),
                          redoTo(Position(-1, -1)),
+                         from(Position(-1, -1)),
+                         to(Position(-1, -1)),
                          hasCapturedUnit(false)
     {
     }
@@ -19,6 +21,8 @@ struct CommandStructure
     Position undoTo;
     Position redoFrom;
     Position redoTo;
+    Position from;
+    Position to;
     bool hasCapturedUnit;
     color_t capturedUnitColor;
     unitType_t capturedUnitType;

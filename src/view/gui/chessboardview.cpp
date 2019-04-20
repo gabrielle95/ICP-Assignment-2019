@@ -40,20 +40,22 @@ chessBoardView::chessBoardView(int id, QWidget *parent) : QWidget(parent),
 
     int col = 1;
 
-    for(int i = 0; i < 16; i++) {
+    for (int i = 0; i < 16; i++)
+    {
         QChessCell *cell = new QChessCell(WHITE, this); //dummy
         cell->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         cell->setCaptured(true);
-        ui->capturedUnitsLayout->addWidget(cell, i+1, col);
+        ui->capturedUnitsLayout->addWidget(cell, i + 1, col);
         qCapturedBoard_.push_back(cell);
     }
 
     col = 2;
-    for(int i = 0; i < 16; i++) {
+    for (int i = 0; i < 16; i++)
+    {
         QChessCell *cell = new QChessCell(WHITE, this); //dummy
         cell->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         cell->setCaptured(true);
-        ui->capturedUnitsLayout->addWidget(cell, i+1, col);
+        ui->capturedUnitsLayout->addWidget(cell, i + 1, col);
         qCapturedBoard_.push_back(cell);
     }
 
@@ -116,13 +118,17 @@ chessBoardView::~chessBoardView()
 
 void chessBoardView::executePendingMove()
 {
-    if (!pendingFrom || !pendingTo) {
+    if (!pendingFrom || !pendingTo)
+    {
         return;
     }
 
-    if(pendingTo->hasUnitStyle()) {
-        for(auto &c: qCapturedBoard_) {
-            if(!c->hasUnitStyle()) {
+    if (pendingTo->hasUnitStyle())
+    {
+        for (auto &c : qCapturedBoard_)
+        {
+            if (!c->hasUnitStyle())
+            {
                 c->setUnitStyle(pendingTo->getUnitStyle());
                 break;
             }
@@ -141,23 +147,28 @@ void chessBoardView::executePendingMove()
     emit sig_emitRequestUnitsOnTurn(itsWhitesTurn_);
 }
 
-void chessBoardView::executeUndoMove(CommandStructure data) {
-    if(data.undoFrom.isValid() && data.undoTo.isValid()) {
+void chessBoardView::executeUndoMove(CommandStructure data)
+{
+    if (data.undoFrom.isValid() && data.undoTo.isValid())
+    {
         QChessCell *from = qCellBoard_.at(data.undoFrom.clm()).at(data.undoFrom.row());
-        QChessCell * to = qCellBoard_.at(data.undoTo.clm()).at(data.undoTo.row());
+        QChessCell *to = qCellBoard_.at(data.undoTo.clm()).at(data.undoTo.row());
         to->setUnitStyle(from->getUnitStyle());
         from->unsetUnitStyle();
         to->setChecked(false);
         from->setCheckable(false);
         to->setCheckable(true);
 
-        if(data.hasCapturedUnit) {
+        if (data.hasCapturedUnit)
+        {
             to = from;
             QString retrievedStyle = Styles::getStyleFrom(data.capturedUnitType, data.capturedUnitColor);
             to->setUnitStyle(retrievedStyle);
 
-            for(auto &c: qCapturedBoard_) {
-                if(c->getUnitStyle() == retrievedStyle) {
+            for (auto &c : qCapturedBoard_)
+            {
+                if (c->getUnitStyle() == retrievedStyle)
+                {
                     c->unsetUnitStyle();
                     break;
                 }
@@ -169,8 +180,10 @@ void chessBoardView::executeUndoMove(CommandStructure data) {
     draw();
 }
 
-void chessBoardView::executeRedoMove(CommandStructure data) {
-    if(data.redoFrom.isValid() && data.redoTo.isValid()) {
+void chessBoardView::executeRedoMove(CommandStructure data)
+{
+    if (data.redoFrom.isValid() && data.redoTo.isValid())
+    {
         pendingFrom = qCellBoard_.at(data.redoFrom.clm()).at(data.redoFrom.row());
         pendingTo = qCellBoard_.at(data.redoTo.clm()).at(data.redoTo.row());
         executePendingMove();
@@ -189,14 +202,15 @@ void chessBoardView::markAvailableCellsForMove(std::vector<Position> cellPositio
     }
 }
 
-void chessBoardView::setTheseCellsCheckable(std::vector<Position> positions) {
+void chessBoardView::setTheseCellsCheckable(std::vector<Position> positions)
+{
     for (auto &a : qCellBoard_)
+    {
+        for (auto &cell : a)
         {
-            for (auto &cell : a)
-            {
-                cell->setCheckable(false);
-            }
+            cell->setCheckable(false);
         }
+    }
 
     for (auto &p : positions)
     {
@@ -214,7 +228,8 @@ void chessBoardView::draw()
         }
     }
 
-    for(auto &c: qCapturedBoard_) {
+    for (auto &c : qCapturedBoard_)
+    {
         c->draw();
     }
 }
@@ -224,13 +239,16 @@ void chessBoardView::sl_cellWasClicked()
     QChessCell *clickedCell = (QChessCell *)sender();
 
     // no cell is checked before clickedCell is clicked
-    if(previouslyClickedCell == nullptr || !previouslyClickedCell->isChecked()) {
+    if (previouslyClickedCell == nullptr || !previouslyClickedCell->isChecked())
+    {
         // we clicked on a cell, none selected before
-        if(clickedCell->isChecked()){
+        if (clickedCell->isChecked())
+        {
             //we will request available moves for this cell
             onRequestAvailableMoves(clickedCell);
         }
-        else {
+        else
+        {
             //we are now unchecking this checked cell, so we must clean its moves too
             clearAvailableForMove_();
         }
@@ -239,22 +257,26 @@ void chessBoardView::sl_cellWasClicked()
         previouslyClickedCell = clickedCell;
 
     } //if previously clicked cell is selected
-    else if(previouslyClickedCell->isChecked()) {
+    else if (previouslyClickedCell->isChecked())
+    {
         //if we now clicked on a friendly cell
-        if(clickedCell->isCheckable()) {
+        if (clickedCell->isCheckable())
+        {
             //we will uncheck the previous cell
             previouslyClickedCell->setChecked(false);
             //we will also clear its available moves
             clearAvailableForMove_();
             //and request available moves for the clicked cell if checked
-            if(clickedCell->isChecked()) {
+            if (clickedCell->isChecked())
+            {
                 onRequestAvailableMoves(clickedCell);
             }
 
             // save previously clicked cell
             previouslyClickedCell = clickedCell;
         } // now if the clicked cell is empty or unfriendly
-        else {
+        else
+        {
             // we will try to move the figure
             onCellSelectionChanged(previouslyClickedCell, clickedCell);
 
@@ -268,36 +290,44 @@ void chessBoardView::sl_cellWasClicked()
     draw();
 }
 
-void chessBoardView::sl_undoClicked() {
+void chessBoardView::sl_undoClicked()
+{
     emit sig_emitRequestUndo();
 }
 
-void chessBoardView::sl_redoClicked() {
+void chessBoardView::sl_redoClicked()
+{
     emit sig_emitRequestRedo();
 }
 
-void chessBoardView::sl_requestSerializedData() {
+void chessBoardView::sl_requestSerializedData()
+{
     emit sig_emitRequestSerializedData();
 }
 
-void chessBoardView::sl_requestDeserializedData() {
+void chessBoardView::sl_requestDeserializedData()
+{
     emit sig_emitRequestDeserializedData();
 }
 
-void chessBoardView::sl_saveGameToFile() {
+void chessBoardView::sl_saveGameToFile()
+{
     QString fileName = QFileDialog::getSaveFileName(this,
                                                     tr("Save ICP Game"), "",
                                                     tr("ICP Chess Game (*);;All Files (*)"));
 
-    if(fileName.isEmpty()) {
+    if (fileName.isEmpty())
+    {
         return;
     }
-    else {
+    else
+    {
         QFile file(fileName);
 
-        if(!file.open(QIODevice::WriteOnly)) {
+        if (!file.open(QIODevice::WriteOnly))
+        {
             QMessageBox::information(this, tr("Unable to open file for writing"),
-                            file.errorString());
+                                     file.errorString());
             return;
         }
 
@@ -306,20 +336,24 @@ void chessBoardView::sl_saveGameToFile() {
     }
 }
 
-void chessBoardView::sl_openGameFromFile() {
+void chessBoardView::sl_openGameFromFile()
+{
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("Open ICP Game"), "",
                                                     tr("ICP Chess Game (*);;All Files (*)"));
 
-    if(fileName.isEmpty()) {
+    if (fileName.isEmpty())
+    {
         return;
     }
-    else {
+    else
+    {
         QFile file(fileName);
 
-        if(!file.open(QIODevice::ReadOnly)) {
+        if (!file.open(QIODevice::ReadOnly))
+        {
             QMessageBox::information(this, tr("Unable to open file for reading"),
-                            file.errorString());
+                                     file.errorString());
             return;
         }
 
@@ -332,22 +366,26 @@ void chessBoardView::sl_openGameFromFile() {
     }
 }
 
-void chessBoardView::sl_forwardClicked() {
+void chessBoardView::sl_forwardClicked()
+{
     emit sig_emitRequestForward();
 }
 
-void chessBoardView::sl_backwardClicked() {
+void chessBoardView::sl_backwardClicked()
+{
     emit sig_emitRequestBackward();
 }
 
-void chessBoardView::onCellSelectionChanged(QChessCell *from, QChessCell *to) {
+void chessBoardView::onCellSelectionChanged(QChessCell *from, QChessCell *to)
+{
     /* sends request to the 'backend' */
     pendingFrom = from;
     pendingTo = to;
     emit sig_emitMoveRequest(getCellPosition_(from), getCellPosition_(to));
 }
 
-void chessBoardView::onRequestAvailableMoves(QChessCell *from) {
+void chessBoardView::onRequestAvailableMoves(QChessCell *from)
+{
     emit sig_emitAvailableCellsRequest(getCellPosition_(from));
 }
 
@@ -436,12 +474,14 @@ void chessBoardView::clearAvailableForMove_()
     }
 }
 
-QPushButton *chessBoardView::generateAppButton_(QString style, QString tooltip) {
+QPushButton *chessBoardView::generateAppButton_(QString style, QString tooltip)
+{
     QPushButton *button = new QPushButton();
     button->setToolTip(tooltip);
     button->setStyleSheet(""
-                              "QPushButton {" + style + Styles::margin10px + "}"
-                              "QToolTip { color: #ffffff; background-color: #000000; border: 0px; }");
+                          "QPushButton {" +
+                          style + Styles::margin10px + "}"
+                                                       "QToolTip { color: #ffffff; background-color: #000000; border: 0px; }");
     button->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
     return button;

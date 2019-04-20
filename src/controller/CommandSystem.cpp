@@ -2,21 +2,32 @@
 
 CommandSystem::CommandSystem() {}
 
-void CommandSystem::executeRecordedCommand() {
-    if(recordedSteps_.empty()) return;
-    if(recordedStepsIterator_ == recordedSteps_.end()) return;
-    if(!undoVector_.empty()) return;
-
-    (*recordedStepsIterator_)->execute();
-    ++recordedStepsIterator_;
-}
-
-commandPtr_t CommandSystem::backward() {
-    if(!undoVector_.empty()) return nullptr;
-    if(recordedSteps_.empty()) return nullptr;
+commandPtr_t CommandSystem::executeRecordedCommand()
+{
+    if (recordedSteps_.empty())
+        return;
+    if (recordedStepsIterator_ == recordedSteps_.end())
+        return;
+    if (!undoVector_.empty())
+        return;
 
     commandPtr_t command = (*recordedStepsIterator_);
-    if(command) {
+    command->execute();
+    ++recordedStepsIterator_;
+
+    return command;
+}
+
+commandPtr_t CommandSystem::backward()
+{
+    if (!undoVector_.empty())
+        return nullptr;
+    if (recordedSteps_.empty())
+        return nullptr;
+
+    commandPtr_t command = (*recordedStepsIterator_);
+    if (command)
+    {
         command->undo();
         --recordedStepsIterator_;
     }

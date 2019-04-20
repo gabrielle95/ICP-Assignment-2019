@@ -39,22 +39,37 @@ class Styles
 
     inline static QString margin10px = "margin: 10px;";
 
-    inline static QString getStyleFrom(unitType_t type, color_t color) {
-        if(color == BLACK) {
-            if(type == PAWN) return cellPawnBlackFg;
-            if(type == ROOK) return cellRookBlackFg;
-            if(type == BISHOP) return cellBishopBlackFg;
-            if(type == KNIGHT) return cellKnightBlackFg;
-            if(type == KING) return cellKingBlackFg;
-            if (type == QUEEN) return cellQueenBlackFg;
+    inline static QString getStyleFrom(unitType_t type, color_t color)
+    {
+        if (color == BLACK)
+        {
+            if (type == PAWN)
+                return cellPawnBlackFg;
+            if (type == ROOK)
+                return cellRookBlackFg;
+            if (type == BISHOP)
+                return cellBishopBlackFg;
+            if (type == KNIGHT)
+                return cellKnightBlackFg;
+            if (type == KING)
+                return cellKingBlackFg;
+            if (type == QUEEN)
+                return cellQueenBlackFg;
         }
-        else if(color == WHITE) {
-            if(type == PAWN) return cellPawnWhiteFg;
-            if(type == ROOK) return cellRookWhiteFg;
-            if(type == BISHOP) return cellBishopWhiteFg;
-            if(type == KNIGHT) return cellKnightWhiteFg;
-            if(type == KING) return cellKingWhiteFg;
-            if (type == QUEEN) return cellQueenWhiteFg;
+        else if (color == WHITE)
+        {
+            if (type == PAWN)
+                return cellPawnWhiteFg;
+            if (type == ROOK)
+                return cellRookWhiteFg;
+            if (type == BISHOP)
+                return cellBishopWhiteFg;
+            if (type == KNIGHT)
+                return cellKnightWhiteFg;
+            if (type == KING)
+                return cellKingWhiteFg;
+            if (type == QUEEN)
+                return cellQueenWhiteFg;
         }
     }
 };

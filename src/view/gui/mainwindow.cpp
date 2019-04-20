@@ -25,7 +25,8 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     application->quitGame(gameToDelete);
     gameIds.erase(gameIds.begin() + index);
 
-    if(ui->tabWidget->count() == 0) {
+    if (ui->tabWidget->count() == 0)
+    {
         ui->tabWidget->setVisible(false);
         ui->welcomeLabel->setVisible(true);
     }
@@ -33,8 +34,10 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
 
 void MainWindow::on_addtab_btn_clicked()
 {
-    if(!ui->tabWidget->isVisible()) ui->tabWidget->setVisible(true);
-    if(ui->welcomeLabel->isVisible()) ui->welcomeLabel->setVisible(false);
+    if (!ui->tabWidget->isVisible())
+        ui->tabWidget->setVisible(true);
+    if (ui->welcomeLabel->isVisible())
+        ui->welcomeLabel->setVisible(false);
 
     chessBoardView *c = new chessBoardView(gameNumber);
 
@@ -71,37 +74,44 @@ void MainWindow::sl_onRequestAvailableCells(Position from)
     senderView->markAvailableCellsForMove(application->onRequestAvailableCells(senderView->Id(), from));
 }
 
-void MainWindow::sl_onRequestUnitsOnTurn(bool isWhitesTurn) {
+void MainWindow::sl_onRequestUnitsOnTurn(bool isWhitesTurn)
+{
     chessBoardView *senderView = (chessBoardView *)sender();
     senderView->setTheseCellsCheckable(application->onRequestPositionsOfPlayersTurn(senderView->Id(), isWhitesTurn));
 }
 
-void MainWindow::sl_onRequestUndo() {
+void MainWindow::sl_onRequestUndo()
+{
     chessBoardView *senderView = (chessBoardView *)sender();
     senderView->executeUndoMove(application->onRequestUndo(senderView->Id()));
 }
 
-void MainWindow::sl_onRequestRedo() {
+void MainWindow::sl_onRequestRedo()
+{
     chessBoardView *senderView = (chessBoardView *)sender();
     senderView->executeRedoMove(application->onRequestRedo(senderView->Id()));
 }
 
-void MainWindow::sl_onRequestSerializedData() {
+void MainWindow::sl_onRequestSerializedData()
+{
     chessBoardView *senderView = (chessBoardView *)sender();
     senderView->setSerializedData(application->onRequestSerializedData(senderView->Id()));
 }
 
-void MainWindow::sl_onRequestDeserializedData() {
+void MainWindow::sl_onRequestDeserializedData()
+{
     chessBoardView *senderView = (chessBoardView *)sender();
     application->onRequestDeserializedData(senderView->Id(), senderView->getSerializedData());
 }
 
-void MainWindow::sl_onRequestForward() {
+void MainWindow::sl_onRequestForward()
+{
     chessBoardView *senderView = (chessBoardView *)sender();
     //
 }
 
-void MainWindow::sl_onRequestBackward() {
+void MainWindow::sl_onRequestBackward()
+{
     chessBoardView *senderView = (chessBoardView *)sender();
     //
 }

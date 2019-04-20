@@ -39,17 +39,20 @@ std::vector<Position> GameInstance::onRequestPositionsOfPlayersTurn(bool isWhite
     return board_->getPositionsOfPlayersTurn(isWhitesTurn);
 }
 
-CommandStructure GameInstance::onRequestUndo() {
+CommandStructure GameInstance::onRequestUndo()
+{
     commandPtr_t undoCommand = commandSystem_->undo();
 
     CommandStructure data;
 
-    if(undoCommand != nullptr) {
+    if (undoCommand != nullptr)
+    {
         data.undoFrom = undoCommand->new_pos();
         data.undoTo = undoCommand->old_pos();
 
         unitPtr_t captured = undoCommand->capturedUnit();
-        if(captured  != nullptr) {
+        if (captured != nullptr)
+        {
             data.hasCapturedUnit = true;
             data.capturedUnitColor = captured->color();
             data.capturedUnitType = captured->type();
@@ -59,13 +62,15 @@ CommandStructure GameInstance::onRequestUndo() {
     return data;
 }
 
-CommandStructure GameInstance::onRequestRedo() {
+CommandStructure GameInstance::onRequestRedo()
+{
 
     commandPtr_t redoCommand = commandSystem_->redo();
 
     CommandStructure data;
 
-    if(redoCommand != nullptr) {
+    if (redoCommand != nullptr)
+    {
         data.redoFrom = redoCommand->old_pos();
         data.redoTo = redoCommand->new_pos();
     }
@@ -73,7 +78,8 @@ CommandStructure GameInstance::onRequestRedo() {
     return data;
 }
 
-std::string GameInstance::onRequestSerializedData() {
+std::string GameInstance::onRequestSerializedData()
+{
     saveSystem_->setCommandsToSave(commandSystem_->constructCommandsToSave());
 
     saveSystem_->serialize();
@@ -81,10 +87,47 @@ std::string GameInstance::onRequestSerializedData() {
     return saveSystem_->getSerializedCommands();
 }
 
-void GameInstance::onRequestDeserializedData(std::string input) {
+void GameInstance::onRequestDeserializedData(std::string input)
+{
     saveSystem_->setInputToDeserialize(input);
 
     saveSystem_->deserialize(board_);
+}
 
-    //return saveSystem_->getDeserializedCommands();
+CommandStructure GameInstance::onRequestForward()
+{
+    commandPtr_t command = commandSystem_->executeRecordedCommand();
+
+    CommandStructure data;
+
+    if (command != nullptr)
+    {
+        data.from = command->old_pos();
+        data.to = command->new_pos();
+    }
+
+    return data;
+}
+
+CommandStructure GameInstance::onRequestBackward()
+{
+    commandPtr_t backCommand = commandSystem_->backward();
+
+    CommandStructure data;
+
+    if (backCommand != nullptr)
+    {
+        data.from = backCommand->new_pos();
+        data.to = backCommand->old_pos();
+
+        unitPtr_t captured = backCommand->capturedUnit();
+        if (captured != nullptr)
+        {
+            data.hasCapturedUnit = true;
+            data.capturedUnitColor = captured->color();
+            data.capturedUnitType = captured->type();
+        }
+    }
+
+    return data;
 }

@@ -96,7 +96,6 @@ commandVector_t SaveSerializer::deserializeInput_(std::string input, boardPtr_t 
         s.erase(0, pos + delimiter.length());
     }
 
-
     for (auto line : lines)
     {
         commands.push_back(deserializeLine_(line, board));

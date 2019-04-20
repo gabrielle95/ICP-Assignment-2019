@@ -26,7 +26,8 @@ class QChessCell : public QPushButton
         this->unitStyle_.clear();
     }
 
-    bool hasUnitStyle () const {
+    bool hasUnitStyle() const
+    {
         return !this->unitStyle_.isEmpty();
     }
 
@@ -61,11 +62,13 @@ class QChessCell : public QPushButton
         this->availableForMove_ = value;
     }
 
-    void setCaptured(bool value) {
+    void setCaptured(bool value)
+    {
         this->captured_ = value;
     }
 
-    bool isCaptured() const {
+    bool isCaptured() const
+    {
         return this->captured_;
     }
 

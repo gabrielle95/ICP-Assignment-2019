@@ -18,6 +18,8 @@ public:
   CommandStructure onRequestRedo(int gameId);
   std::string onRequestSerializedData(int gameId);
   void onRequestDeserializedData(int gameId, std::string input);
+  CommandStructure onRequestForward(int gameId);
+  CommandStructure onRequestBackward(int gameId);
 
 private:
   int findGameIdx_(int gameId);

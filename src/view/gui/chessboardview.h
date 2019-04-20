@@ -18,85 +18,87 @@ class chessBoardView;
 
 class chessBoardView : public QWidget
 {
-    Q_OBJECT
+  Q_OBJECT
 
-  public:
-    explicit chessBoardView(int id, QWidget *parent = 0);
-    ~chessBoardView();
+public:
+  explicit chessBoardView(int id, QWidget *parent = 0);
+  ~chessBoardView();
 
-    void draw();
+  void draw();
 
-    int Id() const
-    {
-        return this->id_;
-    }
+  int Id() const
+  {
+    return this->id_;
+  }
 
-    bool isWhitesTurn() const {
-        return this->itsWhitesTurn_;
-    }
+  bool isWhitesTurn() const
+  {
+    return this->itsWhitesTurn_;
+  }
 
-    void setSerializedData(std::string data) {
-        serializedData_ = data;
-    }
+  void setSerializedData(std::string data)
+  {
+    serializedData_ = data;
+  }
 
-    std::string getSerializedData() const {
-        return serializedData_;
-    }
+  std::string getSerializedData() const
+  {
+    return serializedData_;
+  }
 
-    void executePendingMove();
-    void markAvailableCellsForMove(std::vector<Position> cellPositions);
-    void setTheseCellsCheckable(std::vector<Position> positions);
-    void executeUndoMove(CommandStructure data);
-    void executeRedoMove(CommandStructure data);
+  void executePendingMove();
+  void markAvailableCellsForMove(std::vector<Position> cellPositions);
+  void setTheseCellsCheckable(std::vector<Position> positions);
+  void executeUndoMove(CommandStructure data);
+  void executeRedoMove(CommandStructure data);
 
-  signals:
-    void sig_emitClickedCell(QChessCell *cell);
-    void sig_emitMoveRequest(Position from, Position to);
-    void sig_emitAvailableCellsRequest(Position from);
-    void sig_emitRequestUnitsOnTurn(bool isWhitesTurn);
-    void sig_emitRequestUndo();
-    void sig_emitRequestRedo();
-    void sig_emitRequestSerializedData();
-    void sig_emitRequestDeserializedData();
-    void sig_emitRequestForward();
-    void sig_emitRequestBackward();
+signals:
+  void sig_emitClickedCell(QChessCell *cell);
+  void sig_emitMoveRequest(Position from, Position to);
+  void sig_emitAvailableCellsRequest(Position from);
+  void sig_emitRequestUnitsOnTurn(bool isWhitesTurn);
+  void sig_emitRequestUndo();
+  void sig_emitRequestRedo();
+  void sig_emitRequestSerializedData();
+  void sig_emitRequestDeserializedData();
+  void sig_emitRequestForward();
+  void sig_emitRequestBackward();
 
-  private slots:
-    void sl_cellWasClicked();
-    void sl_undoClicked();
-    void sl_redoClicked();
-    void sl_requestSerializedData();
-    void sl_requestDeserializedData();
-    void sl_saveGameToFile();
-    void sl_openGameFromFile();
-    void sl_forwardClicked();
-    void sl_backwardClicked();
+private slots:
+  void sl_cellWasClicked();
+  void sl_undoClicked();
+  void sl_redoClicked();
+  void sl_requestSerializedData();
+  void sl_requestDeserializedData();
+  void sl_saveGameToFile();
+  void sl_openGameFromFile();
+  void sl_forwardClicked();
+  void sl_backwardClicked();
 
-  private:
-    void onCellSelectionChanged(QChessCell *from, QChessCell *to);
-    void onRequestAvailableMoves(QChessCell *from);
-    void initStyles_();
-    void moveUnitStyle_();
-    Position getCellPosition_(QChessCell *cell);
-    void clearAvailableForMove_();
-    QPushButton *generateAppButton_(QString style, QString tooltip);
+private:
+  void onCellSelectionChanged(QChessCell *from, QChessCell *to);
+  void onRequestAvailableMoves(QChessCell *from);
+  void initStyles_();
+  void moveUnitStyle_();
+  Position getCellPosition_(QChessCell *cell);
+  void clearAvailableForMove_();
+  QPushButton *generateAppButton_(QString style, QString tooltip);
 
-    Ui::chessBoardView *ui;
-    std::array<std::array<QChessCell *, MAX_CELLS>, MAX_CELLS> qCellBoard_;
-    std::vector<QChessCell*> qCapturedBoard_;
+  Ui::chessBoardView *ui;
+  std::array<std::array<QChessCell *, MAX_CELLS>, MAX_CELLS> qCellBoard_;
+  std::vector<QChessCell *> qCapturedBoard_;
 
+  int id_;
 
-    int id_;
+  QChessCell *pendingFrom;
+  QChessCell *pendingTo;
 
-    QChessCell *pendingFrom;
-    QChessCell *pendingTo;
+  QChessCell *previouslyClickedCell;
 
-    QChessCell *previouslyClickedCell;
+  bool itsWhitesTurn_;
 
-    bool itsWhitesTurn_;
-
-    // variable to save loaded data and data before saving
-    std::string serializedData_;
+  // variable to save loaded data and data before saving
+  std::string serializedData_;
 };
 
 #endif // CHESSBOARDVIEW_H
