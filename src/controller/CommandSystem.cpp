@@ -38,6 +38,8 @@ commandPtr_t CommandSystem::redo()
 
 commandVector_t CommandSystem::constructCommandsToSave()
 {
-    std::move(undoVector_.begin(), undoVector_.end(), commandsToSave_.begin());
+    commandsToSave_.clear();
+    commandsToSave_.insert(commandsToSave_.end(), undoVector_.begin(), undoVector_.end());
+    commandsToSave_.insert(commandsToSave_.end(), redoVector_.begin(), redoVector_.end());
     return commandsToSave_;
 }

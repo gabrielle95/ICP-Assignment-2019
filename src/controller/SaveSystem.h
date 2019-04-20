@@ -1,28 +1,24 @@
-#include "../model/SaveFile.h"
+#include "../model/SaveSerializer.h"
 
-using saveFilePtr_t = std::shared_ptr<SaveFile>;
+using saveSerializerPtr_t = std::shared_ptr<SaveSerializer>;
 using saveSystemPtr_t = std::shared_ptr<SaveSystem>;
 
 class SaveSystem
 {
-  public:
-    SaveSystem();
+public:
+  SaveSystem();
 
-    void load(std::string filePath);
+  void setCommandsToSave(commandVector_t commands);
 
-    void save();
+  void serialize();
 
-    void saveAs(std::string filePath);
+  std::string getSerializedCommands() const
+  {
+    return serializedCommands_;
+  }
 
-    saveFilePtr_t instantiateSaveFile(std::string filePath);
+private:
+  commandVector_t commandsToSave_;
 
-    saveFilePtr_t getOpenedSave() const
-    {
-        return currentlyOpen_;
-    }
-
-  private:
-    void load_(saveFilePtr_t saveFile);
-    void save_(saveFilePtr_t saveFile);
-    saveFilePtr_t currentlyOpen_; //TODO
+  std::string serializedCommands_;
 };

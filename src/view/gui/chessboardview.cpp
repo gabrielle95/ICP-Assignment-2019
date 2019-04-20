@@ -2,6 +2,7 @@
 #include "ui_chessboardview.h"
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QTextStream>
 
 chessBoardView::chessBoardView(int id, QWidget *parent) : QWidget(parent),
                                                           ui(new Ui::chessBoardView),
@@ -71,6 +72,7 @@ chessBoardView::chessBoardView(int id, QWidget *parent) : QWidget(parent),
 
     ui->appButtonsLayout->addWidget(btn);
 
+    connect(btn, SIGNAL(clicked(bool)), this, SLOT(sl_requestSerializedData()));
     connect(btn, SIGNAL(clicked(bool)), this, SLOT(sl_saveGameToFile()));
 
     //undo
@@ -376,7 +378,12 @@ QPushButton *chessBoardView::generateAppButton_(QString style, QString tooltip) 
     return button;
 }
 
+void chessBoardView::sl_requestSerializedData() {
+    emit sig_emitRequestSerializedData();
+}
+
 void chessBoardView::sl_saveGameToFile() {
+
     QString fileName = QFileDialog::getSaveFileName(this,
                                                     tr("Save ICP Game"), "",
                                                     tr("ICP Chess Game (*);;All Files (*)"));
@@ -385,7 +392,6 @@ void chessBoardView::sl_saveGameToFile() {
         return;
     }
     else {
-        // TODO request serialize commands and write out
         QFile file(fileName);
 
         if(!file.open(QIODevice::WriteOnly)) {
@@ -394,10 +400,9 @@ void chessBoardView::sl_saveGameToFile() {
             return;
         }
 
-        //dummy
-        QDataStream out(&file);
-        out.setVersion(QDataStream::Qt_4_5);
-        //out << savegamefile;
+        QTextStream out(&file);
+        //out.setVersion(QTextStream::Qt_4_5);
+        out << QString::fromStdString(serializedData_);
     }
 }
 

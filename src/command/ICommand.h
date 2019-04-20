@@ -11,6 +11,7 @@ public:
   virtual Position old_pos() const = 0;
   virtual Position new_pos() const = 0;
   virtual unitPtr_t capturedUnit() const = 0;
+  virtual unitPtr_t movingUnit() const = 0;
 
 protected:
   friend CommandSystem;

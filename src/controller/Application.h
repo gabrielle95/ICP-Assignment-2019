@@ -16,6 +16,7 @@ public:
   std::vector<Position> onRequestPositionsOfPlayersTurn(int gameId, bool isWhitesTurn);
   CommandStructure onRequestUndo(int gameId);
   CommandStructure onRequestRedo(int gameId);
+  std::string onRequestSerializedData(int gameId);
 
 private:
   int findGameIdx_(int gameId);

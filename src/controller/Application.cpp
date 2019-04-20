@@ -71,3 +71,12 @@ CommandStructure Application::onRequestRedo(int gameId) {
     }
     return CommandStructure();
 }
+
+std::string Application::onRequestSerializedData(int gameId) {
+    auto gameIdx = findGameIdx_(gameId);
+    if (games_.at(gameIdx) != nullptr)
+    {
+        return games_.at(gameIdx)->onRequestSerializedData();
+    }
+    return std::string("");
+}

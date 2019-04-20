@@ -35,6 +35,10 @@ class chessBoardView : public QWidget
         return this->itsWhitesTurn_;
     }
 
+    void setSerializedData(std::string data) {
+        serializedData_ = data;
+    }
+
     void executePendingMove();
     void markAvailableCellsForMove(std::vector<Position> cellPositions);
     void setTheseCellsCheckable(std::vector<Position> positions);
@@ -48,11 +52,13 @@ class chessBoardView : public QWidget
     void sig_emitRequestUnitsOnTurn(bool isWhitesTurn);
     void sig_emitRequestUndo();
     void sig_emitRequestRedo();
+    void sig_emitRequestSerializedData();
 
   private slots:
     void sl_cellWasClicked();
     void sl_undoClicked();
     void sl_redoClicked();
+    void sl_requestSerializedData();
     void sl_saveGameToFile();
     void sl_openGameFromFile();
 
@@ -78,6 +84,8 @@ class chessBoardView : public QWidget
     QChessCell *previouslyClickedCell;
 
     bool itsWhitesTurn_;
+
+    std::string serializedData_;
 };
 
 #endif // CHESSBOARDVIEW_H

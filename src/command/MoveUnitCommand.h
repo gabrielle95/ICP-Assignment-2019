@@ -30,6 +30,11 @@ public:
     return capturedUnit_;
   }
 
+  virtual unitPtr_t movingUnit() const
+  {
+    return unit_;
+  }
+
 private:
   virtual void execute()
   {

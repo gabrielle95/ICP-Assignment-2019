@@ -72,3 +72,11 @@ CommandStructure GameInstance::onRequestRedo() {
 
     return data;
 }
+
+std::string GameInstance::onRequestSerializedData() {
+    saveSystem_->setCommandsToSave(commandSystem_->constructCommandsToSave());
+
+    saveSystem_->serialize();
+
+    return saveSystem_->getSerializedCommands();
+}

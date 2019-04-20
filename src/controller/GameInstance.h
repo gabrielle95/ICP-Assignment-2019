@@ -25,6 +25,7 @@ public:
   std::vector<Position> onRequestPositionsOfPlayersTurn(bool isWhitesTurn);
   CommandStructure onRequestUndo();
   CommandStructure onRequestRedo();
+  std::string onRequestSerializedData();
 
 private:
   bool moveIsValid_(unitPtr_t unit, Position fromPos, Position toPos);

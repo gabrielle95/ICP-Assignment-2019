@@ -33,7 +33,7 @@ SOURCES += \
     ../src/controller/GameInstance.cpp \
     ../src/controller/SaveSystem.cpp \
     ../src/controller/CommandSystem.cpp \
-    ../src/model/SaveFile.cpp \
+    ../src/model/SaveSerializer.cpp \
     ../src/model/Board.cpp \
     ../src/model/Rules.cpp
 
@@ -45,7 +45,7 @@ HEADERS += \
     ../src/controller/GameInstance.h \
     ../src/controller/SaveSystem.h \
     ../src/controller/CommandSystem.h \
-    ../src/model/SaveFile.h \
+    ../src/model/SaveSerializer.h \
     ../src/model/Board.h \
     ../src/model/Unit.h \
     ../src/command/ICommand.h \

@@ -32,6 +32,8 @@ private slots:
 
   void sl_onRequestRedo();
 
+  void sl_onRequestSerializedData();
+
 private:
   Ui::MainWindow *ui;
   int gameNumber;

@@ -46,6 +46,7 @@ void MainWindow::on_addtab_btn_clicked()
     connect(c, SIGNAL(sig_emitRequestUnitsOnTurn(bool)), this, SLOT(sl_onRequestUnitsOnTurn(bool)));
     connect(c, SIGNAL(sig_emitRequestUndo()), this, SLOT(sl_onRequestUndo()));
     connect(c, SIGNAL(sig_emitRequestRedo()), this, SLOT(sl_onRequestRedo()));
+    connect(c, SIGNAL(sig_emitRequestSerializedData()), this, SLOT(sl_onRequestSerializedData()));
 
     application->newGame(gameNumber);
     gameIds.push_back(gameNumber);
@@ -80,4 +81,9 @@ void MainWindow::sl_onRequestUndo() {
 void MainWindow::sl_onRequestRedo() {
     chessBoardView *senderView = (chessBoardView *)sender();
     senderView->executeRedoMove(application->onRequestRedo(senderView->Id()));
+}
+
+void MainWindow::sl_onRequestSerializedData() {
+    chessBoardView *senderView = (chessBoardView *)sender();
+    senderView->setSerializedData(application->onRequestSerializedData(senderView->Id()));
 }
