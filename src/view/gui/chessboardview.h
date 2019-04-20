@@ -39,6 +39,10 @@ class chessBoardView : public QWidget
         serializedData_ = data;
     }
 
+    std::string getSerializedData() const {
+        return serializedData_;
+    }
+
     void executePendingMove();
     void markAvailableCellsForMove(std::vector<Position> cellPositions);
     void setTheseCellsCheckable(std::vector<Position> positions);
@@ -53,14 +57,20 @@ class chessBoardView : public QWidget
     void sig_emitRequestUndo();
     void sig_emitRequestRedo();
     void sig_emitRequestSerializedData();
+    void sig_emitRequestDeserializedData();
+    void sig_emitRequestForward();
+    void sig_emitRequestBackward();
 
   private slots:
     void sl_cellWasClicked();
     void sl_undoClicked();
     void sl_redoClicked();
     void sl_requestSerializedData();
+    void sl_requestDeserializedData();
     void sl_saveGameToFile();
     void sl_openGameFromFile();
+    void sl_forwardClicked();
+    void sl_backwardClicked();
 
   private:
     void onCellSelectionChanged(QChessCell *from, QChessCell *to);
@@ -85,6 +95,7 @@ class chessBoardView : public QWidget
 
     bool itsWhitesTurn_;
 
+    // variable to save loaded data and data before saving
     std::string serializedData_;
 };
 

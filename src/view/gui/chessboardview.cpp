@@ -66,6 +66,7 @@ chessBoardView::chessBoardView(int id, QWidget *parent) : QWidget(parent),
     ui->appButtonsLayout->addWidget(btn);
 
     connect(btn, SIGNAL(clicked(bool)), this, SLOT(sl_openGameFromFile()));
+    connect(btn, SIGNAL(clicked(bool)), this, SLOT(sl_requestDeserializedData()));
 
     //save
     btn = generateAppButton_(Styles::saveIcon, "Save a game.");
@@ -95,10 +96,14 @@ chessBoardView::chessBoardView(int id, QWidget *parent) : QWidget(parent),
 
     ui->appButtonsLayout->addWidget(btn);
 
+    connect(btn, SIGNAL(clicked(bool)), this, SLOT(sl_forwardClicked()));
+
     //backward
     btn = generateAppButton_(Styles::backwardIcon, "Move one recorded step backward.");
 
     ui->appButtonsLayout->addWidget(btn);
+
+    connect(btn, SIGNAL(clicked(bool)), this, SLOT(sl_backwardClicked()));
 
     //draw cell styles
     draw();
@@ -271,6 +276,70 @@ void chessBoardView::sl_redoClicked() {
     emit sig_emitRequestRedo();
 }
 
+void chessBoardView::sl_requestSerializedData() {
+    emit sig_emitRequestSerializedData();
+}
+
+void chessBoardView::sl_requestDeserializedData() {
+    emit sig_emitRequestDeserializedData();
+}
+
+void chessBoardView::sl_saveGameToFile() {
+    QString fileName = QFileDialog::getSaveFileName(this,
+                                                    tr("Save ICP Game"), "",
+                                                    tr("ICP Chess Game (*);;All Files (*)"));
+
+    if(fileName.isEmpty()) {
+        return;
+    }
+    else {
+        QFile file(fileName);
+
+        if(!file.open(QIODevice::WriteOnly)) {
+            QMessageBox::information(this, tr("Unable to open file for writing"),
+                            file.errorString());
+            return;
+        }
+
+        QTextStream out(&file);
+        out << QString::fromStdString(serializedData_);
+    }
+}
+
+void chessBoardView::sl_openGameFromFile() {
+    QString fileName = QFileDialog::getOpenFileName(this,
+                                                    tr("Open ICP Game"), "",
+                                                    tr("ICP Chess Game (*);;All Files (*)"));
+
+    if(fileName.isEmpty()) {
+        return;
+    }
+    else {
+        QFile file(fileName);
+
+        if(!file.open(QIODevice::ReadOnly)) {
+            QMessageBox::information(this, tr("Unable to open file for reading"),
+                            file.errorString());
+            return;
+        }
+
+        QString inputData;
+        QTextStream in(&file);
+        serializedData_.clear();
+        in >> inputData;
+
+        serializedData_ = inputData.toStdString();
+    }
+}
+
+void chessBoardView::sl_forwardClicked() {
+    emit sig_emitRequestForward();
+}
+
+void chessBoardView::sl_backwardClicked() {
+    emit sig_emitRequestBackward();
+}
+
 void chessBoardView::onCellSelectionChanged(QChessCell *from, QChessCell *to) {
     /* sends request to the 'backend' */
     pendingFrom = from;
@@ -376,59 +445,4 @@ QPushButton *chessBoardView::generateAppButton_(QString style, QString tooltip) 
     button->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
     return button;
-}
-
-void chessBoardView::sl_requestSerializedData() {
-    emit sig_emitRequestSerializedData();
-}
-
-void chessBoardView::sl_saveGameToFile() {
-
-    QString fileName = QFileDialog::getSaveFileName(this,
-                                                    tr("Save ICP Game"), "",
-                                                    tr("ICP Chess Game (*);;All Files (*)"));
-
-    if(fileName.isEmpty()) {
-        return;
-    }
-    else {
-        QFile file(fileName);
-
-        if(!file.open(QIODevice::WriteOnly)) {
-            QMessageBox::information(this, tr("Unable to open file for writing"),
-                            file.errorString());
-            return;
-        }
-
-        QTextStream out(&file);
-        //out.setVersion(QTextStream::Qt_4_5);
-        out << QString::fromStdString(serializedData_);
-    }
-}
-
-void chessBoardView::sl_openGameFromFile() {
-    QString fileName = QFileDialog::getOpenFileName(this,
-                                                    tr("Open ICP Game"), "",
-                                                    tr("ICP Chess Game (*);;All Files (*)"));
-
-    if(fileName.isEmpty()) {
-        return;
-    }
-    else {
-        // TODO request deserialize commands and read in
-        QFile file(fileName);
-
-        if(!file.open(QIODevice::ReadOnly)) {
-            QMessageBox::information(this, tr("Unable to open file for reading"),
-                            file.errorString());
-            return;
-        }
-
-        //dummy
-        QDataStream in(&file);
-        in.setVersion(QDataStream::Qt_4_5);
-        //savegamewhatever.clear()
-        //in >> savegamewhatever;
-    }
-
 }

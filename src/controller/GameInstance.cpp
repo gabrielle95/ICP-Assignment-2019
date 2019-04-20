@@ -80,3 +80,11 @@ std::string GameInstance::onRequestSerializedData() {
 
     return saveSystem_->getSerializedCommands();
 }
+
+void GameInstance::onRequestDeserializedData(std::string input) {
+    saveSystem_->setInputToDeserialize(input);
+
+    saveSystem_->deserialize(board_);
+
+    //return saveSystem_->getDeserializedCommands();
+}

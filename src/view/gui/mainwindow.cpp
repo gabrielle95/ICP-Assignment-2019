@@ -47,6 +47,9 @@ void MainWindow::on_addtab_btn_clicked()
     connect(c, SIGNAL(sig_emitRequestUndo()), this, SLOT(sl_onRequestUndo()));
     connect(c, SIGNAL(sig_emitRequestRedo()), this, SLOT(sl_onRequestRedo()));
     connect(c, SIGNAL(sig_emitRequestSerializedData()), this, SLOT(sl_onRequestSerializedData()));
+    connect(c, SIGNAL(sig_emitRequestDeserializedData()), this, SLOT(sl_onRequestDeserializedData()));
+    connect(c, SIGNAL(sig_emitRequestForward()), this, SLOT(sl_onRequestForward()));
+    connect(c, SIGNAL(sig_emitRequestBackward()), this, SLOT(sl_onRequestBackward()));
 
     application->newGame(gameNumber);
     gameIds.push_back(gameNumber);
@@ -86,4 +89,19 @@ void MainWindow::sl_onRequestRedo() {
 void MainWindow::sl_onRequestSerializedData() {
     chessBoardView *senderView = (chessBoardView *)sender();
     senderView->setSerializedData(application->onRequestSerializedData(senderView->Id()));
+}
+
+void MainWindow::sl_onRequestDeserializedData() {
+    chessBoardView *senderView = (chessBoardView *)sender();
+    application->onRequestDeserializedData(senderView->Id(), senderView->getSerializedData());
+}
+
+void MainWindow::sl_onRequestForward() {
+    chessBoardView *senderView = (chessBoardView *)sender();
+    //
+}
+
+void MainWindow::sl_onRequestBackward() {
+    chessBoardView *senderView = (chessBoardView *)sender();
+    //
 }

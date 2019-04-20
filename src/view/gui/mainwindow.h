@@ -33,6 +33,10 @@ private slots:
   void sl_onRequestRedo();
 
   void sl_onRequestSerializedData();
+  void sl_onRequestDeserializedData();
+
+  void sl_onRequestForward();
+  void sl_onRequestBackward();
 
 private:
   Ui::MainWindow *ui;

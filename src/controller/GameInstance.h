@@ -26,6 +26,7 @@ public:
   CommandStructure onRequestUndo();
   CommandStructure onRequestRedo();
   std::string onRequestSerializedData();
+  void onRequestDeserializedData(std::string input);
 
 private:
   bool moveIsValid_(unitPtr_t unit, Position fromPos, Position toPos);

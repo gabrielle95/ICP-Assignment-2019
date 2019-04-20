@@ -17,6 +17,7 @@ public:
   CommandStructure onRequestUndo(int gameId);
   CommandStructure onRequestRedo(int gameId);
   std::string onRequestSerializedData(int gameId);
+  void onRequestDeserializedData(int gameId, std::string input);
 
 private:
   int findGameIdx_(int gameId);

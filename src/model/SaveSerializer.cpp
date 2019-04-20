@@ -11,27 +11,32 @@ std::string SaveSerializer::serializeOutput_(commandVector_t outputCommands)
     // 2 commands per line - white followed by black
     int commandLineCounter = 0;
 
-    for(auto &c: outputCommands) {
+    for (auto &c : outputCommands)
+    {
 
         // add line number
-        if(commandLineCounter == 0) {
+        if (commandLineCounter == 0)
+        {
             line += std::to_string(lineNumber) + ". ";
         }
 
         // serialize one command
-        line+= serializeCommand_(c);
+        line += serializeCommand_(c);
 
         //if black command, add newline
-        if(commandLineCounter == 1) {
+        if (commandLineCounter == 1)
+        {
             line += "\n";
         }
-        else {
-            line+= " ";
+        else
+        {
+            line += " ";
         }
 
         commandLineCounter++;
 
-        if(commandLineCounter > 1) {
+        if (commandLineCounter > 1)
+        {
             serializedLines.push_back(line);
             line.clear();
             lineNumber++;
@@ -41,23 +46,24 @@ std::string SaveSerializer::serializeOutput_(commandVector_t outputCommands)
 
     std::string serializedOutput;
 
-
-
-    for(auto s: serializedLines) {
+    for (auto s : serializedLines)
+    {
         serializedOutput += s;
     }
 
     return serializedOutput;
 }
 
-std::string SaveSerializer::serializeCommand_(commandPtr_t command) {
+std::string SaveSerializer::serializeCommand_(commandPtr_t command)
+{
     std::string serialized;
 
     // unit letter
     serialized += strFrom_(command->movingUnit()->type());
 
     // captured x ?
-    if(command->capturedUnit()) {
+    if (command->capturedUnit())
+    {
         serialized += "x";
     }
 
@@ -70,44 +76,47 @@ std::string SaveSerializer::serializeCommand_(commandPtr_t command) {
     return serialized;
 }
 
-/*commandVector_t SaveSerializer::deserializeInput_()
+commandVector_t SaveSerializer::deserializeInput_(std::string input, boardPtr_t board)
 {
 
     commandVector_t commands;
 
     std::vector<std::string> lines;
-    std::string s;
 
-    while (std::getline(sStream_, s))
+    std::string s(input);
+    std::string delimiter("\n");
+    size_t pos = 0;
+
+    std::string line;
+
+    while ((pos = s.find(delimiter)) != std::string::npos)
     {
-        lines.push_back(s);
+        line = s.substr(0, pos);
+        lines.push_back(line);
+        s.erase(0, pos + delimiter.length());
     }
 
-    if (lines.empty())
-    {
-        throw ChessException("The save file is empty.");
-    }
 
     for (auto line : lines)
     {
-        deserializeLine_(line);
+        commands.push_back(deserializeLine_(line, board));
     }
 
     return commands;
-}*/
+}
 
-/*commandPtr_t SaveSerializer::deserializeLine_(std::string line)
+commandPtr_t SaveSerializer::deserializeLine_(std::string line, boardPtr_t board)
 {
 
     commandPtr_t command;
 
     for (auto i : line)
     {
-        //std::cout << i << "\n";
+        ;
     }
 
     return command;
-}*/
+}
 
 unitType_t SaveSerializer::unitTypeFrom_(std::string c)
 {

@@ -45,7 +45,8 @@ std::vector<Position> Application::onRequestAvailableCells(int gameId, Position 
     return std::vector<Position>();
 }
 
-std::vector<Position> Application::onRequestPositionsOfPlayersTurn(int gameId, bool isWhitesTurn) {
+std::vector<Position> Application::onRequestPositionsOfPlayersTurn(int gameId, bool isWhitesTurn)
+{
     auto gameIdx = findGameIdx_(gameId);
     if (games_.at(gameIdx) != nullptr)
     {
@@ -54,7 +55,8 @@ std::vector<Position> Application::onRequestPositionsOfPlayersTurn(int gameId, b
     return std::vector<Position>();
 }
 
-CommandStructure Application::onRequestUndo(int gameId) {
+CommandStructure Application::onRequestUndo(int gameId)
+{
     auto gameIdx = findGameIdx_(gameId);
     if (games_.at(gameIdx) != nullptr)
     {
@@ -63,7 +65,8 @@ CommandStructure Application::onRequestUndo(int gameId) {
     return CommandStructure();
 }
 
-CommandStructure Application::onRequestRedo(int gameId) {
+CommandStructure Application::onRequestRedo(int gameId)
+{
     auto gameIdx = findGameIdx_(gameId);
     if (games_.at(gameIdx) != nullptr)
     {
@@ -72,11 +75,21 @@ CommandStructure Application::onRequestRedo(int gameId) {
     return CommandStructure();
 }
 
-std::string Application::onRequestSerializedData(int gameId) {
+std::string Application::onRequestSerializedData(int gameId)
+{
     auto gameIdx = findGameIdx_(gameId);
     if (games_.at(gameIdx) != nullptr)
     {
         return games_.at(gameIdx)->onRequestSerializedData();
     }
     return std::string("");
+}
+
+void Application::onRequestDeserializedData(int gameId, std::string input)
+{
+    auto gameIdx = findGameIdx_(gameId);
+    if (games_.at(gameIdx) != nullptr)
+    {
+        games_.at(gameIdx)->onRequestDeserializedData(input);
+    }
 }
