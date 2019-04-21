@@ -32,6 +32,7 @@ class Board
     Position findUnitPosition(unitPtr_t unit);
     std::vector<Position> getAvailableCellsForUnit(Position from);
     std::vector<Position> getPositionsOfPlayersTurn(bool isWhitesTurn);
+    unitPtr_t findActualUnitForShortNotation(unitType_t unitType, color_t color, Position to, int hintingRow = -1, int hintingColumn = -1);
 
   private:
     void setUnitTo_(unitPtr_t unit, Position pos);

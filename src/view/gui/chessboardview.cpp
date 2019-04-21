@@ -360,7 +360,7 @@ void chessBoardView::sl_openGameFromFile()
         QString inputData;
         QTextStream in(&file);
         serializedData_.clear();
-        in >> inputData;
+        inputData = in.readAll();
 
         serializedData_ = inputData.toStdString();
     }

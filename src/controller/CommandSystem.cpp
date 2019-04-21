@@ -5,11 +5,11 @@ CommandSystem::CommandSystem() {}
 commandPtr_t CommandSystem::executeRecordedCommand()
 {
     if (recordedSteps_.empty())
-        return;
+        return nullptr;
     if (recordedStepsIterator_ == recordedSteps_.end())
-        return;
+        return nullptr;
     if (!undoVector_.empty())
-        return;
+        return nullptr;
 
     commandPtr_t command = (*recordedStepsIterator_);
     command->execute();

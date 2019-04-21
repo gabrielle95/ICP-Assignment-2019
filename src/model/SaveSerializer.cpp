@@ -1,5 +1,8 @@
 #include "SaveSerializer.h"
 #include "../common/ChessException.h"
+#include "../command/MoveUnitCommand.h"
+#include <cctype>
+#include <cstdlib>
 
 std::string SaveSerializer::serializeOutput_(commandVector_t outputCommands)
 {
@@ -96,30 +99,204 @@ commandVector_t SaveSerializer::deserializeInput_(std::string input, boardPtr_t 
         s.erase(0, pos + delimiter.length());
     }
 
+    commandVector_t deserializedLine;
     for (auto line : lines)
     {
-        commands.push_back(deserializeLine_(line, board));
+        deserializedLine.clear();
+        deserializedLine = deserializeLine_(line, board);
+        commands.insert(commands.end(), deserializedLine.begin(), deserializedLine.end());
     }
 
     return commands;
 }
 
-commandPtr_t SaveSerializer::deserializeLine_(std::string line, boardPtr_t board)
+commandVector_t SaveSerializer::deserializeLine_(std::string line, boardPtr_t board)
 {
 
+    commandVector_t commands;
     commandPtr_t command;
 
-    for (auto i : line)
+    unsigned int pos = 0;
+    unsigned int lookAhead = 1;
+    const char period = '.';
+
+    std::string whiteDelimiter(" ");
+
+    //expect line numbering
+    if (line.at(lookAhead) != period)
     {
-        ;
+        lookAhead++;
+        if (line.at(lookAhead) != period)
+        {
+            lookAhead++;
+            if (line.at(lookAhead != period))
+            {
+                throw ChessException("ERROR: Incorrect or non-existent line numbering");
+            }
+        }
     }
 
+    lookAhead++;
+    if (line.at(lookAhead) != ' ')
+    {
+        throw ChessException("No whitespace after line nubering.");
+    }
+
+    lookAhead += 2;
+    pos = lookAhead - 1; //pos after space now
+
+    size_t i = pos;
+    std::string subst;
+
+    //white substr command
+    /*while ((i = line.find(whiteDelimiter)) != std::string::npos)
+    {
+        subst = line.substr(pos, i);
+        //lines.push_back(line);
+        //s.erase(0, pos + delimiter.length());
+    }*/
+
+    i = line.find(whiteDelimiter);
+    subst = line.substr(pos, i);
+
+    if (subst.empty())
+    {
+        throw ChessException("ERROR: Did not find space delimiter between white and black draw.");
+    }
+
+    command = deserializeCommand_(subst, board, WHITE);
+    commands.emplace_back(command);
+
+    pos = i + 1;
+    subst.clear();
+
+    // the rest is black command
+    subst = line.substr(pos);
+
+    command = deserializeCommand_(subst, board, BLACK);
+    commands.emplace_back(command);
+
+    return commands;
+}
+
+commandPtr_t SaveSerializer::deserializeCommand_(std::string subst, boardPtr_t board, color_t drawColor)
+{
+    commandPtr_t command;
+
+    char c;
+
+    unitType_t unitType;
+
+    int col = -1;
+    int row = -1;
+
+    Position to(-1, -1);
+    Position from(-1, -1);
+
+    unitPtr_t actualUnit; // will be found on the board
+
+    bool isLongNotationOn = false;
+    bool checkedForLongNotation = false;
+
+    bool isCapturing = false;
+
+    bool acquiredFromPosition = false;
+    bool acquiredToPosition = false;
+
+    for (unsigned int pos = 0; pos < subst.size(); pos++)
+    {
+
+        if (!checkedForLongNotation && Position(col, row).isValid())
+        {
+            unitPtr_t unitAtParsedPos = board->At(Position(col, row));
+            if (unitAtParsedPos)
+            {
+                if (unitAtParsedPos->color() == drawColor)
+                {
+                    // long notation is on
+                    // because we acquired a position of unit, that is going
+                    // to move FROM this position (it is the same color as the draw color
+                    // so it cannot be an enemy unit that is being captured
+                    isLongNotationOn = true;
+                    from = Position(col, row);
+                }
+                checkedForLongNotation = true;
+            }
+        }
+
+        c = subst.at(pos);
+
+        if (isCharacterUnitType_(c))
+        {
+            unitType = unitTypeFrom_(c);
+        }
+        else
+        {
+            unitType = PAWN;
+        }
+
+        if (isCharacterColumnCoord_(c))
+        {
+            col = letterCoordFrom_(c);
+        }
+
+        if (isCharacterRowCoord_(c))
+        {
+            row = atoi(&c) - 1;
+        }
+
+        if (isCharacterSpecialEvent_(c))
+        {
+            switch (c)
+            {
+            case 'x':
+                isCapturing = true;
+                break;
+                //TODO
+            default:
+                break;
+            }
+        }
+
+        /*if (isLongNotationOn && !acquiredFromPosition)
+        {
+            if (Position(col, row).isValid())
+            {
+                from = Position(col, row);
+                acquiredFromPosition = true;
+            }
+        }*/
+
+        if ((!isLongNotationOn && !acquiredToPosition) || (isLongNotationOn && acquiredFromPosition && !acquiredToPosition))
+        {
+            if (Position(col, row).isValid())
+            {
+                to = Position(col, row);
+                acquiredToPosition = true;
+            }
+        }
+    }
+
+    if (!from.isValid())
+    {
+        //need to parse hinting columns or rows according to pdf
+
+        actualUnit = board->findActualUnitForShortNotation(unitType, drawColor, to);
+    }
+    else {
+        actualUnit = board->At(from);
+    }
+
+    if (!actualUnit)
+        throw ChessException("ERROR: Could not find unit to move according to the parsed save file.");
+
+    command = std::make_shared<MoveUnitCommand>(board, actualUnit, to);
     return command;
 }
 
-unitType_t SaveSerializer::unitTypeFrom_(std::string c)
+unitType_t SaveSerializer::unitTypeFrom_(char c)
 {
-    switch (c.at(0))
+    switch (c)
     {
     case 'K':
         return unitType_t::KING;
@@ -131,7 +308,7 @@ unitType_t SaveSerializer::unitTypeFrom_(std::string c)
         return unitType_t::BISHOP;
     case 'J':
         return unitType_t::KNIGHT;
-    case 'p':
+    case 'p': // ?
         return unitType_t::PAWN;
     default:
         throw ChessException("Unknown Unit Type");
@@ -207,4 +384,24 @@ std::string SaveSerializer::letterStrFrom_(letter_t letter)
     default:
         throw ChessException("Letter supplied not part of enum letter_t.");
     }
+}
+
+bool SaveSerializer::isCharacterUnitType_(char c)
+{
+    return (c >= 'A' && c <= 'Z');
+}
+
+bool SaveSerializer::isCharacterColumnCoord_(char c)
+{
+    return (c >= 'a' && c <= 'h');
+}
+
+bool SaveSerializer::isCharacterRowCoord_(char c)
+{
+    return (c >= '1' && c <= '8');
+}
+
+bool SaveSerializer::isCharacterSpecialEvent_(char c)
+{
+    return (c == 'x' || c == '+' || c == '#');
 }

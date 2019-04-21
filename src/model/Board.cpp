@@ -216,6 +216,25 @@ std::vector<Position> Board::getPositionsOfPlayersTurn(bool isWhitesTurn)
     return positions;
 }
 
+unitPtr_t Board::findActualUnitForShortNotation(unitType_t unitType, color_t color, Position to, int hintingRow, int hintingColumn) {
+
+    for(auto &col: board_) {
+        for(auto &rowUnit: col) {
+            if(rowUnit) {
+                if(rowUnit->color() == color && rowUnit->type() == unitType) {
+                    Position fromPos = findUnitPosition(rowUnit);
+
+                    if(fromPos.isValid() /*&& checkMoveValidity(rowUnit, fromPos, to)*/) {
+                        return rowUnit;
+                    }
+                }
+            }
+        }
+    }
+
+    return nullptr;
+}
+
 void Board::setUnitTo_(unitPtr_t unit, Position pos)
 {
     board_.at(pos.clm()).at(pos.row()) = unit;
