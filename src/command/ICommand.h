@@ -4,6 +4,7 @@
 #include "../model/Unit.h"
 
 class CommandSystem;
+class SaveSerializer;
 
 class ICommand
 {
@@ -15,6 +16,7 @@ public:
 
 protected:
   friend CommandSystem;
+  friend SaveSerializer;
 
   virtual void execute() = 0;
   virtual void undo() = 0;

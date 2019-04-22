@@ -35,6 +35,13 @@ public:
     recordedStepsIterator_ = recordedSteps_.begin();
   }
 
+  void clearCache()
+  {
+    recordedSteps_.clear();
+    recordedStepsIterator_ = recordedSteps_.begin();
+    commandsToSave_.clear();
+  }
+
 private:
   commandVector_t undoVector_;
   commandVector_t redoVector_;

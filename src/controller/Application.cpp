@@ -87,6 +87,8 @@ std::string Application::onRequestSerializedData(int gameId)
 
 void Application::onRequestDeserializedData(int gameId, std::string input)
 {
+    if(input.empty()) return;
+
     auto gameIdx = findGameIdx_(gameId);
     if (games_.at(gameIdx) != nullptr)
     {

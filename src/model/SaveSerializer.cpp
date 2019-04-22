@@ -74,7 +74,7 @@ std::string SaveSerializer::serializeCommand_(commandPtr_t command)
     serialized += letterStrFrom_(command->new_pos().clm());
 
     // row to
-    serialized += std::to_string(command->new_pos().row());
+    serialized += std::to_string(command->new_pos().row() + 1);
 
     return serialized;
 }
@@ -107,7 +107,7 @@ commandVector_t SaveSerializer::deserializeInput_(std::string input, boardPtr_t 
         commands.insert(commands.end(), deserializedLine.begin(), deserializedLine.end());
     }
 
-    return commands;
+     return commands;
 }
 
 commandVector_t SaveSerializer::deserializeLine_(std::string line, boardPtr_t board)
@@ -143,9 +143,9 @@ commandVector_t SaveSerializer::deserializeLine_(std::string line, boardPtr_t bo
     }
 
     lookAhead += 2;
-    pos = lookAhead - 1; //pos after space now
+    //pos = lookAhead - 1; //pos on space
 
-    size_t i = pos;
+    //size_t i = pos;
     std::string subst;
 
     //white substr command
@@ -156,8 +156,15 @@ commandVector_t SaveSerializer::deserializeLine_(std::string line, boardPtr_t bo
         //s.erase(0, pos + delimiter.length());
     }*/
 
-    i = line.find(whiteDelimiter);
-    subst = line.substr(pos, i);
+    //finds and erases line numbering and space
+    pos = line.find(whiteDelimiter);
+    pos++;
+    line.erase(0, pos);
+
+    //gets the white substring until space
+    pos = line.find(whiteDelimiter);
+    subst = line.substr(0, pos);
+    pos++;
 
     if (subst.empty())
     {
@@ -167,7 +174,6 @@ commandVector_t SaveSerializer::deserializeLine_(std::string line, boardPtr_t bo
     command = deserializeCommand_(subst, board, WHITE);
     commands.emplace_back(command);
 
-    pos = i + 1;
     subst.clear();
 
     // the rest is black command
@@ -185,7 +191,8 @@ commandPtr_t SaveSerializer::deserializeCommand_(std::string subst, boardPtr_t b
 
     char c;
 
-    unitType_t unitType;
+    //default
+    unitType_t unitType = PAWN;
 
     int col = -1;
     int row = -1;
@@ -229,10 +236,6 @@ commandPtr_t SaveSerializer::deserializeCommand_(std::string subst, boardPtr_t b
         if (isCharacterUnitType_(c))
         {
             unitType = unitTypeFrom_(c);
-        }
-        else
-        {
-            unitType = PAWN;
         }
 
         if (isCharacterColumnCoord_(c))
@@ -288,9 +291,11 @@ commandPtr_t SaveSerializer::deserializeCommand_(std::string subst, boardPtr_t b
     }
 
     if (!actualUnit)
-        throw ChessException("ERROR: Could not find unit to move according to the parsed save file.");
+        throw ChessException("Error: An illegal move was detected inside the save file.");
 
     command = std::make_shared<MoveUnitCommand>(board, actualUnit, to);
+    // execute this command, to simulate the recorded game
+    command->execute();
     return command;
 }
 

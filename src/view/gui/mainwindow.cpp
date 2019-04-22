@@ -107,7 +107,7 @@ void MainWindow::sl_onRequestDeserializedData()
 void MainWindow::sl_onRequestForward()
 {
     chessBoardView *senderView = (chessBoardView *)sender();
-    //
+    senderView->executeRedoMove(application->onRequestForward(senderView->Id()));
 }
 
 void MainWindow::sl_onRequestBackward()

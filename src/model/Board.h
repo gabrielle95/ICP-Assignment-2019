@@ -19,39 +19,43 @@ using boardPtr_t = std::shared_ptr<class Board>;
 class Board
 {
 
-  public:
-    Board();
+public:
+  Board();
 
-    unitPtr_t At(letter_t clm, rowPos_t row);
-    unitPtr_t At(Position pos);
-    void print();
-    bool checkMoveValidity(unitPtr_t unit, Position fromPos, Position toPos);
-    void moveUnit(unitPtr_t unit, Position to); //TODO
-    void captureUnit(unitPtr_t unit);
-    void uncaptureUnit(unitPtr_t unit, Position pos_old);
-    Position findUnitPosition(unitPtr_t unit);
-    std::vector<Position> getAvailableCellsForUnit(Position from);
-    std::vector<Position> getPositionsOfPlayersTurn(bool isWhitesTurn);
-    unitPtr_t findActualUnitForShortNotation(unitType_t unitType, color_t color, Position to, int hintingRow = -1, int hintingColumn = -1);
+  unitPtr_t At(letter_t clm, rowPos_t row);
+  unitPtr_t At(Position pos);
+  void print();
+  bool checkMoveValidity(unitPtr_t unit, Position fromPos, Position toPos);
+  void moveUnit(unitPtr_t unit, Position to); //TODO
+  void captureUnit(unitPtr_t unit);
+  void uncaptureUnit(unitPtr_t unit, Position pos_old);
+  Position findUnitPosition(unitPtr_t unit);
+  std::vector<Position> getAvailableCellsForUnit(Position from);
+  std::vector<Position> getPositionsOfPlayersTurn(bool isWhitesTurn);
+  unitPtr_t findActualUnitForShortNotation(unitType_t unitType, color_t color, Position to, int hintingRow = -1, int hintingColumn = -1);
+  void resetBoard();
 
-  private:
-    void setUnitTo_(unitPtr_t unit, Position pos);
+private:
+  void setUnitTo_(unitPtr_t unit, Position pos);
+   std::vector<Position> getAvailableDiagonalPositions_(Position from);
+  std::vector<Position> getAvailableRowPositions_(Position from);
+  std::vector<Position> getAvailableColPositions_(Position from);
+  std::vector<Position> getFirstAvailableFromAllDirs_(Position from);
+  std::vector<Position> getAvailableKnightPositions_(Position from);
+  std::vector<Position> getAvailablePawnPositions_(Position from);
 
-    std::vector<Position> getAvailableDiagonalPositions_(Position from);
-    std::vector<Position> getAvailableRowPositions_(Position from);
-    std::vector<Position> getAvailableColPositions_(Position from);
-    std::vector<Position> getFirstAvailableFromAllDirs_(Position from);
-    std::vector<Position> getAvailableKnightPositions_(Position from);
-    std::vector<Position> getAvailablePawnPositions_(Position from);
+  bool positionIsAvailable_(std::vector<Position> positions, Position pos);
+  std::vector<Position> validatePossiblyAvailablePositions_(std::vector<Position> possible, unitPtr_t forUnit);
 
-    bool positionIsAvailable_(std::vector<Position> positions, Position pos);
-    std::vector<Position>  validatePossiblyAvailablePositions_(std::vector<Position> possible, unitPtr_t forUnit);
+  void initBoard_();
 
-    unitVector_t capturedUnits_;
+  unitVector_t capturedUnits_;
 
-    unitBoardArray_t board_;
+  unitBoardArray_t board_;
 
-    std::vector<Position> lastAvailableMovesCache_;
+  unitVector_t allUnits_;
 
-    unitPtr_t cachedUnit_;
+  std::vector<Position> lastAvailableMovesCache_;
+
+  unitPtr_t cachedUnit_;
 };

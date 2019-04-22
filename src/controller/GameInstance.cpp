@@ -80,6 +80,10 @@ CommandStructure GameInstance::onRequestRedo()
 
 std::string GameInstance::onRequestSerializedData()
 {
+    // clear all
+    commandSystem_->clearCache();
+    saveSystem_->clearCache();
+
     saveSystem_->setCommandsToSave(commandSystem_->constructCommandsToSave());
 
     saveSystem_->serialize();
@@ -89,9 +93,23 @@ std::string GameInstance::onRequestSerializedData()
 
 void GameInstance::onRequestDeserializedData(std::string input)
 {
+    // reset board before "simulation"
+    board_->resetBoard();
+
+    // clear the previously recorded steps
+    commandSystem_->clearCache();
+
+    // save system clear
+    saveSystem_->clearCache();
+
     saveSystem_->setInputToDeserialize(input);
 
     saveSystem_->deserialize(board_);
+
+    commandSystem_->setRecordedSteps(saveSystem_->getDeserializedCommands());
+
+    // reset board after "simulation"
+    board_->resetBoard();
 }
 
 CommandStructure GameInstance::onRequestForward()
@@ -102,8 +120,8 @@ CommandStructure GameInstance::onRequestForward()
 
     if (command != nullptr)
     {
-        data.from = command->old_pos();
-        data.to = command->new_pos();
+        data.redoFrom = command->old_pos();
+        data.redoTo = command->new_pos();
     }
 
     return data;

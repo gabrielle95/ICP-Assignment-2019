@@ -963,7 +963,7 @@
       </size>
      </property>
      <property name="placeholderText">
-      <string>1. asdf</string>
+      <string>Open a save file to display the notation.</string>
      </property>
     </widget>
    </item>

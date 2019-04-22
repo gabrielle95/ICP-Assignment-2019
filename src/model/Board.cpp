@@ -3,52 +3,7 @@
 
 Board::Board()
 {
-
-    /******** WHITE ********/
-
-    board_.at(A).at(TWO) = std::make_shared<Unit>(WHITE, PAWN);
-    board_.at(B).at(TWO) = std::make_shared<Unit>(WHITE, PAWN);
-    board_.at(C).at(TWO) = std::make_shared<Unit>(WHITE, PAWN);
-    board_.at(D).at(TWO) = std::make_shared<Unit>(WHITE, PAWN);
-    board_.at(E).at(TWO) = std::make_shared<Unit>(WHITE, PAWN);
-    board_.at(F).at(TWO) = std::make_shared<Unit>(WHITE, PAWN);
-    board_.at(G).at(TWO) = std::make_shared<Unit>(WHITE, PAWN);
-    board_.at(H).at(TWO) = std::make_shared<Unit>(WHITE, PAWN);
-
-    board_.at(A).at(ONE) = std::make_shared<Unit>(WHITE, ROOK);
-    board_.at(H).at(ONE) = std::make_shared<Unit>(WHITE, ROOK);
-
-    board_.at(B).at(ONE) = std::make_shared<Unit>(WHITE, KNIGHT);
-    board_.at(G).at(ONE) = std::make_shared<Unit>(WHITE, KNIGHT);
-
-    board_.at(C).at(ONE) = std::make_shared<Unit>(WHITE, BISHOP);
-    board_.at(F).at(ONE) = std::make_shared<Unit>(WHITE, BISHOP);
-
-    board_.at(D).at(ONE) = std::make_shared<Unit>(WHITE, QUEEN);
-    board_.at(E).at(ONE) = std::make_shared<Unit>(WHITE, KING);
-
-    /******** BLACK ********/
-
-    board_.at(A).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN);
-    board_.at(B).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN);
-    board_.at(C).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN);
-    board_.at(D).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN);
-    board_.at(E).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN);
-    board_.at(F).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN);
-    board_.at(G).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN);
-    board_.at(H).at(SEVEN) = std::make_shared<Unit>(BLACK, PAWN);
-
-    board_.at(A).at(EIGHT) = std::make_shared<Unit>(BLACK, ROOK);
-    board_.at(H).at(EIGHT) = std::make_shared<Unit>(BLACK, ROOK);
-
-    board_.at(B).at(EIGHT) = std::make_shared<Unit>(BLACK, KNIGHT);
-    board_.at(G).at(EIGHT) = std::make_shared<Unit>(BLACK, KNIGHT);
-
-    board_.at(C).at(EIGHT) = std::make_shared<Unit>(BLACK, BISHOP);
-    board_.at(F).at(EIGHT) = std::make_shared<Unit>(BLACK, BISHOP);
-
-    board_.at(D).at(EIGHT) = std::make_shared<Unit>(BLACK, QUEEN);
-    board_.at(E).at(EIGHT) = std::make_shared<Unit>(BLACK, KING);
+    initBoard_();
 }
 
 unitPtr_t Board::At(letter_t clm, rowPos_t row)
@@ -100,7 +55,8 @@ void Board::moveUnit(unitPtr_t unit, Position to)
         if (!unit->movedFromStartingPos())
             unit->setMovedFromStartingPos();
     }
-    else if(unitPos == Position(-1,-1)) {
+    else if (unitPos == Position(-1, -1))
+    {
         //unit is captured
         uncaptureUnit(unit, to);
     }
@@ -199,14 +155,15 @@ std::vector<Position> Board::getPositionsOfPlayersTurn(bool isWhitesTurn)
 
     isWhitesTurn ? color = WHITE : color = BLACK;
 
-   for (int c = A; c < board_.size(); c++)
+    for (int c = A; c < board_.size(); c++)
     {
         for (int r = ONE; r < board_.at(c).size(); r++)
         {
             unitPtr_t u = board_.at(c).at(r);
             if (u != nullptr)
             {
-                if(u->color() == color) {
+                if (u->color() == color)
+                {
                     positions.emplace_back(c, r);
                 }
             }
@@ -216,15 +173,76 @@ std::vector<Position> Board::getPositionsOfPlayersTurn(bool isWhitesTurn)
     return positions;
 }
 
-unitPtr_t Board::findActualUnitForShortNotation(unitType_t unitType, color_t color, Position to, int hintingRow, int hintingColumn) {
+/**
+ * @brief 
+ * 
+ * @param unitType 
+ * @param color 
+ * @param to 
+ * @param hintingRow 
+ * @param hintingColumn 
+ * @return unitPtr_t 
+ */
+unitPtr_t Board::findActualUnitForShortNotation(unitType_t unitType, color_t color, Position to, int hintingRow, int hintingColumn)
+{
 
-    for(auto &col: board_) {
-        for(auto &rowUnit: col) {
-            if(rowUnit) {
-                if(rowUnit->color() == color && rowUnit->type() == unitType) {
+    for (auto &col : board_)
+    {
+        for (auto &rowUnit : col)
+        {
+            if (rowUnit)
+            {
+                if (rowUnit->color() == color && rowUnit->type() == unitType)
+                {
                     Position fromPos = findUnitPosition(rowUnit);
 
-                    if(fromPos.isValid() /*&& checkMoveValidity(rowUnit, fromPos, to)*/) {
+                    if(unitType == PAWN) {
+                        continue;
+                    }
+                    if (fromPos.isValid() && Rules::checkMoveValidity(rowUnit, fromPos, to))
+                    {
+                        return rowUnit;
+                    }
+                }
+            }
+        }
+    }
+
+    /* special case for pawns */
+
+    /* check for movement first */
+    for (auto &col : board_)
+    {
+        for (auto &rowUnit : col)
+        {
+            if (rowUnit)
+            {
+                if (rowUnit->color() == color && rowUnit->type() == PAWN)
+                {
+                    Position fromPos = findUnitPosition(rowUnit);
+
+                    if (fromPos.isValid() && Rules::checkPawnMoving(color, fromPos, to, rowUnit->movedFromStartingPos()))
+                    {
+                        return rowUnit;
+                    }
+                }
+            }
+        }
+    }
+
+    /* then check again for capturing */
+    for (auto &col : board_)
+    {
+        for (auto &rowUnit : col)
+        {
+            if (rowUnit)
+            {
+                if (rowUnit->color() == color && rowUnit->type() == PAWN)
+                {
+                    Position fromPos = findUnitPosition(rowUnit);
+
+                    if (fromPos.isValid() && Rules::checkPawnCapturing(color, fromPos, to))
+                    {
                         return rowUnit;
                     }
                 }
@@ -233,6 +251,22 @@ unitPtr_t Board::findActualUnitForShortNotation(unitType_t unitType, color_t col
     }
 
     return nullptr;
+}
+
+void Board::resetBoard()
+{
+    /* clear */
+    for(auto &c: board_) {
+        for(auto &u: c) {
+            u = nullptr;
+        }
+    }
+
+    /* set */
+    for(auto &u: allUnits_) {
+        setUnitTo_(u, u->startingPos());
+        u->setMovedFromStartingPos(false);
+    }
 }
 
 void Board::setUnitTo_(unitPtr_t unit, Position pos)
@@ -492,4 +526,56 @@ std::vector<Position> Board::validatePossiblyAvailablePositions_(std::vector<Pos
         }
     }
     return available;
+}
+
+void Board::initBoard_()
+{
+
+    /******** WHITE ********/
+
+    allUnits_.push_back(std::make_shared<Unit>(WHITE, PAWN, Position(A, TWO)));
+    allUnits_.push_back(std::make_shared<Unit>(WHITE, PAWN, Position(B, TWO)));
+    allUnits_.push_back(std::make_shared<Unit>(WHITE, PAWN, Position(C, TWO)));
+    allUnits_.push_back(std::make_shared<Unit>(WHITE, PAWN, Position(D, TWO)));
+    allUnits_.push_back(std::make_shared<Unit>(WHITE, PAWN, Position(E, TWO)));
+    allUnits_.push_back(std::make_shared<Unit>(WHITE, PAWN, Position(F, TWO)));
+    allUnits_.push_back(std::make_shared<Unit>(WHITE, PAWN, Position(G, TWO)));
+    allUnits_.push_back(std::make_shared<Unit>(WHITE, PAWN, Position(H, TWO)));
+
+    allUnits_.push_back(std::make_shared<Unit>(WHITE, ROOK, Position(A, ONE)));
+    allUnits_.push_back(std::make_shared<Unit>(WHITE, ROOK, Position(H, ONE)));
+
+    allUnits_.push_back(std::make_shared<Unit>(WHITE, KNIGHT, Position(B, ONE)));
+    allUnits_.push_back(std::make_shared<Unit>(WHITE, KNIGHT, Position(G, ONE)));
+
+    allUnits_.push_back(std::make_shared<Unit>(WHITE, BISHOP, Position(C, ONE)));
+    allUnits_.push_back(std::make_shared<Unit>(WHITE, BISHOP, Position(F, ONE)));
+
+    allUnits_.push_back(std::make_shared<Unit>(WHITE, QUEEN, Position(D, ONE)));
+    allUnits_.push_back(std::make_shared<Unit>(WHITE, KING, Position(E, ONE)));
+
+    /* BLACK */
+
+    allUnits_.push_back(std::make_shared<Unit>(BLACK, PAWN, Position(A, SEVEN)));
+    allUnits_.push_back(std::make_shared<Unit>(BLACK, PAWN, Position(B, SEVEN)));
+    allUnits_.push_back(std::make_shared<Unit>(BLACK, PAWN, Position(C, SEVEN)));
+    allUnits_.push_back(std::make_shared<Unit>(BLACK, PAWN, Position(D, SEVEN)));
+    allUnits_.push_back(std::make_shared<Unit>(BLACK, PAWN, Position(E, SEVEN)));
+    allUnits_.push_back(std::make_shared<Unit>(BLACK, PAWN, Position(F, SEVEN)));
+    allUnits_.push_back(std::make_shared<Unit>(BLACK, PAWN, Position(G, SEVEN)));
+    allUnits_.push_back(std::make_shared<Unit>(BLACK, PAWN, Position(H, SEVEN)));
+
+    allUnits_.push_back(std::make_shared<Unit>(BLACK, ROOK, Position(A, EIGHT)));
+    allUnits_.push_back(std::make_shared<Unit>(BLACK, ROOK, Position(H, EIGHT)));
+
+    allUnits_.push_back(std::make_shared<Unit>(BLACK, KNIGHT, Position(B, EIGHT)));
+    allUnits_.push_back(std::make_shared<Unit>(BLACK, KNIGHT, Position(G, EIGHT)));
+
+    allUnits_.push_back(std::make_shared<Unit>(BLACK, BISHOP, Position(C, EIGHT)));
+    allUnits_.push_back(std::make_shared<Unit>(BLACK, BISHOP, Position(F, EIGHT)));
+
+    allUnits_.push_back(std::make_shared<Unit>(BLACK, QUEEN, Position(D, EIGHT)));
+    allUnits_.push_back(std::make_shared<Unit>(BLACK, KING, Position(E, EIGHT)));
+
+    resetBoard();
 }

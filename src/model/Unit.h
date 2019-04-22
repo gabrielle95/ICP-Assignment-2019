@@ -31,8 +31,8 @@ using unitVector_t = std::vector<unitPtr_t>;
 class Unit
 {
   public:
-    Unit(color_t color, unitType_t type)
-        : color_(color), type_(type), hasMovedFromStartingPos_(false)
+    Unit(color_t color, unitType_t type, Position starting_pos)
+        : color_(color), type_(type), starting_pos_(starting_pos), hasMovedFromStartingPos_(false)
     {
     }
 
@@ -77,13 +77,19 @@ class Unit
         return hasMovedFromStartingPos_;
     }
 
-    virtual void setMovedFromStartingPos()
+    virtual void setMovedFromStartingPos(bool value = true)
     {
-        hasMovedFromStartingPos_ = true;
+        hasMovedFromStartingPos_ = value;
+    }
+
+    virtual Position startingPos() const
+    {
+        return starting_pos_;
     }
 
   protected:
     color_t color_;
     unitType_t type_;
+    Position starting_pos_;
     bool hasMovedFromStartingPos_;
 };

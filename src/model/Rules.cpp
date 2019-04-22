@@ -6,7 +6,7 @@ bool Rules::checkMoveValidity(unitPtr_t unit, Position fromPos, Position toPos)
     switch (unit->type())
     {
     case PAWN:
-        return Rules::checkPawn_(unit->color(), fromPos, toPos, unit->movedFromStartingPos());
+        return false; //check manually
     case ROOK:
         return Rules::checkRook_(fromPos, toPos);
     case BISHOP:
@@ -37,11 +37,12 @@ int Rules::getColDistance(Position one, Position two)
     return abs(one.clm() - two.clm());
 }
 
-bool Rules::checkPawn_(color_t color, Position fromPos, Position toPos, bool movedFromStartingPos)
+bool Rules::checkPawnMoving(color_t color, Position fromPos, Position toPos, bool movedFromStartingPos)
 {
+    if (getColDistance(fromPos, toPos) > 1)
+        return false;
 
-    // think about how to do capturing
-    if (fromPos.clm() != toPos.clm())
+    if(getDistance(fromPos, toPos) > 2)
         return false;
 
     const int defaultStep = 1;
@@ -52,7 +53,18 @@ bool Rules::checkPawn_(color_t color, Position fromPos, Position toPos, bool mov
     if (color == WHITE && toPos.row() < fromPos.row())
         return false;
 
-    return getRowDistance(fromPos, toPos) - maxStep == 0 || getRowDistance(fromPos, toPos) - defaultStep == 0;
+    bool moving = (getRowDistance(fromPos, toPos) - maxStep == 0 || getRowDistance(fromPos, toPos) - defaultStep == 0) && getColDistance(fromPos, toPos) == 0;
+    //bool capturing = getColDistance(fromPos, toPos) == 1 && getRowDistance(fromPos, toPos) == 1;
+    return moving;
+}
+
+bool Rules::checkPawnCapturing(color_t color, Position fromPos, Position toPos) {
+    if (color == BLACK && toPos.row() > fromPos.row())
+        return false;
+    if (color == WHITE && toPos.row() < fromPos.row())
+        return false;
+
+    return getColDistance(fromPos, toPos) == 1 && getRowDistance(fromPos, toPos) == 1;
 }
 
 bool Rules::checkRook_(Position fromPos, Position toPos)

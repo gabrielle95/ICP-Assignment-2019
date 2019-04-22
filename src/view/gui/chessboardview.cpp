@@ -338,6 +338,9 @@ void chessBoardView::sl_saveGameToFile()
 
 void chessBoardView::sl_openGameFromFile()
 {
+    serializedData_.clear();
+    ui->textBrowser->setText("");
+
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("Open ICP Game"), "",
                                                     tr("ICP Chess Game (*);;All Files (*)"));
@@ -363,6 +366,8 @@ void chessBoardView::sl_openGameFromFile()
         inputData = in.readAll();
 
         serializedData_ = inputData.toStdString();
+
+        ui->textBrowser->setText(inputData);
     }
 }
 

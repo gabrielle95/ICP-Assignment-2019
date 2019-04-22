@@ -12,9 +12,10 @@ class Rules
     static int getDistance(Position one, Position two);
     static int getRowDistance(Position one, Position two);
     static int getColDistance(Position one, Position two);
+    static bool checkPawnMoving(color_t color, Position fromPos, Position toPos, bool movedFromStartingPos);
+    static bool checkPawnCapturing(color_t color, Position fromPos, Position toPos);
 
   private:
-    static bool checkPawn_(color_t color, Position fromPos, Position toPos, bool movedFromStartingPos);
     static bool checkRook_(Position fromPos, Position toPos);
     static bool checkBishop_(Position fromPos, Position toPos);
     static bool checkKnight_(Position fromPos, Position toPos);

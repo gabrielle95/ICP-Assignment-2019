@@ -26,6 +26,13 @@ public:
     return commandsToPlay_;
   }
 
+  void clearCache() {
+    commandsToSave_.clear();
+    commandsToPlay_.clear();
+    input_.clear();
+    serializedCommands_.clear();
+  }
+
 private:
   commandVector_t commandsToSave_;
   std::string serializedCommands_;
