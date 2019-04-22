@@ -338,9 +338,6 @@ void chessBoardView::sl_saveGameToFile()
 
 void chessBoardView::sl_openGameFromFile()
 {
-    serializedData_.clear();
-    ui->textBrowser->setText("");
-
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("Open ICP Game"), "",
                                                     tr("ICP Chess Game (*);;All Files (*)"));
@@ -351,6 +348,9 @@ void chessBoardView::sl_openGameFromFile()
     }
     else
     {
+        serializedData_.clear();
+        ui->textBrowser->setText("");
+
         QFile file(fileName);
 
         if (!file.open(QIODevice::ReadOnly))
@@ -367,7 +367,12 @@ void chessBoardView::sl_openGameFromFile()
 
         serializedData_ = inputData.toStdString();
 
+        // set new data to the text browser
         ui->textBrowser->setText(inputData);
+
+        // reset the board gui
+        initStyles_();
+        draw();
     }
 }
 
@@ -396,6 +401,20 @@ void chessBoardView::onRequestAvailableMoves(QChessCell *from)
 
 void chessBoardView::initStyles_()
 {
+    // reset all styles on board
+    for (int col = A; col <= H; col++)
+    {
+        for (int row = ONE; row <= EIGHT; row++)
+        {
+            qCellBoard_.at(col).at(row)->unsetUnitStyle();
+        }
+    }
+
+    // clear all styles on captured board
+
+    for(auto &c: qCapturedBoard_) {
+        c->unsetUnitStyle();
+    }
 
     /******** WHITE ********/
     qCellBoard_.at(A).at(TWO)->setUnitStyle(Styles::cellPawnWhiteFg);
