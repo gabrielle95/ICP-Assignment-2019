@@ -107,7 +107,7 @@ commandVector_t SaveSerializer::deserializeInput_(std::string input, boardPtr_t 
         commands.insert(commands.end(), deserializedLine.begin(), deserializedLine.end());
     }
 
-     return commands;
+    return commands;
 }
 
 commandVector_t SaveSerializer::deserializeLine_(std::string line, boardPtr_t board)
@@ -255,7 +255,12 @@ commandPtr_t SaveSerializer::deserializeCommand_(std::string subst, boardPtr_t b
             case 'x':
                 isCapturing = true;
                 break;
+            case '+':
                 //TODO
+                break;
+            case '#':
+                //TODO
+                break;
             default:
                 break;
             }
@@ -286,7 +291,8 @@ commandPtr_t SaveSerializer::deserializeCommand_(std::string subst, boardPtr_t b
 
         actualUnit = board->findActualUnitForShortNotation(unitType, drawColor, to);
     }
-    else {
+    else
+    {
         actualUnit = board->At(from);
     }
 

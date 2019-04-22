@@ -113,5 +113,5 @@ void MainWindow::sl_onRequestForward()
 void MainWindow::sl_onRequestBackward()
 {
     chessBoardView *senderView = (chessBoardView *)sender();
-    //
+    senderView->executeUndoMove(application->onRequestBackward(senderView->Id()));
 }

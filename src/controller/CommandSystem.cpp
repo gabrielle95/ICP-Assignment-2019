@@ -24,12 +24,14 @@ commandPtr_t CommandSystem::backward()
         return nullptr;
     if (recordedSteps_.empty())
         return nullptr;
+    if (recordedStepsIterator_ - 1 < recordedSteps_.begin())
+        return nullptr;
 
-    commandPtr_t command = (*recordedStepsIterator_);
+
+    commandPtr_t command = (*(--recordedStepsIterator_));
     if (command)
     {
         command->undo();
-        --recordedStepsIterator_;
     }
     return command;
 }

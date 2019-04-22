@@ -104,7 +104,15 @@ void GameInstance::onRequestDeserializedData(std::string input)
 
     saveSystem_->setInputToDeserialize(input);
 
-    saveSystem_->deserialize(board_);
+    try {
+        saveSystem_->deserialize(board_);
+    }
+    catch(ChessException& e) {
+        std::cerr << e.what() << "\n";
+        board_->resetBoard();
+        commandSystem_->clearCache();
+        saveSystem_->clearCache();
+    }
 
     commandSystem_->setRecordedSteps(saveSystem_->getDeserializedCommands());
 
@@ -135,8 +143,8 @@ CommandStructure GameInstance::onRequestBackward()
 
     if (backCommand != nullptr)
     {
-        data.from = backCommand->new_pos();
-        data.to = backCommand->old_pos();
+        data.undoFrom = backCommand->new_pos();
+        data.undoTo = backCommand->old_pos();
 
         unitPtr_t captured = backCommand->capturedUnit();
         if (captured != nullptr)
