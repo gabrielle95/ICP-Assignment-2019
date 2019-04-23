@@ -148,13 +148,7 @@ commandVector_t SaveSerializer::deserializeLine_(std::string line, boardPtr_t bo
     //size_t i = pos;
     std::string subst;
 
-    //white substr command
-    /*while ((i = line.find(whiteDelimiter)) != std::string::npos)
-    {
-        subst = line.substr(pos, i);
-        //lines.push_back(line);
-        //s.erase(0, pos + delimiter.length());
-    }*/
+    //white
 
     //finds and erases line numbering and space
     pos = line.find(whiteDelimiter);
@@ -197,39 +191,16 @@ commandPtr_t SaveSerializer::deserializeCommand_(std::string subst, boardPtr_t b
     int col = -1;
     int row = -1;
 
-    Position to(-1, -1);
-    Position from(-1, -1);
-
     unitPtr_t actualUnit; // will be found on the board
 
     bool isLongNotationOn = false;
-    bool checkedForLongNotation = false;
 
     bool isCapturing = false;
 
-    bool acquiredFromPosition = false;
-    bool acquiredToPosition = false;
+    std::vector<Position> acquiredPositions;
 
     for (unsigned int pos = 0; pos < subst.size(); pos++)
     {
-
-        if (!checkedForLongNotation && Position(col, row).isValid())
-        {
-            unitPtr_t unitAtParsedPos = board->At(Position(col, row));
-            if (unitAtParsedPos)
-            {
-                if (unitAtParsedPos->color() == drawColor)
-                {
-                    // long notation is on
-                    // because we acquired a position of unit, that is going
-                    // to move FROM this position (it is the same color as the draw color
-                    // so it cannot be an enemy unit that is being captured
-                    isLongNotationOn = true;
-                    from = Position(col, row);
-                }
-                checkedForLongNotation = true;
-            }
-        }
 
         c = subst.at(pos);
 
@@ -266,40 +237,37 @@ commandPtr_t SaveSerializer::deserializeCommand_(std::string subst, boardPtr_t b
             }
         }
 
-        /*if (isLongNotationOn && !acquiredFromPosition)
+        if (Position(col, row).isValid())
         {
-            if (Position(col, row).isValid())
-            {
-                from = Position(col, row);
-                acquiredFromPosition = true;
-            }
-        }*/
-
-        if ((!isLongNotationOn && !acquiredToPosition) || (isLongNotationOn && acquiredFromPosition && !acquiredToPosition))
-        {
-            if (Position(col, row).isValid())
-            {
-                to = Position(col, row);
-                acquiredToPosition = true;
-            }
+            acquiredPositions.push_back(Position(col, row));
+            col = -1;
+            row = -1;
         }
     }
 
-    if (!from.isValid())
+    //short notation
+    if (acquiredPositions.size() == 1)
     {
-        //need to parse hinting columns or rows according to pdf
-
-        actualUnit = board->findActualUnitForShortNotation(unitType, drawColor, to);
+        actualUnit = board->findActualUnitForShortNotation(unitType, drawColor, acquiredPositions.at(0));
     }
-    else
+    else if (acquiredPositions.size() == 2)
     {
-        actualUnit = board->At(from);
+        actualUnit = board->At(acquiredPositions.at(0));
+        isLongNotationOn = true;
     }
 
     if (!actualUnit)
         throw ChessException("Error: An illegal move was detected inside the save file.");
 
-    command = std::make_shared<MoveUnitCommand>(board, actualUnit, to);
+    if (isLongNotationOn)
+    {
+        command = std::make_shared<MoveUnitCommand>(board, actualUnit, acquiredPositions.at(1));
+    }
+    else
+    {
+        command = std::make_shared<MoveUnitCommand>(board, actualUnit, acquiredPositions.at(0));
+    }
+
     // execute this command, to simulate the recorded game
     command->execute();
     return command;
