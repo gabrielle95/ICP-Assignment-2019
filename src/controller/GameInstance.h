@@ -29,6 +29,7 @@ public:
   void onRequestDeserializedData(std::string input);
   CommandStructure onRequestForward();
   CommandStructure onRequestBackward();
+  bool isGameFinished();
 
 private:
   bool moveIsValid_(unitPtr_t unit, Position fromPos, Position toPos);

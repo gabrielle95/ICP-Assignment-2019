@@ -157,3 +157,8 @@ CommandStructure GameInstance::onRequestBackward()
 
     return data;
 }
+
+bool GameInstance::isGameFinished()
+{
+    return commandSystem_->isGameFinished();
+}

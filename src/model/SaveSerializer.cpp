@@ -76,6 +76,16 @@ std::string SaveSerializer::serializeCommand_(commandPtr_t command)
     // row to
     serialized += std::to_string(command->new_pos().row() + 1);
 
+    if(command->checked())
+    {
+        serialized+= '+';
+    }
+
+    if(command->mated())
+    {
+        serialized+= '#';
+    }
+
     return serialized;
 }
 

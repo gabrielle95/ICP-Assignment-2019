@@ -42,6 +42,30 @@ public:
     commandsToSave_.clear();
   }
 
+  bool isGameFinished() const
+  {
+
+    if(!undoVector_.empty())
+    {
+      for(auto &c: undoVector_)
+      {
+        if(c->mated())
+          return true;
+      }
+    }
+
+    if(!recordedSteps_.empty())
+    {
+      for(auto &c: recordedSteps_)
+      {
+        if(c->mated())
+          return true;
+      }
+    }
+
+    return false;
+  }
+
 private:
   commandVector_t undoVector_;
   commandVector_t redoVector_;

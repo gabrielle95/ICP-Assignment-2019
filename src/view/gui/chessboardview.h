@@ -51,6 +51,7 @@ public:
   void setTheseCellsCheckable(std::vector<Position> positions);
   void executeUndoMove(CommandStructure data);
   void executeRedoMove(CommandStructure data);
+  void onGameFinish();
 
 signals:
   void sig_emitClickedCell(QChessCell *cell);
@@ -83,6 +84,7 @@ private:
   Position getCellPosition_(QChessCell *cell);
   void clearAvailableForMove_();
   QPushButton *generateAppButton_(QString style, QString tooltip);
+  void moveCursor_(int position);
 
   Ui::chessBoardView *ui;
   std::array<std::array<QChessCell *, MAX_CELLS>, MAX_CELLS> qCellBoard_;
@@ -99,6 +101,8 @@ private:
 
   // variable to save loaded data and data before saving
   std::string serializedData_;
+
+  int commandCounter_;
 };
 
 #endif // CHESSBOARDVIEW_H

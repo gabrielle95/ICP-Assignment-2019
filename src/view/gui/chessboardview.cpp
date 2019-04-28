@@ -1,8 +1,8 @@
-#include "chessboardview.h"
-#include "ui_chessboardview.h"
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTextStream>
+#include "chessboardview.h"
+#include "ui_chessboardview.h"
 
 chessBoardView::chessBoardView(int id, QWidget *parent) : QWidget(parent),
                                                           ui(new Ui::chessBoardView),
@@ -14,14 +14,13 @@ chessBoardView::chessBoardView(int id, QWidget *parent) : QWidget(parent),
 {
     ui->setupUi(this);
     auto grid = ui->gridLayout;
-
+    commandCounter_ = 0;
     bool black = false;
 
     for (int i = 1, col = A; i < grid->columnCount() - 1, col <= H; i++, col++)
     {
         for (int j = 1, row = EIGHT; j < grid->rowCount() - 1, row >= ONE; j++, row--)
         {
-
             QChessCell *cell;
 
             black ? cell = new QChessCell(BLACK, this)
@@ -234,6 +233,16 @@ void chessBoardView::draw()
     }
 }
 
+void chessBoardView::onGameFinish()
+{
+    QMessageBox msgBox;
+    msgBox.setIcon(QMessageBox::Information);
+    msgBox.setText("The chess game has ended.");
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    int ret = msgBox.exec();
+}
+
 void chessBoardView::sl_cellWasClicked()
 {
     QChessCell *clickedCell = (QChessCell *)sender();
@@ -369,6 +378,11 @@ void chessBoardView::sl_openGameFromFile()
 
         // set new data to the text browser
         ui->textBrowser->setText(inputData);
+        QTextCursor cursor = ui->textBrowser->textCursor();
+        QTextBlockFormat f;
+        f.setBackground(Qt::lightGray);
+        cursor.select(QTextCursor::LineUnderCursor);
+        cursor.setBlockFormat(f);
 
         // reset the board gui
         initStyles_();

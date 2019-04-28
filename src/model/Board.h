@@ -26,7 +26,7 @@ public:
   unitPtr_t At(Position pos);
   void print();
   bool checkMoveValidity(unitPtr_t unit, Position fromPos, Position toPos);
-  void moveUnit(unitPtr_t unit, Position to); //TODO
+  void moveUnit(unitPtr_t unit, Position to);
   void captureUnit(unitPtr_t unit);
   void uncaptureUnit(unitPtr_t unit, Position pos_old);
   Position findUnitPosition(unitPtr_t unit);
@@ -34,10 +34,15 @@ public:
   std::vector<Position> getPositionsOfPlayersTurn(bool isWhitesTurn);
   unitPtr_t findActualUnitForShortNotation(unitType_t unitType, color_t color, Position to, int hintingRow = -1, int hintingColumn = -1);
   void resetBoard();
+  void resetCheck();
+  bool isKingInCheck(color_t color);
+  bool isKingStalemated(color_t color);
+  bool isKingCheckMated(color_t color);
 
 private:
+  std::vector<Position> getAvailablePositionsForOpposingTeam_(color_t color);
   void setUnitTo_(unitPtr_t unit, Position pos);
-   std::vector<Position> getAvailableDiagonalPositions_(Position from);
+  std::vector<Position> getAvailableDiagonalPositions_(Position from);
   std::vector<Position> getAvailableRowPositions_(Position from);
   std::vector<Position> getAvailableColPositions_(Position from);
   std::vector<Position> getFirstAvailableFromAllDirs_(Position from);
@@ -46,6 +51,7 @@ private:
 
   bool positionIsAvailable_(std::vector<Position> positions, Position pos);
   std::vector<Position> validatePossiblyAvailablePositions_(std::vector<Position> possible, unitPtr_t forUnit);
+  std::vector<Position> intersectPositionVectors_(std::vector<Position> a, std::vector<Position> b);
 
   void initBoard_();
 

@@ -69,6 +69,16 @@ class Position
         return clm_ == p.clm() && row_ == p.row();
     }
 
+    bool operator!=(const Position &p) const
+    {
+        return clm_ != p.clm() || row_ != p.row();
+    }
+
+    static bool comp(const Position &a, const Position &b)
+    {
+        return a.clm() < b.clm() && a.row() < b.row();
+    }
+
   private:
     letter_t clm_;
     rowPos_t row_;

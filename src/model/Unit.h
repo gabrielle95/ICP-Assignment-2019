@@ -32,7 +32,7 @@ class Unit
 {
   public:
     Unit(color_t color, unitType_t type, Position starting_pos)
-        : color_(color), type_(type), starting_pos_(starting_pos), hasMovedFromStartingPos_(false)
+        : color_(color), type_(type), starting_pos_(starting_pos), hasMovedFromStartingPos_(false), isInCheck_(false)
     {
     }
 
@@ -87,9 +87,26 @@ class Unit
         return starting_pos_;
     }
 
+    virtual void setInCheck(bool value)
+    {
+        isInCheck_ = value;
+    }
+
+    virtual bool isInCheck() const
+    {
+        return isInCheck_;
+    }
+
+    virtual void resetFlags()
+    {
+        hasMovedFromStartingPos_ = false;
+        isInCheck_ = false;
+    }
+
   protected:
     color_t color_;
     unitType_t type_;
     Position starting_pos_;
     bool hasMovedFromStartingPos_;
+    bool isInCheck_;
 };

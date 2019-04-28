@@ -115,3 +115,13 @@ CommandStructure Application::onRequestBackward(int gameId)
     }
     return CommandStructure();
 }
+
+bool Application::isGameFinished(int gameId)
+{
+    auto gameIdx = findGameIdx_(gameId);
+    if (games_.at(gameIdx) != nullptr)
+    {
+        return games_.at(gameIdx)->isGameFinished();
+    }
+    return false;
+}

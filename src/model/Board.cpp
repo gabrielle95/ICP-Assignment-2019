@@ -196,7 +196,8 @@ unitPtr_t Board::findActualUnitForShortNotation(unitType_t unitType, color_t col
                 {
                     Position fromPos = findUnitPosition(rowUnit);
 
-                    if(unitType == PAWN) {
+                    if (unitType == PAWN)
+                    {
                         continue;
                     }
                     if (fromPos.isValid() && Rules::checkMoveValidity(rowUnit, fromPos, to))
@@ -256,17 +257,142 @@ unitPtr_t Board::findActualUnitForShortNotation(unitType_t unitType, color_t col
 void Board::resetBoard()
 {
     /* clear */
-    for(auto &c: board_) {
-        for(auto &u: c) {
+    for (auto &c : board_)
+    {
+        for (auto &u : c)
+        {
             u = nullptr;
         }
     }
 
     /* set */
-    for(auto &u: allUnits_) {
+    for (auto &u : allUnits_)
+    {
         setUnitTo_(u, u->startingPos());
-        u->setMovedFromStartingPos(false);
+        u->resetFlags();
     }
+
+}
+
+void Board::resetCheck()
+{
+    for (auto &u : allUnits_)
+    {
+        u->setInCheck(false);
+    }
+}
+
+bool Board::isKingInCheck(color_t color)
+{
+    std::vector<Position> opposingAvailable = getAvailablePositionsForOpposingTeam_(color);
+    auto it = std::find_if(allUnits_.begin(), allUnits_.end(), [&](unitPtr_t const &unit) {
+        return unit->color() == color && unit->type() == KING;
+    });
+    unitPtr_t king = (*it);
+    Position kingPos = findUnitPosition(king);
+
+    for(auto &pos : opposingAvailable)
+    {
+        if(pos == kingPos)
+        {
+            king->setInCheck(true);
+            return true;
+        }
+    }
+
+    king->setInCheck(false);
+    return false;
+}
+
+bool Board::isKingStalemated(color_t color)
+{
+    std::vector<Position> opposingAvailable = getAvailablePositionsForOpposingTeam_(color);
+    auto it = std::find_if(allUnits_.begin(), allUnits_.end(), [&](unitPtr_t const &unit) {
+        return unit->color() == color && unit->type() == KING;
+    });
+    unitPtr_t king = (*it);
+
+    Position kingPosition = findUnitPosition(king);
+    std::vector<Position> availableForKing = getAvailableCellsForUnit(kingPosition);
+
+    std::vector<Position> intersectingPositions = intersectPositionVectors_(opposingAvailable, availableForKing);
+
+    if(availableForKing.empty() && intersectingPositions.empty())
+        return false;
+
+    for(auto &inters: intersectingPositions)
+    {
+        for(auto &pos: availableForKing)
+        {
+            if(pos != inters)
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool Board::isKingCheckMated(color_t color)
+{
+    auto it = std::find_if(allUnits_.begin(), allUnits_.end(), [&](unitPtr_t const &unit) {
+        return unit->color() == color && unit->type() == KING;
+    });
+    unitPtr_t king = (*it);
+
+    if(king->isInCheck())
+        return true;
+
+    std::vector<Position> opposingAvailable = getAvailablePositionsForOpposingTeam_(color);
+    // if king is in not check it cant be checkmated
+    if (!king->isInCheck())
+        return false;
+
+    Position kingPosition = findUnitPosition(king);
+    std::vector<Position> availableForKing = getAvailableCellsForUnit(kingPosition);
+
+    std::vector<Position> intersectingPositions = intersectPositionVectors_(opposingAvailable, availableForKing);
+
+    if(availableForKing.empty() && intersectingPositions.empty())
+        return false;
+
+    for(auto &inters: intersectingPositions)
+    {
+        for(auto &pos: availableForKing)
+        {
+            if(pos != inters)
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+std::vector<Position> Board::getAvailablePositionsForOpposingTeam_(color_t color)
+{
+    std::vector<Position> positions;
+    std::vector<Position> available;
+    ;
+
+    for (auto &c : board_)
+    {
+        for (auto &u : c)
+        {
+            if (!u)
+                continue;
+            if (u->color() != color)
+            {
+                available.clear();
+                available = getAvailableCellsForUnit(findUnitPosition(u));
+                positions.insert(positions.end(), available.begin(), available.end());
+            }
+        }
+    }
+
+    return positions;
 }
 
 void Board::setUnitTo_(unitPtr_t unit, Position pos)
@@ -291,7 +417,11 @@ std::vector<Position> Board::getAvailableDiagonalPositions_(Position from)
             continue;
         }
         if (cachedUnit_->color() != board_.at(col).at(row)->color())
+        {
             available.push_back(Position(col, row));
+            //board_.at(col).at(row)->setInCheck(true);
+        }
+
         break;
     }
     for (col = from.clm() + 1, row = from.row() + 1; col <= COL_MAX, row <= ROW_MAX; col++, row++)
@@ -304,7 +434,11 @@ std::vector<Position> Board::getAvailableDiagonalPositions_(Position from)
             continue;
         }
         if (cachedUnit_->color() != board_.at(col).at(row)->color())
+        {
             available.push_back(Position(col, row));
+            //board_.at(col).at(row)->setInCheck(true);
+        }
+
         break;
     }
     for (col = from.clm() - 1, row = from.row() - 1; col >= COL_MIN, row >= ROW_MIN; col--, row--)
@@ -317,7 +451,10 @@ std::vector<Position> Board::getAvailableDiagonalPositions_(Position from)
             continue;
         }
         if (cachedUnit_->color() != board_.at(col).at(row)->color())
+        {
             available.push_back(Position(col, row));
+            //board_.at(col).at(row)->setInCheck(true);
+        }
         break;
     }
     for (col = from.clm() + 1, row = from.row() - 1; col <= COL_MAX, row >= ROW_MIN; col++, row--)
@@ -330,7 +467,10 @@ std::vector<Position> Board::getAvailableDiagonalPositions_(Position from)
             continue;
         }
         if (cachedUnit_->color() != board_.at(col).at(row)->color())
+        {
             available.push_back(Position(col, row));
+            //board_.at(col).at(row)->setInCheck(true);
+        }
         break;
     }
     return available;
@@ -349,7 +489,11 @@ std::vector<Position> Board::getAvailableRowPositions_(Position from)
             continue;
         }
         if (cachedUnit_->color() != board_.at(from.clm()).at(row)->color())
+        {
             available.push_back(Position(from.clm(), row));
+            //board_.at(from.clm()).at(row)->setInCheck(true);
+        }
+
         break;
     }
     for (row = from.row() + 1; row <= ROW_MAX; row++)
@@ -360,7 +504,11 @@ std::vector<Position> Board::getAvailableRowPositions_(Position from)
             continue;
         }
         if (cachedUnit_->color() != board_.at(from.clm()).at(row)->color())
+        {
             available.push_back(Position(from.clm(), row));
+            //board_.at(from.clm()).at(row)->setInCheck(true);
+        }
+
         break;
     }
     return available;
@@ -379,7 +527,11 @@ std::vector<Position> Board::getAvailableColPositions_(Position from)
             continue;
         }
         if (cachedUnit_->color() != board_.at(col).at(from.row())->color())
+        {
             available.push_back(Position(col, from.row()));
+            //board_.at(col).at(from.row())->setInCheck(true);
+        }
+
         break;
     }
     for (col = from.clm() + 1; col <= ROW_MAX; col++)
@@ -390,7 +542,11 @@ std::vector<Position> Board::getAvailableColPositions_(Position from)
             continue;
         }
         if (cachedUnit_->color() != board_.at(col).at(from.row())->color())
+        {
             available.push_back(Position(col, from.row()));
+            //board_.at(col).at(from.row())->setInCheck(true);
+        }
+
         break;
     }
     return available;
@@ -516,6 +672,7 @@ std::vector<Position> Board::validatePossiblyAvailablePositions_(std::vector<Pos
             {
                 if (forUnit->color() != At(p)->color())
                 {
+                    //At(p)->setInCheck(true);
                     available.push_back(p);
                 }
             }
@@ -578,4 +735,18 @@ void Board::initBoard_()
     allUnits_.push_back(std::make_shared<Unit>(BLACK, KING, Position(E, EIGHT)));
 
     resetBoard();
+}
+
+std::vector<Position> Board::intersectPositionVectors_(std::vector<Position> a, std::vector<Position> b)
+{
+    std::vector<Position> intersect;
+
+    std::sort(a.begin(), a.end(), Position::comp);
+    std::sort(b.begin(), b.end(), Position::comp);
+
+    std::set_intersection(a.begin(), a.end(),
+                          b.begin(), b.end(),
+                          std::back_inserter(intersect), Position::comp);
+
+    return intersect;
 }
