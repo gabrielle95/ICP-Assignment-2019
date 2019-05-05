@@ -1,3 +1,16 @@
+/*
+ * @file mainwindow.h
+ *
+ * Project name:
+ * Chess 2019
+ *
+ * Description:
+ * http://www.fit.vutbr.cz/study/courses/ICP/public/ICP-PRJ-zadani.html.cs
+ *
+ * Team:
+ * @author Gabriela Pacakova (xpacak01)
+ * @author Adam Lanicek (xlanic04)
+ */
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -9,12 +22,27 @@ namespace Ui
 class MainWindow;
 }
 
+/**
+ * @brief The class handling the main gui window
+ *
+ */
 class MainWindow : public QMainWindow
 {
   Q_OBJECT
 
 public:
+
+  /**
+   * @brief Construct a new Main Window object
+   *
+   * @param parent The parent widget
+   */
   explicit MainWindow(QWidget *parent = 0);
+
+  /**
+   * @brief Destroy the Main Window object
+   *
+   */
   ~MainWindow();
 
 private slots:

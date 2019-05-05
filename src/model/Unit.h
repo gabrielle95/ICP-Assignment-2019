@@ -1,3 +1,17 @@
+/*
+ * @file Unit.h
+ *
+ * Project name:
+ * Chess 2019
+ *
+ * Description:
+ * http://www.fit.vutbr.cz/study/courses/ICP/public/ICP-PRJ-zadani.html.cs
+ *
+ * Team:
+ * @author Gabriela Pacakova (xpacak01)
+ * @author Adam Lanicek (xlanic04)
+ */
+
 #pragma once
 
 #include <iostream>
@@ -10,11 +24,10 @@
 #define STRINGIFY(name) #name
 #endif
 
-/*enum color_t {
-    BLACK,
-    WHITE
-};*/
-
+/**
+ * @brief Enum describing all the unit types on the board
+ *
+ */
 enum unitType_t
 {
     KING,   // KING - kral K
@@ -28,76 +41,102 @@ enum unitType_t
 using unitPtr_t = std::shared_ptr<class Unit>;
 using unitVector_t = std::vector<unitPtr_t>;
 
+/**
+ * @brief Class implementing a chess unit on the board
+ *
+ */
 class Unit
 {
   public:
+    /**
+   * @brief Construct a new Unit object
+   *
+   * @param color Color of the unit
+   * @param type Type of the unit
+   * @param starting_pos Unit's starting position on the board
+   */
     Unit(color_t color, unitType_t type, Position starting_pos)
         : color_(color), type_(type), starting_pos_(starting_pos), hasMovedFromStartingPos_(false), isInCheck_(false)
     {
     }
 
-    virtual color_t color() const
+    /**
+     * @brief Getter for the unit color
+     *
+     * @return color_t Unit color
+     */
+    color_t color() const
     {
         return this->color_;
     }
 
-    virtual unitType_t type() const
+    /**
+     * @brief Getter for the unit type
+     *
+     * @return unitType_t Unit type
+     */
+    unitType_t type() const
     {
         return this->type_;
     }
 
-    virtual void print() const
-    {
-
-        switch (type_)
-        {
-        case KING:
-            std::cout << "KING ";
-            break;
-        case QUEEN:
-            std::cout << "QUEEN ";
-            break;
-        case ROOK:
-            std::cout << "ROOK ";
-            break;
-        case BISHOP:
-            std::cout << "BISHOP ";
-            break;
-        case KNIGHT:
-            std::cout << "KNIGHT ";
-            break;
-        default:
-            std::cout << "PAWN ";
-            break;
-        }
-    }
-
-    virtual bool movedFromStartingPos() const
+    /**
+     * @brief Getter for a flag indication if the unit has moved from its starting position
+     *
+     * @return true The unit has moved from starting position
+     * @return false The unit has not moved from starting position
+     */
+    bool movedFromStartingPos() const
     {
         return hasMovedFromStartingPos_;
     }
 
-    virtual void setMovedFromStartingPos(bool value = true)
+    /**
+     * @brief Setter for the flag if the unit moved from the starting position
+     *
+     * @param value The value of the flag
+     */
+    void setMovedFromStartingPos(bool value = true)
     {
         hasMovedFromStartingPos_ = value;
     }
 
-    virtual Position startingPos() const
+    /**
+     * @brief Getter for the starting position
+     *
+     * @return Position The starting position of the unit
+     */
+    Position startingPos() const
     {
         return starting_pos_;
     }
 
-    virtual void setInCheck(bool value)
+    /**
+     * @brief Sets the unit to be in check, mailny used if the unit is a KING
+     *
+     * @param value The truth value of the check
+     */
+    void setInCheck(bool value)
     {
         isInCheck_ = value;
     }
 
-    virtual bool isInCheck() const
+    /**
+     * @brief Gets the value of whether the unit is in check
+     *
+     * @return true Unit is in check
+     * @return false Unit is not in check
+     */
+    bool isInCheck() const
     {
         return isInCheck_;
     }
 
-    virtual void resetFlags()
+    /**
+     * @brief Resets all the unit flags to their default values
+     *
+     */
+    void resetFlags()
     {
         hasMovedFromStartingPos_ = false;
         isInCheck_ = false;

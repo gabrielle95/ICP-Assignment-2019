@@ -1,3 +1,16 @@
+/*
+ * @file Application.cpp
+ *
+ * Project name:
+ * Chess 2019
+ *
+ * Description:
+ * http://www.fit.vutbr.cz/study/courses/ICP/public/ICP-PRJ-zadani.html.cs
+ *
+ * Team:
+ * @author Gabriela Pacakova (xpacak01)
+ * @author Adam Lanicek (xlanic04)
+ */
 #include "Application.h"
 
 Application::Application() : gameInstanceNextId_(0)

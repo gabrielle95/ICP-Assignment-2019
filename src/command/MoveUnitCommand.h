@@ -1,12 +1,36 @@
+/*
+ * @file MoveUnitCommand.h
+ *
+ * Project name:
+ * Chess 2019
+ *
+ * Description:
+ * http://www.fit.vutbr.cz/study/courses/ICP/public/ICP-PRJ-zadani.html.cs
+ *
+ * Team:
+ * @author Gabriela Pacakova (xpacak01)
+ * @author Adam Lanicek (xlanic04)
+ */
 #pragma once
 
 #include "../model/Board.h"
 #include "../model/Unit.h"
 #include "ICommand.h"
 
+/**
+ * @brief A command that moves the unit in game and sets all appropriate flags.
+ *
+ */
 class MoveUnitCommand : public ICommand
 {
 public:
+  /**
+   * @brief Construct a new Move Unit Command object
+   *
+   * @param board The board on which the command is performed
+   * @param unit The unit on which the command is performed
+   * @param pos The new position for the unit to move to
+   */
   MoveUnitCommand(boardPtr_t board, unitPtr_t unit, Position pos)
       : board_(board),
         unit_(unit),
@@ -18,31 +42,63 @@ public:
   {
   }
 
+  /**
+   * @brief Gets the unit's old position
+   *
+   * @return Position The Position of the unit before the move
+   */
   virtual Position old_pos() const
   {
     return pos_old_;
   }
 
+  /**
+   * @brief Gets the units new position
+   *
+   * @return Position The position of the unit after move
+   */
   virtual Position new_pos() const
   {
     return pos_;
   }
 
+  /**
+   * @brief Gets the unit that the commanded unit captured
+   *
+   * @return unitPtr_t The unit captured by the commanded unit
+   */
   virtual unitPtr_t capturedUnit() const
   {
     return capturedUnit_;
   }
 
+  /**
+   * @brief Gets the unit the command is performed on
+   *
+   * @return unitPtr_t The unit that is moving
+   */
   virtual unitPtr_t movingUnit() const
   {
     return unit_;
   }
 
+  /**
+   * @brief Gets whether the moving unit has checked an enemy king
+   *
+   * @return true The unit has checked the enemy king
+   * @return false The unit has not checked the enemy king
+   */
   virtual bool checked() const
   {
     return checkedKing_;
   }
 
+  /**
+   * @brief Gets whether the moving unit has checkmated the enemy king
+   *
+   * @return true The unit has checkmated the enemy king
+   * @return false The unit has not checkmated the enemy king
+   */
   virtual bool mated() const
   {
     return checkMatedKing_ || staleMatedKing_;

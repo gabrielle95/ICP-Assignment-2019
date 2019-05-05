@@ -1,9 +1,26 @@
+/*
+ * @file styles.h
+ *
+ * Project name:
+ * Chess 2019
+ *
+ * Description:
+ * http://www.fit.vutbr.cz/study/courses/ICP/public/ICP-PRJ-zadani.html.cs
+ *
+ * Team:
+ * @author Gabriela Pacakova (xpacak01)
+ * @author Adam Lanicek (xlanic04)
+ */
 #ifndef STYLES_H
 #define STYLES_H
 
 #include "../../common/Color.h"
 #include "../../model/Unit.h"
 
+/**
+ * @brief The qt styles for different unit types
+ *
+ */
 class Styles
 {
   public:
@@ -39,6 +56,13 @@ class Styles
 
     inline static QString margin10px = "margin: 10px;";
 
+    /**
+     * @brief Get the style corresponding to a certain unit
+     *
+     * @param type Unit type
+     * @param color Unit color
+     * @return QString The corresponding style
+     */
     inline static QString getStyleFrom(unitType_t type, color_t color)
     {
         if (color == BLACK)

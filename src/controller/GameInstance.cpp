@@ -1,3 +1,16 @@
+/*
+ * @file GameInstance.cpp
+ *
+ * Project name:
+ * Chess 2019
+ *
+ * Description:
+ * http://www.fit.vutbr.cz/study/courses/ICP/public/ICP-PRJ-zadani.html.cs
+ *
+ * Team:
+ * @author Gabriela Pacakova (xpacak01)
+ * @author Adam Lanicek (xlanic04)
+ */
 #include "../common/ChessException.h"
 #include "GameInstance.h"
 
@@ -14,7 +27,7 @@ bool GameInstance::onRequestMove(Position fromPos, Position toPos)
 
     // rewrite this line pls
     if (unit == nullptr)
-        throw ChessException("GameInstance::onRequestMove unit is nullptr at " + fromPos.to_str());
+        throw ChessException("GameInstance::onRequestMove unit is nullptr.");
     if (moveIsValid_(unit, fromPos, toPos))
     {
         commandPtr_t moveCommand = std::make_shared<MoveUnitCommand>(board_, board_->At(fromPos), toPos);

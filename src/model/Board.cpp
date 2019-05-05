@@ -1,3 +1,16 @@
+/*
+ * @file Board.cpp
+ *
+ * Project name:
+ * Chess 2019
+ *
+ * Description:
+ * http://www.fit.vutbr.cz/study/courses/ICP/public/ICP-PRJ-zadani.html.cs
+ *
+ * Team:
+ * @author Gabriela Pacakova (xpacak01)
+ * @author Adam Lanicek (xlanic04)
+ */
 #include "../common/Color.h"
 #include "Board.h"
 
@@ -23,19 +36,6 @@ unitPtr_t Board::At(letter_t clm, rowPos_t row)
 unitPtr_t Board::At(Position pos)
 {
     return At(pos.clm(), pos.row());
-}
-
-void Board::print()
-{
-    for (int c = A; c < board_.size(); c++)
-    {
-
-        for (int r = ONE; r < board_.at(c).size(); r++)
-        {
-            if (board_.at(c).at(r))
-                board_.at(c).at(r)->print();
-        }
-    }
 }
 
 bool Board::checkMoveValidity(unitPtr_t unit, Position fromPos, Position toPos)
@@ -173,16 +173,6 @@ std::vector<Position> Board::getPositionsOfPlayersTurn(bool isWhitesTurn)
     return positions;
 }
 
-/**
- * @brief 
- * 
- * @param unitType 
- * @param color 
- * @param to 
- * @param hintingRow 
- * @param hintingColumn 
- * @return unitPtr_t 
- */
 unitPtr_t Board::findActualUnitForShortNotation(unitType_t unitType, color_t color, Position to, int hintingRow, int hintingColumn)
 {
 

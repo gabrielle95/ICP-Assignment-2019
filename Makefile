@@ -2,6 +2,11 @@
 PROJECT = chess
 BIN = $(PROJECT)
 
+# Doxygen
+DOXYFILE=Doxyfile
+
+# Zip file
+ZIP_FILE=xpacak01-xlanic04.zip
 
 # Compiler
 CXX = g++
@@ -23,6 +28,7 @@ OBJ_DIR = obj
 SRC_DIR = src
 GUI_DIR = gui
 GUI_QMAKE = gui_qmake
+DOXY_DIR=doc
 
 # Sources
 APP_SRC = $(wildcard $(SRC_DIR)/view/cli/*.cpp)
@@ -33,6 +39,9 @@ CONTROLLER_OBJ = $(addprefix $(OBJ_DIR)/controller/, $(notdir $(patsubst %.cpp, 
 
 MODEL_SRC = $(wildcard $(SRC_DIR)/model/*.cpp)
 MODEL_OBJ = $(addprefix $(OBJ_DIR)/model/, $(notdir $(patsubst %.cpp, %.o, $(MODEL_SRC))))
+
+ZIP=zip -r
+PACKED_FILES = src/* include/* res/* gui/* examples/* Makefile README.txt Doxyfile
 
 all: app gui
 
@@ -62,6 +71,14 @@ run:
 	@make all && ./$(BIN_DIR)/$(BIN)
 
 clean:
-	rm -rf $(BIN_DIR) $(OBJ_DIR) $(GUI_QMAKE)
+	rm -rf $(BIN_DIR) $(OBJ_DIR) $(GUI_QMAKE) $(DOXY_DIR) $(ZIP_FILE)
 
-.PHONY: app gui
+doxygen:
+	@command -v doxygen >/dev/null 2>&1 \
+		&& { doxygen $(DOXYFILE); true; } \
+		|| echo "icp-make: Doxygen not installed."
+
+pack:
+	$(ZIP) $(ZIP_FILE) $(PACKED_FILES)
+
+.PHONY: app gui doxygen pack clean run
