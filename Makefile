@@ -18,8 +18,8 @@ QFLAGS_DEBUG = CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug
 INCLUDE = -Iinclude
 
 # Linker
-
-LFLAGS = $(shell command -v g++-7.3 >/dev/null 2>&1 && echo -n "-static-libstdc++")
+LFLAGS = -lpthread
+LFLAGS += $(shell command -v g++-7.3 >/dev/null 2>&1 && echo -n "-static-libstdc++")
 
 # Folders
 
@@ -49,7 +49,7 @@ app: $(APP_OBJ) $(CONTROLLER_OBJ) $(MODEL_OBJ)
 	 $(CXX) $^ -o $(BIN_DIR)/$(BIN) $(LFLAGS)
 
 gui:
-	@cd $(GUI_DIR) && qmake -o ../$(GUI_QMAKE)/Makefile $(QFLAGS)
+	@cd $(GUI_DIR) && qmake -o ../$(GUI_QMAKE)/Makefile $(QFLAGS_DEBUG)
 	$(MAKE) CXX=$(CXX) -C $(GUI_QMAKE)
 
 # main.o

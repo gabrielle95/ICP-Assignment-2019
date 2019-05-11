@@ -250,10 +250,8 @@ commandPtr_t SaveSerializer::deserializeCommand_(std::string subst, boardPtr_t b
                 isCapturing = true;
                 break;
             case '+':
-                //TODO
                 break;
             case '#':
-                //TODO
                 break;
             default:
                 break;
@@ -279,8 +277,9 @@ commandPtr_t SaveSerializer::deserializeCommand_(std::string subst, boardPtr_t b
         isLongNotationOn = true;
     }
 
-    if (!actualUnit)
+    if (!actualUnit) {
         throw ChessException("Error: An illegal move was detected inside the save file.");
+    }
 
     if (isLongNotationOn)
     {
