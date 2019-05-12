@@ -28,7 +28,7 @@ bool GameInstance::onRequestMove(Position fromPos, Position toPos)
     // rewrite this line pls
     if (unit == nullptr)
         throw ChessException("GameInstance::onRequestMove unit is nullptr.");
-    if (moveIsValid_(unit, fromPos, toPos))
+    if (moveIsValid_(toPos))
     {
         commandPtr_t moveCommand = std::make_shared<MoveUnitCommand>(board_, board_->At(fromPos), toPos);
         commandSystem_->executeCommand(moveCommand);
@@ -37,9 +37,9 @@ bool GameInstance::onRequestMove(Position fromPos, Position toPos)
     return false;
 }
 
-bool GameInstance::moveIsValid_(unitPtr_t unit, Position fromPos, Position toPos)
+bool GameInstance::moveIsValid_(Position toPos)
 {
-    return board_->checkMoveValidity(unit, fromPos, toPos);
+    return board_->checkMoveValidity(toPos);
 }
 
 std::vector<Position> GameInstance::onRequestAvailableCells(Position from)

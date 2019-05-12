@@ -10,7 +10,7 @@ ZIP_FILE=xpacak01-xlanic04.zip
 
 # Compiler
 CXX = g++
-CFLAGS = -c --std=c++17 -g -DDEBUG
+CFLAGS = -Wall -c --std=c++17 -g -DDEBUG
 QFLAGS =
 QFLAGS_DEBUG = CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug
 

@@ -218,8 +218,6 @@ commandPtr_t SaveSerializer::deserializeCommand_(std::string subst, boardPtr_t b
 
     bool isLongNotationOn = false;
 
-    bool isCapturing = false;
-
     std::vector<Position> acquiredPositions;
 
     for (unsigned int pos = 0; pos < subst.size(); pos++)
@@ -242,12 +240,11 @@ commandPtr_t SaveSerializer::deserializeCommand_(std::string subst, boardPtr_t b
             row = atoi(&c) - 1;
         }
 
-        if (isCharacterSpecialEvent_(c))
+        /*if (isCharacterSpecialEvent_(c))
         {
             switch (c)
             {
             case 'x':
-                isCapturing = true;
                 break;
             case '+':
                 break;
@@ -256,7 +253,7 @@ commandPtr_t SaveSerializer::deserializeCommand_(std::string subst, boardPtr_t b
             default:
                 break;
             }
-        }
+        }*/
 
         if (Position(col, row).isValid())
         {

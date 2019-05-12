@@ -20,7 +20,7 @@
 #include "../../controller/SaveSystem.h"
 #include "../../model/Board.h"
 
-int main(int argc, char *argv[])
+int main()
 {
 
     commandSystemPtr_t commandSystem = std::make_shared<CommandSystem>();

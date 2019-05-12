@@ -30,9 +30,9 @@ chessBoardView::chessBoardView(int id, QWidget *parent) : QWidget(parent),
     commandCounter_ = 0;
     bool black = false;
 
-    for (int i = 1, col = A; i < grid->columnCount() - 1, col <= H; i++, col++)
+    for (int i = 1, col = A; col <= H; i++, col++)
     {
-        for (int j = 1, row = EIGHT; j < grid->rowCount() - 1, row >= ONE; j++, row--)
+        for (int j = 1, row = EIGHT; row >= ONE; j++, row--)
         {
             QChessCell *cell;
 
@@ -253,7 +253,7 @@ void chessBoardView::onGameFinish()
     msgBox.setText("The chess game has ended.");
     msgBox.setStandardButtons(QMessageBox::Ok);
     msgBox.setDefaultButton(QMessageBox::Ok);
-    int ret = msgBox.exec();
+    msgBox.exec();
 }
 
 void chessBoardView::sl_cellWasClicked()

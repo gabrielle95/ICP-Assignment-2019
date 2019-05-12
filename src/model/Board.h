@@ -64,13 +64,11 @@ public:
   /**
    * @brief Checks a validity of a given move
    *
-   * @param unit The unit that wants to perform the move
-   * @param fromPos The current position of this unit
    * @param toPos The position the unit wants to move to
    * @return true The move is valid
    * @return false The move is not valid
    */
-  bool checkMoveValidity(unitPtr_t unit, Position fromPos, Position toPos);
+  bool checkMoveValidity(Position toPos);
 
   /**
    * @brief Move the unit setting its position
@@ -125,11 +123,9 @@ public:
    * @param unitType The type of the unit
    * @param color The color of the unit
    * @param to The position it is moving to
-   * @param hintingRow The row that hints in case there are multiple choices
-   * @param hintingColumn A column that hints in case there are multiple choices
    * @return unitPtr_t The found unit
    */
-  unitPtr_t findActualUnitForShortNotation(unitType_t unitType, color_t color, Position to, int hintingRow = -1, int hintingColumn = -1);
+  unitPtr_t findActualUnitForShortNotation(unitType_t unitType, color_t color, Position to);
 
   /**
    * @brief Reset the board putting units to their starting positions and resetting its flag

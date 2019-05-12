@@ -121,7 +121,7 @@ public:
   bool isGameFinished();
 
 private:
-  bool moveIsValid_(unitPtr_t unit, Position fromPos, Position toPos);
+  bool moveIsValid_(Position toPos);
 
   int gameId_;
   commandSystemPtr_t commandSystem_;

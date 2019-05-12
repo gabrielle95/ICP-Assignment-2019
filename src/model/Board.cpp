@@ -31,6 +31,7 @@ unitPtr_t Board::At(letter_t clm, rowPos_t row)
         std::cerr << e.what() << "\n";
         std::cerr << "Error: Accessed out of range coords.\n";
     }
+    return nullptr;
 }
 
 unitPtr_t Board::At(Position pos)
@@ -38,7 +39,7 @@ unitPtr_t Board::At(Position pos)
     return At(pos.clm(), pos.row());
 }
 
-bool Board::checkMoveValidity(unitPtr_t unit, Position fromPos, Position toPos)
+bool Board::checkMoveValidity(Position toPos)
 {
     return positionIsAvailable_(lastAvailableMovesCache_, toPos);
 }
@@ -77,10 +78,10 @@ void Board::uncaptureUnit(unitPtr_t unit, Position pos_old)
 
 Position Board::findUnitPosition(unitPtr_t unit)
 {
-    for (int c = A; c < board_.size(); c++)
+    for (unsigned int c = A; c < board_.size(); c++)
     {
 
-        for (int r = ONE; r < board_.at(c).size(); r++)
+        for (unsigned int r = ONE; r < board_.at(c).size(); r++)
         {
             if (board_.at(c).at(r) == unit)
             {
@@ -155,9 +156,9 @@ std::vector<Position> Board::getPositionsOfPlayersTurn(bool isWhitesTurn)
 
     isWhitesTurn ? color = WHITE : color = BLACK;
 
-    for (int c = A; c < board_.size(); c++)
+    for (unsigned int c = A; c < board_.size(); c++)
     {
-        for (int r = ONE; r < board_.at(c).size(); r++)
+        for (unsigned int r = ONE; r < board_.at(c).size(); r++)
         {
             unitPtr_t u = board_.at(c).at(r);
             if (u != nullptr)
@@ -173,9 +174,8 @@ std::vector<Position> Board::getPositionsOfPlayersTurn(bool isWhitesTurn)
     return positions;
 }
 
-unitPtr_t Board::findActualUnitForShortNotation(unitType_t unitType, color_t color, Position to, int hintingRow, int hintingColumn)
+unitPtr_t Board::findActualUnitForShortNotation(unitType_t unitType, color_t color, Position to)
 {
-
     for (auto &col : board_)
     {
         for (auto &rowUnit : col)
@@ -397,7 +397,7 @@ std::vector<Position> Board::getAvailableDiagonalPositions_(Position from)
 
     int col, row;
 
-    for (col = from.clm() - 1, row = from.row() + 1; col >= COL_MIN, row <= ROW_MAX; col--, row++)
+    for (col = from.clm() - 1, row = from.row() + 1; row <= ROW_MAX; col--, row++)
     {
         if (col < COL_MIN)
             break;
@@ -414,7 +414,7 @@ std::vector<Position> Board::getAvailableDiagonalPositions_(Position from)
 
         break;
     }
-    for (col = from.clm() + 1, row = from.row() + 1; col <= COL_MAX, row <= ROW_MAX; col++, row++)
+    for (col = from.clm() + 1, row = from.row() + 1; row <= ROW_MAX; col++, row++)
     {
         if (col > COL_MAX)
             break;
@@ -431,7 +431,7 @@ std::vector<Position> Board::getAvailableDiagonalPositions_(Position from)
 
         break;
     }
-    for (col = from.clm() - 1, row = from.row() - 1; col >= COL_MIN, row >= ROW_MIN; col--, row--)
+    for (col = from.clm() - 1, row = from.row() - 1; row >= ROW_MIN; col--, row--)
     {
         if (col < COL_MIN)
             break;
@@ -447,7 +447,7 @@ std::vector<Position> Board::getAvailableDiagonalPositions_(Position from)
         }
         break;
     }
-    for (col = from.clm() + 1, row = from.row() - 1; col <= COL_MAX, row >= ROW_MIN; col++, row--)
+    for (col = from.clm() + 1, row = from.row() - 1; row >= ROW_MIN; col++, row--)
     {
         if (col > COL_MAX)
             break;

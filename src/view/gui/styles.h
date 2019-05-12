@@ -95,6 +95,7 @@ class Styles
             if (type == QUEEN)
                 return cellQueenWhiteFg;
         }
+        return QString("");
     }
 };
 
