@@ -76,6 +76,7 @@ void MainWindow::on_addtab_btn_clicked()
 void MainWindow::sl_onMoveRequest(Position from, Position to)
 {
     chessBoardView *senderView = (chessBoardView *)sender();
+
     if (application->onRequestMove(senderView->Id(), from, to))
     {
         senderView->executePendingMove();

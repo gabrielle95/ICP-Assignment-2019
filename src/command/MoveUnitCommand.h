@@ -114,10 +114,15 @@ private:
     {
       board_->captureUnit(capturedUnit_);
       isCapturer_ = true;
+
+      //workaround
+      if(capturedUnit_->type() == KING)
+        checkMate_ = true;
+
     }
     board_->moveUnit(unit_, pos_);
 
-    if(board_->isKingCheckMated(WHITE) || board_->isKingCheckMated(BLACK))
+    if(/*board_->isKingCheckMated(WHITE) || board_->isKingCheckMated(BLACK)*/board_->isGameFinished())
     {
       checkMate_ = true;
     }

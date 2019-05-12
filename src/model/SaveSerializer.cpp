@@ -63,7 +63,7 @@ std::string SaveSerializer::serializeOutput_(commandVector_t outputCommands)
     // in case white went last
     if(!line.empty())
     {
-        line += std::to_string(lineNumber+1) + ". ";
+        line += "\n";
         serializedLines.push_back(line);
         line.clear();
     }
@@ -188,6 +188,7 @@ commandVector_t SaveSerializer::deserializeLine_(std::string line, boardPtr_t bo
 
     //gets the white substring until space
     pos = line.find(whiteDelimiter);
+
     subst = line.substr(0, pos);
     pos++;
 
@@ -198,14 +199,20 @@ commandVector_t SaveSerializer::deserializeLine_(std::string line, boardPtr_t bo
 
     command = deserializeCommand_(subst, board, WHITE);
     commands.emplace_back(command);
+    command = nullptr;
 
     subst.clear();
 
     // the rest is black command
     subst = line.substr(pos);
 
-    command = deserializeCommand_(subst, board, BLACK);
-    commands.emplace_back(command);
+    if(!subst.empty() && subst != " ")
+    {
+        command = deserializeCommand_(subst, board, BLACK);
+    }
+
+    if(command)
+        commands.emplace_back(command);
 
     return commands;
 }

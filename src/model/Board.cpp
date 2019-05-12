@@ -314,12 +314,28 @@ bool Board::isKingCheckMated(color_t color)
     if(intersectingPositions.empty())
         return false;
 
+
     // find the unprotected positions for the king
-    std::vector<Position> finalPositions = subtractPositionVectors_(intersectingPositions, availableForKing);
+    std::vector<Position> finalPositions = subtractPositionVectors_(availableForKing, intersectingPositions);
 
     if(finalPositions.empty())
     {
         return true;
+    }
+
+    intersectingPositions.clear();
+
+    // are still any of the final positions in opponents positions?
+    intersectingPositions = intersectPositionVectors_(finalPositions, opposingAvailable);
+
+    // ...
+    if(!intersectingPositions.empty())
+    {
+        finalPositions = subtractPositionVectors_(finalPositions, intersectingPositions);
+        if(finalPositions.empty())
+        {
+            return true;
+        }
     }
 
     return false;
@@ -329,12 +345,18 @@ bool Board::isGameFinished()
 {
     if(isKingInCheck(WHITE))
     {
-        return isKingCheckMated(WHITE);
+        if(isKingCheckMated(WHITE))
+        {
+            return true;
+        }
     }
 
     if(isKingInCheck(BLACK))
     {
-        return isKingCheckMated(BLACK);
+        if(isKingCheckMated(BLACK))
+        {
+            return true;
+        }
     }
     return false;
 }
@@ -735,6 +757,9 @@ std::vector<Position> Board::subtractPositionVectors_(std::vector<Position> a, s
 
     std::sort(a.begin(), a.end(), Position::comp);
     std::sort(b.begin(), b.end(), Position::comp);
+
+    a.erase(std::unique(a.begin(), a.end()), a.end());
+    b.erase(std::unique(b.begin(), b.end()), b.end());
 
     std::set_symmetric_difference(
         a.begin(), a.end(),
