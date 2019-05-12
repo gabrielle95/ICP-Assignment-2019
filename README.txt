@@ -17,6 +17,7 @@ Undo button - undoes a user-performed step
 Redo button - redoes a user-performed step
 Forward button - steps the recorded game forward
 Backward button - steps the recorded game backwards
+Restart button - restarts the loaded chess game
 
 Libraries used:
 Qt 5.5.1
