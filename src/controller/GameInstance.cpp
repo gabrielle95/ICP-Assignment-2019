@@ -94,7 +94,6 @@ CommandStructure GameInstance::onRequestRedo()
 std::string GameInstance::onRequestSerializedData()
 {
     // clear all
-    commandSystem_->clearCache();
     saveSystem_->clearCache();
 
     saveSystem_->setCommandsToSave(commandSystem_->constructCommandsToSave());
@@ -171,7 +170,17 @@ CommandStructure GameInstance::onRequestBackward()
     return data;
 }
 
+bool GameInstance::onRequestRestart()
+{
+    bool restarted = commandSystem_->restartSteps();
+    if(restarted)
+    {
+        board_->resetBoard();
+    }
+    return restarted;
+}
+
 bool GameInstance::isGameFinished()
 {
-    return commandSystem_->isGameFinished();
+    return board_->isGameFinished();
 }

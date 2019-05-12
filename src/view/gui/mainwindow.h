@@ -66,6 +66,8 @@ private slots:
   void sl_onRequestForward();
   void sl_onRequestBackward();
 
+  void sl_onRequestRestart();
+
 private:
   Ui::MainWindow *ui;
   int gameNumber;

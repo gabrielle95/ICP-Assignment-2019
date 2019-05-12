@@ -56,7 +56,7 @@ class Unit
    * @param starting_pos Unit's starting position on the board
    */
     Unit(color_t color, unitType_t type, Position starting_pos)
-        : color_(color), type_(type), starting_pos_(starting_pos), hasMovedFromStartingPos_(false), isInCheck_(false)
+        : color_(color), type_(type), starting_pos_(starting_pos), hasMovedFromStartingPos_(false)
     {
     }
 
@@ -112,34 +112,12 @@ class Unit
     }
 
     /**
-     * @brief Sets the unit to be in check, mailny used if the unit is a KING
-     *
-     * @param value The truth value of the check
-     */
-    void setInCheck(bool value)
-    {
-        isInCheck_ = value;
-    }
-
-    /**
-     * @brief Gets the value of whether the unit is in check
-     *
-     * @return true Unit is in check
-     * @return false Unit is not in check
-     */
-    bool isInCheck() const
-    {
-        return isInCheck_;
-    }
-
-    /**
      * @brief Resets all the unit flags to their default values
      *
      */
     void resetFlags()
     {
         hasMovedFromStartingPos_ = false;
-        isInCheck_ = false;
     }
 
   protected:
@@ -147,5 +125,4 @@ class Unit
     unitType_t type_;
     Position starting_pos_;
     bool hasMovedFromStartingPos_;
-    bool isInCheck_;
 };

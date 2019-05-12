@@ -54,6 +54,10 @@ void CommandSystem::executeCommand(commandPtr_t command)
     redoVector_ = commandVector_t();
     command->execute();
     undoVector_.push_back(command);
+
+    // on first user executed command erase all recorded steps for restart
+    if(!recordedStepsForRestart_.empty())
+        recordedStepsForRestart_.clear();
 }
 
 commandPtr_t CommandSystem::undo()

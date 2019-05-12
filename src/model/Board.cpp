@@ -261,104 +261,82 @@ void Board::resetBoard()
         setUnitTo_(u, u->startingPos());
         u->resetFlags();
     }
-
-}
-
-void Board::resetCheck()
-{
-    for (auto &u : allUnits_)
-    {
-        u->setInCheck(false);
-    }
 }
 
 bool Board::isKingInCheck(color_t color)
 {
+    // get all protected positions from the opposing team
     std::vector<Position> opposingAvailable = getAvailablePositionsForOpposingTeam_(color);
+
+    //retrieve the pointer to my king
     auto it = std::find_if(allUnits_.begin(), allUnits_.end(), [&](unitPtr_t const &unit) {
         return unit->color() == color && unit->type() == KING;
     });
     unitPtr_t king = (*it);
+
+    //get its position
     Position kingPos = findUnitPosition(king);
 
-    for(auto &pos : opposingAvailable)
+    // for each protected position, match it with current king position
+    for (auto &pos : opposingAvailable)
     {
-        if(pos == kingPos)
+        // if any of these protected positions is the position of the king, the king is in check
+        if (pos == kingPos)
         {
-            king->setInCheck(true);
             return true;
         }
     }
-
-    king->setInCheck(false);
     return false;
-}
-
-bool Board::isKingStalemated(color_t color)
-{
-    std::vector<Position> opposingAvailable = getAvailablePositionsForOpposingTeam_(color);
-    auto it = std::find_if(allUnits_.begin(), allUnits_.end(), [&](unitPtr_t const &unit) {
-        return unit->color() == color && unit->type() == KING;
-    });
-    unitPtr_t king = (*it);
-
-    Position kingPosition = findUnitPosition(king);
-    std::vector<Position> availableForKing = getAvailableCellsForUnit(kingPosition);
-
-    std::vector<Position> intersectingPositions = intersectPositionVectors_(opposingAvailable, availableForKing);
-
-    if(availableForKing.empty() && intersectingPositions.empty())
-        return false;
-
-    for(auto &inters: intersectingPositions)
-    {
-        for(auto &pos: availableForKing)
-        {
-            if(pos != inters)
-            {
-                return false;
-            }
-        }
-    }
-
-    return true;
 }
 
 bool Board::isKingCheckMated(color_t color)
 {
+    // king is in check and we need to find available positions for him to move
+
+    //retrieve a pointer to my king
     auto it = std::find_if(allUnits_.begin(), allUnits_.end(), [&](unitPtr_t const &unit) {
         return unit->color() == color && unit->type() == KING;
     });
     unitPtr_t king = (*it);
 
-    if(king->isInCheck())
-        return true;
-
-    std::vector<Position> opposingAvailable = getAvailablePositionsForOpposingTeam_(color);
-    // if king is in not check it cant be checkmated
-    if (!king->isInCheck())
-        return false;
-
+    // king position
     Position kingPosition = findUnitPosition(king);
+
+    // available king positions
     std::vector<Position> availableForKing = getAvailableCellsForUnit(kingPosition);
 
+    // all protected positions of the opposite team
+    std::vector<Position> opposingAvailable = getAvailablePositionsForOpposingTeam_(color);
+
+    // now find a vector of positions that are the same in king's protected and opposite team's protected
     std::vector<Position> intersectingPositions = intersectPositionVectors_(opposingAvailable, availableForKing);
 
-    if(availableForKing.empty() && intersectingPositions.empty())
+    if(intersectingPositions.empty())
         return false;
 
-    for(auto &inters: intersectingPositions)
+    // find the unprotected positions for the king
+    std::vector<Position> finalPositions = subtractPositionVectors_(intersectingPositions, availableForKing);
+
+    if(finalPositions.empty())
     {
-        for(auto &pos: availableForKing)
-        {
-            if(pos != inters)
-            {
-                return false;
-            }
-        }
+        return true;
     }
 
-    return true;
+    return false;
+}
+
+bool Board::isGameFinished()
+{
+    if(isKingInCheck(WHITE))
+    {
+        return isKingCheckMated(WHITE);
+    }
+
+    if(isKingInCheck(BLACK))
+    {
+        return isKingCheckMated(BLACK);
+    }
+    return false;
 }
 
 std::vector<Position> Board::getAvailablePositionsForOpposingTeam_(color_t color)
@@ -734,9 +712,34 @@ std::vector<Position> Board::intersectPositionVectors_(std::vector<Position> a, 
     std::sort(a.begin(), a.end(), Position::comp);
     std::sort(b.begin(), b.end(), Position::comp);
 
-    std::set_intersection(a.begin(), a.end(),
-                          b.begin(), b.end(),
-                          std::back_inserter(intersect), Position::comp);
+    a.erase(std::unique(a.begin(), a.end()), a.end());
+    b.erase(std::unique(b.begin(), b.end()), b.end());
+
+    for(auto &a1 : a)
+    {
+        for(auto &b1 : b)
+        {
+            if(a1 == b1)
+            {
+                intersect.push_back(a1);
+            }
+        }
+    }
 
     return intersect;
+}
+
+std::vector<Position> Board::subtractPositionVectors_(std::vector<Position> a, std::vector<Position> b)
+{
+    std::vector<Position> subtract;
+
+    std::sort(a.begin(), a.end(), Position::comp);
+    std::sort(b.begin(), b.end(), Position::comp);
+
+    std::set_symmetric_difference(
+        a.begin(), a.end(),
+        b.begin(), b.end(),
+        std::back_inserter(subtract), Position::comp);
+
+    return subtract;
 }

@@ -119,6 +119,13 @@ chessBoardView::chessBoardView(int id, QWidget *parent) : QWidget(parent),
 
     connect(btn, SIGNAL(clicked(bool)), this, SLOT(sl_backwardClicked()));
 
+    //restart
+    btn = generateAppButton_(Styles::restartIcon, "Restart recorded steps to the beginning.");
+
+    ui->appButtonsLayout->addWidget(btn);
+
+    connect(btn, SIGNAL(clicked(bool)), this, SLOT(sl_restartClicked()));
+
     //draw cell styles
     draw();
 }
@@ -200,6 +207,13 @@ void chessBoardView::executeRedoMove(CommandStructure data)
         pendingTo = qCellBoard_.at(data.redoTo.clm()).at(data.redoTo.row());
         executePendingMove();
     }
+    draw();
+}
+
+void chessBoardView::executeRestartSteps()
+{
+    //reset the board gui
+    initStyles_();
     draw();
 }
 
@@ -411,6 +425,11 @@ void chessBoardView::sl_forwardClicked()
 void chessBoardView::sl_backwardClicked()
 {
     emit sig_emitRequestBackward();
+}
+
+void chessBoardView::sl_restartClicked()
+{
+    emit sig_emitRequestRestart();
 }
 
 void chessBoardView::onCellSelectionChanged(QChessCell *from, QChessCell *to)

@@ -135,6 +135,12 @@ public:
   void executeRedoMove(CommandStructure data);
 
   /**
+   * @brief Execute a restart to the beginning of recorded steps
+   *
+   */
+  void executeRestartSteps();
+
+  /**
    * @brief Handles the ending of the game, displays msgbox of game ending
    *
    */
@@ -151,6 +157,7 @@ signals:
   void sig_emitRequestDeserializedData();
   void sig_emitRequestForward();
   void sig_emitRequestBackward();
+  void sig_emitRequestRestart();
 
 private slots:
   void sl_cellWasClicked();
@@ -162,6 +169,7 @@ private slots:
   void sl_openGameFromFile();
   void sl_forwardClicked();
   void sl_backwardClicked();
+  void sl_restartClicked();
 
 private:
   void onCellSelectionChanged(QChessCell *from, QChessCell *to);

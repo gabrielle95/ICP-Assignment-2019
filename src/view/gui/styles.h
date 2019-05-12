@@ -51,6 +51,7 @@ class Styles
     inline static QString redoIcon = "border-image: url(:/res/app_icons/redo.png);";
     inline static QString forwardIcon = "border-image: url(:/res/app_icons/forward.png);";
     inline static QString backwardIcon = "border-image: url(:/res/app_icons/backward.png);";
+    inline static QString restartIcon = "border-image: url(:/res/app_icons/restart.png);";
 
     inline static QString greyBackground = "background-color: rgb(136, 138, 133);";
 

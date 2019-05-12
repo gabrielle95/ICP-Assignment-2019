@@ -123,6 +123,15 @@ public:
   CommandStructure onRequestBackward(int gameId);
 
   /**
+   * @brief Restarts the board and sets the user recorded steps to play from beginning
+   *
+   * @param gameId The id of the game
+   * @return true Restart was performed
+   * @return false Restart was not performed
+   */
+  bool onRequestRestart(int gameId);
+
+  /**
    * @brief A request to check for the finishing condition
    *
    * @param gameId The id of the game

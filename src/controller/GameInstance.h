@@ -113,6 +113,14 @@ public:
   CommandStructure onRequestBackward();
 
   /**
+   * @brief Restarts the board and sets the user recorded steps to play from beginning
+   *
+   * @return true Restart was performed
+   * @return false Restart was not performed
+   */
+  bool onRequestRestart();
+
+  /**
    * @brief A request to check for the finishing condition
    *
    * @return true The checkmate event has occured and game is finished

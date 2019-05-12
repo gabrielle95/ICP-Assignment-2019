@@ -36,9 +36,8 @@ public:
         unit_(unit),
         pos_(pos),
         isCapturer_(false),
-        checkedKing_(false),
-        staleMatedKing_(false),
-        checkMatedKing_(false)
+        checked_(false),
+        checkMate_(false)
   {
   }
 
@@ -90,7 +89,7 @@ public:
    */
   virtual bool checked() const
   {
-    return checkedKing_;
+    return checked_;
   }
 
   /**
@@ -101,19 +100,13 @@ public:
    */
   virtual bool mated() const
   {
-    return checkMatedKing_ || staleMatedKing_;
+    return checkMate_;
   }
 
 private:
   virtual void execute()
   {
-    color_t oppositeColor = unit_->color() == WHITE ? BLACK : WHITE;
     pos_old_ = board_->findUnitPosition(unit_);
-
-    /* if enemy king is in check before making my move */
-    /* then i have won, no  matter what move i make */
-    checkMatedKing_ = board_->isKingInCheck(oppositeColor);
-    staleMatedKing_ = board_->isKingStalemated(oppositeColor);
 
     capturedUnit_ = board_->At(pos_);
 
@@ -124,14 +117,14 @@ private:
     }
     board_->moveUnit(unit_, pos_);
 
-    /* has this move made enemy king in check ?*/
-    checkedKing_ = board_->isKingInCheck(oppositeColor);
-
-
-    /* has this move made my king in check(mate) ?*/
-    board_->isKingInCheck(unit_->color());
-    checkMatedKing_ = board_->isKingCheckMated(unit_->color());
-    staleMatedKing_ = board_->isKingStalemated(unit_->color());
+    if(board_->isKingCheckMated(WHITE) || board_->isKingCheckMated(BLACK))
+    {
+      checkMate_ = true;
+    }
+    else if(board_->isKingInCheck(WHITE) || board_->isKingInCheck(BLACK))
+    {
+      checked_ = true;
+    }
 
   }
 
@@ -158,7 +151,6 @@ private:
   bool isCapturer_;
   unitPtr_t capturedUnit_;
 
-  bool checkedKing_;
-  bool staleMatedKing_;
-  bool checkMatedKing_;
+  bool checked_;
+  bool checkMate_;
 };

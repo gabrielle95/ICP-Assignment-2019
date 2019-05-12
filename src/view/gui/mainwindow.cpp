@@ -66,6 +66,7 @@ void MainWindow::on_addtab_btn_clicked()
     connect(c, SIGNAL(sig_emitRequestDeserializedData()), this, SLOT(sl_onRequestDeserializedData()));
     connect(c, SIGNAL(sig_emitRequestForward()), this, SLOT(sl_onRequestForward()));
     connect(c, SIGNAL(sig_emitRequestBackward()), this, SLOT(sl_onRequestBackward()));
+    connect(c, SIGNAL(sig_emitRequestRestart()), this, SLOT(sl_onRequestRestart()));
 
     application->newGame(gameNumber);
     gameIds.push_back(gameNumber);
@@ -75,12 +76,6 @@ void MainWindow::on_addtab_btn_clicked()
 void MainWindow::sl_onMoveRequest(Position from, Position to)
 {
     chessBoardView *senderView = (chessBoardView *)sender();
-    if(application->isGameFinished(senderView->Id()))
-    {
-        senderView->onGameFinish();
-        return;
-    }
-
     if (application->onRequestMove(senderView->Id(), from, to))
     {
         senderView->executePendingMove();
@@ -137,4 +132,13 @@ void MainWindow::sl_onRequestBackward()
 {
     chessBoardView *senderView = (chessBoardView *)sender();
     senderView->executeUndoMove(application->onRequestBackward(senderView->Id()));
+}
+
+void MainWindow::sl_onRequestRestart()
+{
+    chessBoardView *senderView = (chessBoardView *)sender();
+    if(application->onRequestRestart(senderView->Id()))
+    {
+        senderView->executeRestartSteps();
+    }
 }

@@ -95,6 +95,7 @@ public:
   {
     recordedSteps_ = deserializedSteps;
     recordedStepsIterator_ = recordedSteps_.begin();
+    recordedStepsForRestart_ = recordedSteps_;
   }
 
   /**
@@ -109,6 +110,21 @@ public:
   }
 
   /**
+   * @brief Sets the steps to the beginning
+   *
+   * @return true Steps were restarted
+   * @return false No loaded steps to restart
+   */
+  bool restartSteps()
+  {
+    if(recordedStepsForRestart_.empty()) return false;
+    recordedSteps_ = recordedStepsForRestart_;
+    recordedStepsIterator_ = recordedSteps_.begin();
+    commandsToSave_.clear();
+    return true;
+  }
+
+  /**
    * @brief Checks for a finishing condition looking for a checkmate flag in commands
    *
    * @return true The game is finished
@@ -116,7 +132,6 @@ public:
    */
   bool isGameFinished() const
   {
-
     if(!undoVector_.empty())
     {
       for(auto &c: undoVector_)
@@ -124,17 +139,18 @@ public:
         if(c->mated())
           return true;
       }
+      //return false;
     }
 
-    if(!recordedSteps_.empty())
+    /*if(!recordedSteps_.empty())
     {
       for(auto &c: recordedSteps_)
       {
         if(c->mated())
           return true;
       }
-    }
-
+      return false;
+    }*/
     return false;
   }
 
@@ -145,4 +161,5 @@ private:
 
   commandVector_t recordedSteps_;
   commandVector_t::iterator recordedStepsIterator_;
+  commandVector_t recordedStepsForRestart_;
 };

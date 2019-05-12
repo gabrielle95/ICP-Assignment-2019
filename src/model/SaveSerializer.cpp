@@ -60,6 +60,14 @@ std::string SaveSerializer::serializeOutput_(commandVector_t outputCommands)
         }
     }
 
+    // in case white went last
+    if(!line.empty())
+    {
+        line += std::to_string(lineNumber+1) + ". ";
+        serializedLines.push_back(line);
+        line.clear();
+    }
+
     std::string serializedOutput;
 
     for (auto s : serializedLines)

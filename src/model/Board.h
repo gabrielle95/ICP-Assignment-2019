@@ -134,12 +134,6 @@ public:
   void resetBoard();
 
   /**
-   * @brief Resets the king in check flag
-   *
-   */
-  void resetCheck();
-
-  /**
    * @brief Finds out if the desired teams king is in check
    *
    * @param color Color of the king
@@ -149,15 +143,6 @@ public:
   bool isKingInCheck(color_t color);
 
   /**
-   * @brief Finds out if the desired players king is stalemated
-   *
-   * @param color The color of the king
-   * @return true The king got stalemated
-   * @return false The king is not stalemated
-   */
-  bool isKingStalemated(color_t color);
-
-  /**
    * @brief Finds whether a desired king got checkmated
    *
    * @param color The color of the king
@@ -165,6 +150,8 @@ public:
    * @return false The king is not checkmated
    */
   bool isKingCheckMated(color_t color);
+
+  bool isGameFinished();
 
 private:
   std::vector<Position> getAvailablePositionsForOpposingTeam_(color_t color);
@@ -179,6 +166,7 @@ private:
   bool positionIsAvailable_(std::vector<Position> positions, Position pos);
   std::vector<Position> validatePossiblyAvailablePositions_(std::vector<Position> possible, unitPtr_t forUnit);
   std::vector<Position> intersectPositionVectors_(std::vector<Position> a, std::vector<Position> b);
+  std::vector<Position> subtractPositionVectors_(std::vector<Position> a, std::vector<Position> b);
 
   void initBoard_();
 
